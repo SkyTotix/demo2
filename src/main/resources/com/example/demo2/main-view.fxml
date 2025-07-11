@@ -212,7 +212,97 @@
                      </children>
                   </VBox>
                   
-
+                  <!-- Sección de Estadísticas del Sistema - Listas Interactivas -->
+                  <VBox spacing="16.0" fx:id="statisticsSection" visible="false" managed="false">
+                     <children>
+                        <Label text="📊 Estadísticas del Sistema" styleClass="section-title">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <HBox spacing="16.0" alignment="TOP_LEFT">
+                           <children>
+                              <!-- Panel de Préstamos Próximos a Vencer -->
+                              <VBox spacing="12.0" styleClass="stats-panel warning-panel" prefWidth="350.0">
+                                 <children>
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                       <children>
+                                          <Label text="⏰ Próximos a Vencer" styleClass="stats-title">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="lblProximosVencer" text="(0)" styleClass="stats-count">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <Label text="Doble clic para ver detalles del préstamo" styleClass="stats-hint">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <ListView fx:id="listProximosVencer" prefHeight="160.0" styleClass="stats-list" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Panel de Usuarios con Multa -->
+                              <VBox spacing="12.0" styleClass="stats-panel error-panel" prefWidth="350.0">
+                                 <children>
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                       <children>
+                                          <Label text="💰 Con Multa Pendiente" styleClass="stats-title">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="lblConMulta" text="(0)" styleClass="stats-count">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <Label text="Doble clic para ver detalles del préstamo" styleClass="stats-hint">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <ListView fx:id="listConMulta" prefHeight="160.0" styleClass="stats-list" />
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Panel de Libros con Una Existencia -->
+                              <VBox spacing="12.0" styleClass="stats-panel info-panel" prefWidth="350.0">
+                                 <children>
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                       <children>
+                                          <Label text="📖 Ejemplar Único" styleClass="stats-title">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="lblUnaExistencia" text="(0)" styleClass="stats-count">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <Label text="Doble clic para ver información del libro" styleClass="stats-hint">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <ListView fx:id="listUnaExistencia" prefHeight="160.0" styleClass="stats-list" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                   
                   <!-- Sección de Acciones Rápidas -->
                   <VBox spacing="16.0">

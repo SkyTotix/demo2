@@ -252,6 +252,14 @@ public class Prestamo {
         return getDiasRetraso() * multaPorDia;
     }
     
+    /**
+     * Calcula la multa usando la configuración del sistema
+     */
+    public double calcularMultaConConfiguracion() {
+        // Usar el servicio de préstamos para calcular con configuración del sistema
+        return com.example.demo2.service.PrestamoService.getInstance().calcularMultaIndividual(this);
+    }
+    
     // Getters y setters para campos adicionales
     public String getLibroTitulo() {
         return libroTitulo;

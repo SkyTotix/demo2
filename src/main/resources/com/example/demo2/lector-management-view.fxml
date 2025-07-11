@@ -137,24 +137,8 @@
       </TableView>
    </VBox>
    
-   <!-- Footer with additional actions -->
-   <HBox spacing="15" alignment="CENTER_LEFT" styleClass="footer-actions">
-      <Button fx:id="btnExportarLectores" text="Exportar a Excel" styleClass="btn, btn-outline-success">
-         <graphic>
-            <FontIcon iconLiteral="fas-file-excel" iconSize="14" iconColor="#10B981" />
-         </graphic>
-      </Button>
-      <Button fx:id="btnImportarLectores" text="Importar Lectores" styleClass="btn, btn-outline-info">
-         <graphic>
-            <FontIcon iconLiteral="fas-file-import" iconSize="14" iconColor="#3B82F6" />
-         </graphic>
-      </Button>
-      <Button fx:id="btnEstadisticas" text="Ver Estadísticas" styleClass="btn, btn-outline-secondary">
-         <graphic>
-            <FontIcon iconLiteral="fas-chart-bar" iconSize="14" iconColor="#64748B" />
-         </graphic>
-      </Button>
-      <Region HBox.hgrow="ALWAYS" />
+   <!-- Footer with timestamp -->
+   <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="footer-actions">
       <Label fx:id="lblUltimaActualizacion" text="Última actualización: --" styleClass="last-updated" />
    </HBox>
 </VBox> 

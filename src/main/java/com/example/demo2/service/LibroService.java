@@ -558,4 +558,97 @@ public class LibroService {
             System.err.println("❌ Error creando libros de ejemplo: " + e.getMessage());
         }
     }
+    
+    /**
+     * =============================
+     * MÉTODOS PARA ESTADÍSTICAS DEL DASHBOARD
+     * =============================
+     */
+    
+    /**
+     * Obtiene libros que tienen solo una existencia (no deberían prestarse)
+     */
+    public List<Libro> obtenerLibrosConUnaExistencia() {
+        List<Libro> librosUnaExistencia = new ArrayList<>();
+        
+        try (Connection conn = DatabaseManager.getInstance().getConnection()) {
+            String sql = """
+                SELECT l.* 
+                FROM libros l 
+                WHERE l.cantidad_total = 1 
+                AND l.activo = 1
+                ORDER BY l.titulo ASC
+                """;
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sql);
+                 ResultSet rs = stmt.executeQuery()) {
+                
+                while (rs.next()) {
+                    Libro libro = mapearResultSetALibro(rs);
+                    librosUnaExistencia.add(libro);
+                }
+            }
+            
+            System.out.println("📚 Libros con una sola existencia: " + librosUnaExistencia.size());
+            
+        } catch (SQLException e) {
+            System.err.println("❌ Error obteniendo libros con una existencia: " + e.getMessage());
+        }
+        
+        return librosUnaExistencia;
+    }
+    
+    /**
+     * Obtiene estadísticas rápidas de libros para el dashboard
+     */
+    public EstadisticasLibros obtenerEstadisticasRapidas() {
+        EstadisticasLibros stats = new EstadisticasLibros();
+        
+        try (Connection conn = DatabaseManager.getInstance().getConnection()) {
+            // Contar libros con una sola existencia
+            String sqlUnaExistencia = """
+                SELECT COUNT(*) as total
+                FROM libros 
+                WHERE cantidad_total = 1 
+                AND activo = 1
+                """;
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sqlUnaExistencia);
+                 ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    stats.librosUnaExistencia = rs.getInt("total");
+                }
+            }
+            
+            // Contar libros sin disponibilidad
+            String sqlSinDisponibilidad = """
+                SELECT COUNT(*) as total
+                FROM libros 
+                WHERE cantidad_disponible = 0 
+                AND activo = 1
+                """;
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sqlSinDisponibilidad);
+                 ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    stats.librosSinDisponibilidad = rs.getInt("total");
+                }
+            }
+            
+            System.out.println("📊 Estadísticas de libros calculadas");
+            
+        } catch (SQLException e) {
+            System.err.println("❌ Error calculando estadísticas de libros: " + e.getMessage());
+        }
+        
+        return stats;
+    }
+    
+    /**
+     * Clase interna para estadísticas rápidas de libros
+     */
+    public static class EstadisticasLibros {
+        public int librosUnaExistencia = 0;
+        public int librosSinDisponibilidad = 0;
+    }
 } 

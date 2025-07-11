@@ -2093,3 +2093,177 @@
     -fx-background-color: #F3F4F6;
     -fx-background-radius: 4;
 }
+
+/* ===========================
+   ESTILOS PARA ESTADÍSTICAS DEL DASHBOARD
+   =========================== */
+
+.stats-panel {
+    -fx-padding: 20px;
+    -fx-spacing: 12px;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-border-radius: 12px;
+    -fx-min-width: 180px;
+    -fx-max-width: 200px;
+    -fx-alignment: center;
+}
+
+.stats-panel:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 3);
+    -fx-scale-y: 1.02;
+    -fx-scale-x: 1.02;
+}
+
+.warning-panel {
+    -fx-border-color: #F59E0B;
+    -fx-border-width: 2px;
+}
+
+.error-panel {
+    -fx-border-color: #EF4444;
+    -fx-border-width: 2px;
+}
+
+.info-panel {
+    -fx-border-color: #3B82F6;
+    -fx-border-width: 2px;
+}
+
+.stats-title {
+    -fx-text-fill: #374151;
+    -fx-font-weight: bold;
+}
+
+.stats-number {
+    -fx-font-weight: bold;
+    -fx-font-size: 28px;
+}
+
+.warning-number {
+    -fx-text-fill: #F59E0B;
+}
+
+.error-number {
+    -fx-text-fill: #EF4444;
+}
+
+.info-number {
+    -fx-text-fill: #3B82F6;
+}
+
+.stats-description {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 12px;
+    -fx-text-alignment: center;
+}
+
+.stats-button {
+    -fx-padding: 8px 16px;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+}
+
+.warning-button {
+    -fx-background-color: #F59E0B;
+}
+
+.warning-button:hover {
+    -fx-background-color: #D97706;
+}
+
+.error-button {
+    -fx-background-color: #EF4444;
+}
+
+.error-button:hover {
+    -fx-background-color: #DC2626;
+}
+
+.info-button {
+    -fx-background-color: #3B82F6;
+}
+
+.info-button:hover {
+    -fx-background-color: #2563EB;
+}
+
+/* ===========================
+   ESTILOS PARA LISTAS DE ESTADÍSTICAS INTERACTIVAS
+   =========================== */
+
+.stats-count {
+    -fx-text-fill: #6B7280;
+    -fx-font-style: italic;
+}
+
+.stats-hint {
+    -fx-text-fill: #9CA3AF;
+    -fx-font-style: italic;
+}
+
+.stats-list {
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 4px;
+}
+
+.stats-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 8px 12px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-text-fill: #374151;
+    -fx-font-size: 12px;
+}
+
+.stats-list .list-cell:hover {
+    -fx-background-color: #F3F4F6;
+    -fx-cursor: hand;
+}
+
+.stats-list .list-cell:selected {
+    -fx-background-color: #E0E7FF;
+    -fx-text-fill: #1E40AF;
+}
+
+.stats-list .list-cell:focused {
+    -fx-background-color: #DBEAFE;
+}
+
+/* Estilos específicos para cada tipo de lista */
+.warning-panel .stats-list .list-cell:hover {
+    -fx-background-color: #FEF3C7;
+}
+
+.warning-panel .stats-list .list-cell:selected {
+    -fx-background-color: #FDE68A;
+    -fx-text-fill: #92400E;
+}
+
+.error-panel .stats-list .list-cell:hover {
+    -fx-background-color: #FEE2E2;
+}
+
+.error-panel .stats-list .list-cell:selected {
+    -fx-background-color: #FECACA;
+    -fx-text-fill: #991B1B;
+}
+
+.info-panel .stats-list .list-cell:hover {
+    -fx-background-color: #DBEAFE;
+}
+
+.info-panel .stats-list .list-cell:selected {
+    -fx-background-color: #BFDBFE;
+    -fx-text-fill: #1E40AF;
+}

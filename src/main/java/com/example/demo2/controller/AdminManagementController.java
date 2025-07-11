@@ -336,7 +336,7 @@ public class AdminManagementController {
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(btnNuevoAdmin.getScene().getWindow());
             
-            Scene scene = new Scene(root, 600, 700);
+            Scene scene = new Scene(root, 750, 800);
             scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
             scene.getStylesheets().add(getClass().getResource("/com/example/demo2/styles/main.css").toExternalForm());
             

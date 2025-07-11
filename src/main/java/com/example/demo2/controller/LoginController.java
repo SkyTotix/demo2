@@ -279,7 +279,7 @@ public class LoginController {
     }
     
     /**
-     * Configura el logo del login según la configuración
+     * Configura el logo personalizable en el login
      */
     private void setupLoginLogo() {
         if (logoContainer != null && loginLogo != null && loginLogoImage != null) {
@@ -287,12 +287,15 @@ public class LoginController {
             var config = configService.getConfiguracion();
             
             if (config.isLogoPersonalizado()) {
-                // Intentar cargar logo personalizado desde archivo
+                // Intentar cargar logo personalizado desde archivo fijo
                 try {
                     java.io.File logoFile = new java.io.File("config/logo-personalizado.png");
                     if (logoFile.exists()) {
+                        // Limpiar cache de JavaFX agregando timestamp a la URL
+                        String logoUrl = logoFile.toURI().toString() + "?t=" + System.currentTimeMillis();
+                        
                         // Cargar y mostrar imagen personalizada
-                        Image logoImage = new Image(logoFile.toURI().toString());
+                        Image logoImage = new Image(logoUrl);
                         loginLogoImage.setImage(logoImage);
                         loginLogoImage.setVisible(true);
                         loginLogo.setVisible(false);

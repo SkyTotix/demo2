@@ -207,6 +207,11 @@ public class ConfigurationService {
         config.backupTime = "02:00";
         config.backupRetention = 30;
         
+        // Configuración de multas (valores por defecto)
+        config.diasGraciaMulta = 3;        // 3 días de gracia
+        config.montoMultaDiario = 5.0;     // $5.00 por día
+        config.montoMultaMaxima = 100.0;   // Máximo $100.00
+        
         return config;
     }
     
@@ -258,6 +263,13 @@ public class ConfigurationService {
         currentConfig.backupFrequency = backupFrequency;
         currentConfig.backupTime = backupTime;
         currentConfig.backupRetention = backupRetention;
+    }
+    
+    public void actualizarConfiguracionMultas(int diasGraciaMulta, double montoMultaDiario, 
+                                            double montoMultaMaxima) {
+        currentConfig.diasGraciaMulta = diasGraciaMulta;
+        currentConfig.montoMultaDiario = montoMultaDiario;
+        currentConfig.montoMultaMaxima = montoMultaMaxima;
     }
     
     /**
@@ -335,6 +347,9 @@ public class ConfigurationService {
         if (config.maxLoginAttempts < 1 || config.maxLoginAttempts > 10) return false;
         if (config.lockoutDuration < 1 || config.lockoutDuration > 1440) return false;
         if (config.backupRetention < 1 || config.backupRetention > 365) return false;
+        if (config.diasGraciaMulta < 0 || config.diasGraciaMulta > 30) return false;
+        if (config.montoMultaDiario < 0.1 || config.montoMultaDiario > 1000.0) return false;
+        if (config.montoMultaMaxima < 1.0 || config.montoMultaMaxima > 10000.0) return false;
         
         return true;
     }
@@ -374,6 +389,11 @@ public class ConfigurationService {
         public String backupFrequency;
         public String backupTime;
         public int backupRetention;
+        
+        // Configuración de multas por préstamos
+        public int diasGraciaMulta;        // Días de gracia antes de aplicar multa
+        public double montoMultaDiario;    // Monto de multa por día de retraso
+        public double montoMultaMaxima;    // Monto máximo de multa por préstamo
         
         @Override
         public String toString() {

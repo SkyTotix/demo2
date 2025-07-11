@@ -7,6 +7,7 @@ import com.example.demo2.service.PrestamoService;
 import com.example.demo2.service.LibroService;
 import com.example.demo2.service.LectorService;
 import com.example.demo2.service.NotificationService;
+import com.example.demo2.service.AuthService;
 import com.example.demo2.utils.IconHelper;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -182,7 +183,17 @@ public class PrestamoFormController implements Initializable {
             try {
                 Long lectorId = (long) lectorCombo.getValue().getId();
                 if (prestamoService.lectorTienePrestamosActivos(lectorId)) {
-                    mostrarError("El lector seleccionado tiene préstamos activos pendientes");
+                    // Mostrar advertencia en tiempo real, pero no bloquear
+                    List<Prestamo> prestamosActivos = prestamoService.obtenerPorLector(lectorId);
+                    int cantidadActivos = (int) prestamosActivos.stream()
+                        .filter(p -> "ACTIVO".equals(p.getEstado()))
+                        .count();
+                        
+                    String mensaje = String.format(
+                        "⚠️ Este lector tiene %d préstamo(s) activo(s).",
+                        cantidadActivos
+                    );
+                    mostrarAdvertencia(mensaje);
                     return;
                 }
             } catch (SQLException e) {
@@ -197,38 +208,73 @@ public class PrestamoFormController implements Initializable {
      * Guarda el préstamo
      */
     private void guardar() {
+        System.out.println("🔄 Iniciando proceso de creación de préstamo...");
+        
         if (!validarFormulario()) {
+            System.out.println("❌ Validación de formulario falló");
             return;
         }
+        
+        System.out.println("✅ Validación de formulario exitosa");
         
         try {
             Prestamo nuevoPrestamo = new Prestamo();
             nuevoPrestamo.setCodigoPrestamo(codigoField.getText());
-            nuevoPrestamo.setLibroId((long) libroCombo.getValue().getId());
-            nuevoPrestamo.setLectorId((long) lectorCombo.getValue().getId());
-            nuevoPrestamo.setBibliotecarioPrestamoId(1L); // ID del bibliotecario actual
+            nuevoPrestamo.setLibroId(libroCombo.getValue().getId());  // Libro.getId() ya retorna Long
+            nuevoPrestamo.setLectorId((long) lectorCombo.getValue().getId());  // Lector.getId() retorna int, necesita cast
+            
+            // Usar el usuario autenticado actual
+            AuthService authService = AuthService.getInstance();
+            if (authService.getUsuarioActual() != null) {
+                nuevoPrestamo.setBibliotecarioPrestamoId(authService.getUsuarioActual().getId());
+                System.out.println("📋 Bibliotecario asignado: " + authService.getUsuarioActual().getNombreCompleto() + " (ID: " + authService.getUsuarioActual().getId() + ")");
+            } else {
+                System.out.println("❌ No hay usuario autenticado");
+                mostrarError("Error: No hay usuario autenticado");
+                return;
+            }
+            
             nuevoPrestamo.setFechaDevolucionEsperada(fechaDevolucionPicker.getValue());
             nuevoPrestamo.setEstado("ACTIVO");
             nuevoPrestamo.setCondicionPrestamo(condicionCombo.getValue());
             nuevoPrestamo.setObservacionesPrestamo(observacionesArea.getText());
             
+            System.out.println("📝 Datos del préstamo:");
+            System.out.println("  - Código: " + nuevoPrestamo.getCodigoPrestamo());
+            System.out.println("  - Libro ID: " + nuevoPrestamo.getLibroId());
+            System.out.println("  - Lector ID: " + nuevoPrestamo.getLectorId());
+            System.out.println("  - Bibliotecario ID: " + nuevoPrestamo.getBibliotecarioPrestamoId());
+            System.out.println("  - Fecha devolución: " + nuevoPrestamo.getFechaDevolucionEsperada());
+            System.out.println("  - Estado: " + nuevoPrestamo.getEstado());
+            
+            System.out.println("💾 Intentando guardar préstamo en base de datos...");
+            
             Prestamo prestamoCreado = prestamoService.crear(nuevoPrestamo);
             
-            if (prestamoCreado != null) {
+            if (prestamoCreado != null && prestamoCreado.getId() != null) {
+                System.out.println("✅ Préstamo creado exitosamente con ID: " + prestamoCreado.getId());
+                
                 notificationService.notifySuccess("Préstamo creado", 
                     "El préstamo " + prestamoCreado.getCodigoPrestamo() + " ha sido creado exitosamente.");
                 
                 // Actualizar la tabla padre y cerrar ventana
                 if (parentController != null) {
                     parentController.refrescarTabla();
+                    System.out.println("🔄 Tabla de préstamos actualizada");
                 }
                 cerrarVentana();
             } else {
-                mostrarError("No se pudo crear el préstamo");
+                System.out.println("❌ El servicio retornó null o sin ID");
+                mostrarError("No se pudo crear el préstamo - el servicio no retornó un préstamo válido");
             }
         } catch (SQLException e) {
-            mostrarError("Error al guardar préstamo: " + e.getMessage());
+            System.err.println("❌ Error SQL al guardar préstamo: " + e.getMessage());
             e.printStackTrace();
+            mostrarError("Error al guardar préstamo: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("❌ Error inesperado al guardar préstamo: " + e.getMessage());
+            e.printStackTrace();
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
     
@@ -236,62 +282,108 @@ public class PrestamoFormController implements Initializable {
      * Valida el formulario antes de guardar
      */
     private boolean validarFormulario() {
+        System.out.println("🔍 Iniciando validación del formulario...");
+        
         // Validar campos obligatorios
+        System.out.println("  📝 Código: '" + codigoField.getText() + "'");
         if (codigoField.getText().trim().isEmpty()) {
+            System.out.println("  ❌ Código vacío");
             mostrarError("El código del préstamo es obligatorio");
             return false;
         }
         
+        System.out.println("  📚 Libro seleccionado: " + (libroCombo.getValue() != null ? libroCombo.getValue().getTitulo() : "null"));
         if (libroCombo.getValue() == null) {
+            System.out.println("  ❌ No hay libro seleccionado");
             mostrarError("Debe seleccionar un libro");
             return false;
         }
         
+        System.out.println("  👤 Lector seleccionado: " + (lectorCombo.getValue() != null ? lectorCombo.getValue().getNombreCompleto() : "null"));
         if (lectorCombo.getValue() == null) {
+            System.out.println("  ❌ No hay lector seleccionado");
             mostrarError("Debe seleccionar un lector");
             return false;
         }
         
+        System.out.println("  📅 Fecha devolución: " + fechaDevolucionPicker.getValue());
         if (fechaDevolucionPicker.getValue() == null) {
+            System.out.println("  ❌ No hay fecha de devolución");
             mostrarError("Debe seleccionar una fecha de devolución");
             return false;
         }
         
+        System.out.println("  📋 Condición: " + condicionCombo.getValue());
         if (condicionCombo.getValue() == null) {
+            System.out.println("  ❌ No hay condición seleccionada");
             mostrarError("Debe seleccionar la condición del libro");
             return false;
         }
         
         // Validar fecha de devolución
+        System.out.println("  🗓️ Validando fecha: " + fechaDevolucionPicker.getValue() + " vs hoy: " + LocalDate.now());
         if (fechaDevolucionPicker.getValue().isBefore(LocalDate.now())) {
+            System.out.println("  ❌ Fecha anterior a hoy");
             mostrarError("La fecha de devolución no puede ser anterior a hoy");
             return false;
         }
         
         // Validar disponibilidad del libro
         try {
-            Long libroId = (long) libroCombo.getValue().getId();
+            Long libroId = libroCombo.getValue().getId();
+            System.out.println("  📖 Validando disponibilidad del libro ID: " + libroId);
             if (!prestamoService.libroDisponible(libroId)) {
+                System.out.println("  ❌ Libro no disponible");
                 mostrarError("El libro seleccionado no está disponible para préstamo");
                 return false;
             }
+            System.out.println("  ✅ Libro disponible");
         } catch (SQLException e) {
+            System.out.println("  ❌ Error SQL validando libro: " + e.getMessage());
             mostrarError("Error al validar disponibilidad del libro");
             return false;
         }
         
-        // Validar estado del lector
+        // Validar estado del lector - CONFIGURACIÓN TEMPORAL RELAJADA
         try {
             Long lectorId = (long) lectorCombo.getValue().getId();
+            System.out.println("  👥 Validando lector ID: " + lectorId);
+            
+            // OPCIÓN TEMPORAL: Permitir múltiples préstamos pero mostrar advertencia
             if (prestamoService.lectorTienePrestamosActivos(lectorId)) {
-                mostrarError("El lector seleccionado tiene préstamos activos pendientes");
-                return false;
+                System.out.println("  ⚠️ Lector tiene préstamos activos - mostrando advertencia");
+                
+                // Obtener información de los préstamos activos
+                List<Prestamo> prestamosActivos = prestamoService.obtenerPorLector(lectorId);
+                int cantidadActivos = (int) prestamosActivos.stream()
+                    .filter(p -> "ACTIVO".equals(p.getEstado()))
+                    .count();
+                
+                // Mostrar advertencia pero permitir continuar
+                String mensaje = String.format(
+                    "⚠️ ADVERTENCIA: El lector %s tiene %d préstamo(s) activo(s). " +
+                    "Considere si debe permitirse otro préstamo antes de continuar.",
+                    lectorCombo.getValue().getNombreCompleto(),
+                    cantidadActivos
+                );
+                
+                // Cambiar el estilo para mostrar como advertencia, no error
+                errorLabel.setText(mensaje);
+                errorLabel.setStyle("-fx-text-fill: #F59E0B; -fx-background-color: #FEF3C7; -fx-padding: 8px; -fx-background-radius: 4px;");
+                errorLabel.setVisible(true);
+                
+                System.out.println("  ⚠️ Advertencia mostrada - préstamo permitido");
+                // NO retornar false - permitir que continúe
+            } else {
+                System.out.println("  ✅ Lector sin préstamos activos");
             }
         } catch (SQLException e) {
+            System.out.println("  ❌ Error SQL validando lector: " + e.getMessage());
             mostrarError("Error al validar el lector");
             return false;
         }
         
+        System.out.println("✅ Validación completada exitosamente");
         return true;
     }
     
@@ -315,14 +407,25 @@ public class PrestamoFormController implements Initializable {
      */
     private void mostrarError(String mensaje) {
         errorLabel.setText(mensaje);
+        errorLabel.setStyle("-fx-text-fill: #EF4444; -fx-background-color: #FEE2E2; -fx-padding: 8px; -fx-background-radius: 4px;");
         errorLabel.setVisible(true);
     }
     
     /**
-     * Limpia el mensaje de error
+     * Muestra un mensaje de advertencia
+     */
+    private void mostrarAdvertencia(String mensaje) {
+        errorLabel.setText(mensaje);
+        errorLabel.setStyle("-fx-text-fill: #F59E0B; -fx-background-color: #FEF3C7; -fx-padding: 8px; -fx-background-radius: 4px;");
+        errorLabel.setVisible(true);
+    }
+    
+    /**
+     * Limpia el mensaje de error/advertencia
      */
     private void limpiarError() {
         errorLabel.setText("");
+        errorLabel.setStyle("");
         errorLabel.setVisible(false);
     }
     

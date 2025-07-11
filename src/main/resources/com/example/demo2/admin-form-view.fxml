@@ -16,9 +16,7 @@
       </HBox>
       
       <!-- Formulario -->
-      <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
-         <content>
-            <VBox spacing="25.0" styleClass="form-container">
+      <VBox spacing="20.0" styleClass="form-container" VBox.vgrow="ALWAYS">
                <children>
                   <!-- Información Personal -->
                   <VBox spacing="15.0" styleClass="form-section">
@@ -92,12 +90,10 @@
                      </children>
                   </HBox>
                </children>
-            </VBox>
-         </content>
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
-      </ScrollPane>
+      </VBox>
    </children>
    <padding>
       <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />

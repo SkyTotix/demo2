@@ -127,20 +127,8 @@
       </TableView>
    </VBox>
    
-   <!-- Footer with additional actions -->
-   <HBox spacing="15" alignment="CENTER_LEFT" styleClass="footer-actions">
-      <Button fx:id="btnExportarPrestamos" text="Exportar a Excel" styleClass="btn, btn-outline-success">
-         <graphic>
-            <FontIcon iconLiteral="fas-file-excel" iconSize="14" iconColor="#10B981" />
-         </graphic>
-      </Button>
-
-      <Button fx:id="btnNotificarVencidos" text="Notificar Vencidos" styleClass="btn, btn-outline-warning">
-         <graphic>
-            <FontIcon iconLiteral="fas-bell" iconSize="14" iconColor="#F59E0B" />
-         </graphic>
-      </Button>
-      <Region HBox.hgrow="ALWAYS" />
+   <!-- Footer with timestamp -->
+   <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="footer-actions">
       <Label fx:id="lblUltimaActualizacion" text="Última actualización: --" styleClass="last-updated" />
    </HBox>
 </VBox> 

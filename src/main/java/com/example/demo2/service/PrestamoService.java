@@ -441,7 +441,89 @@ public class PrestamoService {
     }
     
     /**
-     * Calcula y actualiza multas para préstamos vencidos
+     * Calcula y actualiza multas para préstamos vencidos usando configuración del sistema
+     */
+    public int calcularMultasConConfiguracion() throws SQLException {
+        ConfigurationService configService = ConfigurationService.getInstance();
+        var config = configService.getConfiguracion();
+        
+        // Usar configuración del sistema para calcular multas
+        return calcularMultasPersonalizadas(
+            config.diasGraciaMulta,
+            config.montoMultaDiario,
+            config.montoMultaMaxima
+        );
+    }
+    
+    /**
+     * Calcula y actualiza multas para préstamos vencidos con parámetros personalizados
+     */
+    public int calcularMultasPersonalizadas(int diasGracia, double multaPorDia, double multaMaxima) throws SQLException {
+        String sql = """
+            UPDATE prestamos 
+            SET multa = LEAST(
+                GREATEST(0, (TRUNC(SYSDATE) - fecha_devolucion_esperada - ?)) * ?,
+                ?
+            )
+            WHERE estado IN ('ACTIVO', 'VENCIDO') 
+            AND fecha_devolucion_esperada < TRUNC(SYSDATE) - ?
+            """;
+        
+        try (Connection conn = DatabaseManager.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, diasGracia);           // Días de gracia
+            pstmt.setDouble(2, multaPorDia);       // Monto por día
+            pstmt.setDouble(3, multaMaxima);       // Monto máximo
+            pstmt.setInt(4, diasGracia);           // Días de gracia para WHERE
+            
+            int prestamosActualizados = pstmt.executeUpdate();
+            
+            System.out.println("💰 Multas calculadas automáticamente:");
+            System.out.println("   - Días de gracia: " + diasGracia);
+            System.out.println("   - Multa por día: $" + multaPorDia);
+            System.out.println("   - Multa máxima: $" + multaMaxima);
+            System.out.println("   - Préstamos actualizados: " + prestamosActualizados);
+            
+            return prestamosActualizados;
+        }
+    }
+    
+    /**
+     * Calcula multa individual para un préstamo específico
+     */
+    public double calcularMultaIndividual(Prestamo prestamo) {
+        ConfigurationService configService = ConfigurationService.getInstance();
+        var config = configService.getConfiguracion();
+        
+        return calcularMultaIndividual(prestamo, config.diasGraciaMulta, config.montoMultaDiario, config.montoMultaMaxima);
+    }
+    
+    /**
+     * Calcula multa individual para un préstamo con parámetros personalizados
+     */
+    public double calcularMultaIndividual(Prestamo prestamo, int diasGracia, double multaPorDia, double multaMaxima) {
+        if (!"ACTIVO".equals(prestamo.getEstado()) && !"VENCIDO".equals(prestamo.getEstado())) {
+            return 0.0;
+        }
+        
+        LocalDate fechaVencimiento = prestamo.getFechaDevolucionEsperada();
+        LocalDate fechaActual = LocalDate.now();
+        
+        // Calcular días de retraso considerando período de gracia
+        long diasRetraso = fechaActual.toEpochDay() - fechaVencimiento.toEpochDay() - diasGracia;
+        
+        if (diasRetraso <= 0) {
+            return 0.0; // Dentro del período de gracia
+        }
+        
+        // Calcular multa = días de retraso * monto por día, pero no mayor al máximo
+        double multaCalculada = diasRetraso * multaPorDia;
+        return Math.min(multaCalculada, multaMaxima);
+    }
+    
+    /**
+     * Calcula y actualiza multas para préstamos vencidos (método legacy)
      */
     public int calcularMultas(double multaPorDia) throws SQLException {
         String sql = """
@@ -456,8 +538,69 @@ public class PrestamoService {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setDouble(1, multaPorDia);
-            return pstmt.executeUpdate(sql);
+            return pstmt.executeUpdate();
         }
+    }
+    
+    /**
+     * Obtiene información detallada sobre configuración de multas
+     */
+    public String obtenerInformacionMultas() {
+        ConfigurationService configService = ConfigurationService.getInstance();
+        var config = configService.getConfiguracion();
+        
+        StringBuilder info = new StringBuilder();
+        info.append("📊 CONFIGURACIÓN ACTUAL DE MULTAS:\n");
+        info.append("   • Días de gracia: ").append(config.diasGraciaMulta).append(" días\n");
+        info.append("   • Multa por día: $").append(String.format("%.2f", config.montoMultaDiario)).append("\n");
+        info.append("   • Multa máxima: $").append(String.format("%.2f", config.montoMultaMaxima)).append("\n");
+        info.append("   • Ejemplo: Un préstamo con 10 días de retraso tendría una multa de $");
+        
+        double multaEjemplo = Math.min((10 - config.diasGraciaMulta) * config.montoMultaDiario, config.montoMultaMaxima);
+        if (multaEjemplo <= 0) {
+            info.append("0.00 (dentro del período de gracia)");
+        } else {
+            info.append(String.format("%.2f", multaEjemplo));
+        }
+        
+        return info.toString();
+    }
+    
+    /**
+     * Obtiene estadísticas de multas del sistema
+     */
+    public String obtenerEstadisticasMultas() throws SQLException {
+        String sql = """
+            SELECT 
+                COUNT(*) as total_multas,
+                SUM(multa) as total_monto,
+                AVG(multa) as promedio_multa,
+                MAX(multa) as multa_maxima,
+                COUNT(CASE WHEN multa_pagada = 1 THEN 1 END) as multas_pagadas,
+                COUNT(CASE WHEN multa_pagada = 0 AND multa > 0 THEN 1 END) as multas_pendientes
+            FROM prestamos 
+            WHERE multa > 0
+            """;
+        
+        try (Connection conn = DatabaseManager.getInstance().getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            if (rs.next()) {
+                StringBuilder stats = new StringBuilder();
+                stats.append("📈 ESTADÍSTICAS DE MULTAS:\n");
+                stats.append("   • Total de multas: ").append(rs.getInt("total_multas")).append("\n");
+                stats.append("   • Monto total: $").append(String.format("%.2f", rs.getDouble("total_monto"))).append("\n");
+                stats.append("   • Promedio por multa: $").append(String.format("%.2f", rs.getDouble("promedio_multa"))).append("\n");
+                stats.append("   • Multa más alta: $").append(String.format("%.2f", rs.getDouble("multa_maxima"))).append("\n");
+                stats.append("   • Multas pagadas: ").append(rs.getInt("multas_pagadas")).append("\n");
+                stats.append("   • Multas pendientes: ").append(rs.getInt("multas_pendientes"));
+                
+                return stats.toString();
+            }
+        }
+        
+        return "No hay datos de multas disponibles";
     }
     
     /**
@@ -612,5 +755,187 @@ public class PrestamoService {
             System.err.println("❌ Error creando préstamos de prueba: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * =============================
+     * MÉTODOS PARA ESTADÍSTICAS DEL DASHBOARD
+     * =============================
+     */
+    
+    /**
+     * Obtiene préstamos que vencen en los próximos días especificados
+     */
+    public List<Prestamo> obtenerPrestamosProximosAVencer(int diasProximidad) {
+        List<Prestamo> prestamosProximosAVencer = new ArrayList<>();
+        
+        try (Connection conn = DatabaseManager.getInstance().getConnection()) {
+            String sql = """
+                SELECT p.id, p.codigo_prestamo, p.fecha_devolucion_esperada, p.estado,
+                       p.fecha_prestamo, p.multa, p.multa_pagada,
+                       l.titulo, l.isbn,
+                       lec.codigo_lector, lec.nombre || ' ' || lec.apellido as lector_nombre,
+                       u1.nombre || ' ' || u1.apellido as bibliotecario_prestamo_nombre
+                FROM prestamos p
+                LEFT JOIN libros l ON p.libro_id = l.id
+                LEFT JOIN lectores lec ON p.lector_id = lec.id
+                LEFT JOIN usuarios u1 ON p.bibliotecario_prestamo_id = u1.id
+                WHERE p.estado = 'ACTIVO' 
+                AND p.fecha_devolucion_esperada BETWEEN TRUNC(SYSDATE) AND (TRUNC(SYSDATE) + ?)
+                ORDER BY p.fecha_devolucion_esperada ASC
+                """;
+            
+            System.out.println("🔍 Ejecutando consulta para préstamos próximos a vencer...");
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, diasProximidad);
+                
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        Prestamo prestamo = new Prestamo();
+                        prestamo.setId(rs.getLong("id"));
+                        prestamo.setCodigoPrestamo(rs.getString("codigo_prestamo"));
+                        prestamo.setFechaDevolucionEsperada(rs.getDate("fecha_devolucion_esperada").toLocalDate());
+                        prestamo.setEstado(rs.getString("estado"));
+                        prestamo.setFechaPrestamo(rs.getTimestamp("fecha_prestamo"));
+                        prestamo.setMulta(rs.getDouble("multa"));
+                        prestamo.setMultaPagada(rs.getBoolean("multa_pagada"));
+                        prestamo.setLibroTitulo(rs.getString("titulo"));
+                        prestamo.setLibroIsbn(rs.getString("isbn"));
+                        prestamo.setLectorCodigo(rs.getString("codigo_lector"));
+                        prestamo.setLectorNombre(rs.getString("lector_nombre"));
+                        prestamo.setBibliotecarioPrestamoNombre(rs.getString("bibliotecario_prestamo_nombre"));
+                        prestamosProximosAVencer.add(prestamo);
+                        
+                        System.out.println("✅ Préstamo encontrado: " + prestamo.getCodigoPrestamo() + 
+                                         " - " + prestamo.getLibroTitulo() + 
+                                         " - Vence: " + prestamo.getFechaDevolucionEsperada());
+                    }
+                }
+            }
+            
+            System.out.println("📋 Préstamos próximos a vencer (" + diasProximidad + " días): " + prestamosProximosAVencer.size());
+            
+        } catch (SQLException e) {
+            System.err.println("❌ Error obteniendo préstamos próximos a vencer: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        return prestamosProximosAVencer;
+    }
+    
+    /**
+     * Obtiene préstamos vencidos con multa pendiente
+     */
+    public List<Prestamo> obtenerPrestamosConMulta() {
+        List<Prestamo> prestamosConMulta = new ArrayList<>();
+        
+        try (Connection conn = DatabaseManager.getInstance().getConnection()) {
+            String sql = """
+                SELECT p.id, p.codigo_prestamo, p.fecha_devolucion_esperada, p.estado,
+                       p.fecha_prestamo, p.multa, p.multa_pagada,
+                       l.titulo, l.isbn,
+                       lec.codigo_lector, lec.nombre || ' ' || lec.apellido as lector_nombre,
+                       u1.nombre || ' ' || u1.apellido as bibliotecario_prestamo_nombre
+                FROM prestamos p
+                LEFT JOIN libros l ON p.libro_id = l.id
+                LEFT JOIN lectores lec ON p.lector_id = lec.id
+                LEFT JOIN usuarios u1 ON p.bibliotecario_prestamo_id = u1.id
+                WHERE p.estado = 'ACTIVO' 
+                AND p.fecha_devolucion_esperada < TRUNC(SYSDATE)
+                AND (p.multa > 0 OR p.fecha_devolucion_esperada < TRUNC(SYSDATE))
+                ORDER BY p.fecha_devolucion_esperada ASC
+                """;
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sql);
+                 ResultSet rs = stmt.executeQuery()) {
+                
+                while (rs.next()) {
+                    Prestamo prestamo = new Prestamo();
+                    prestamo.setId(rs.getLong("id"));
+                    prestamo.setCodigoPrestamo(rs.getString("codigo_prestamo"));
+                    prestamo.setFechaDevolucionEsperada(rs.getDate("fecha_devolucion_esperada").toLocalDate());
+                    prestamo.setEstado(rs.getString("estado"));
+                    prestamo.setFechaPrestamo(rs.getTimestamp("fecha_prestamo"));
+                    prestamo.setMulta(rs.getDouble("multa"));
+                    prestamo.setMultaPagada(rs.getBoolean("multa_pagada"));
+                    prestamo.setLibroTitulo(rs.getString("titulo"));
+                    prestamo.setLibroIsbn(rs.getString("isbn"));
+                    prestamo.setLectorCodigo(rs.getString("codigo_lector"));
+                    prestamo.setLectorNombre(rs.getString("lector_nombre"));
+                    prestamo.setBibliotecarioPrestamoNombre(rs.getString("bibliotecario_prestamo_nombre"));
+                    
+                    if (prestamo.getMulta() <= 0 && prestamo.isVencido()) {
+                        double multaCalculada = calcularMultaIndividual(prestamo);
+                        prestamo.setMulta(multaCalculada);
+                    }
+                    
+                    if (prestamo.getMulta() > 0) {
+                        prestamosConMulta.add(prestamo);
+                    }
+                }
+            }
+            
+            System.out.println("💰 Préstamos con multa: " + prestamosConMulta.size());
+            
+        } catch (SQLException e) {
+            System.err.println("❌ Error obteniendo préstamos con multa: " + e.getMessage());
+        }
+        
+        return prestamosConMulta;
+    }
+    
+    /**
+     * Obtiene estadísticas rápidas para el dashboard
+     */
+    public EstadisticasPrestamos obtenerEstadisticasRapidas() {
+        EstadisticasPrestamos stats = new EstadisticasPrestamos();
+        
+        try (Connection conn = DatabaseManager.getInstance().getConnection()) {
+            // Contar préstamos próximos a vencer (próximos 3 días)
+            String sqlProximos = """
+                SELECT COUNT(*) as total
+                FROM prestamos 
+                WHERE estado = 'ACTIVO' 
+                AND fecha_devolucion_esperada BETWEEN TRUNC(SYSDATE) AND (TRUNC(SYSDATE) + 3)
+                """;
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sqlProximos);
+                 ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    stats.prestamosProximosAVencer = rs.getInt("total");
+                }
+            }
+            
+            // Contar préstamos con multa
+            String sqlMultas = """
+                SELECT COUNT(*) as total
+                FROM prestamos 
+                WHERE estado = 'ACTIVO' 
+                AND fecha_devolucion_esperada < TRUNC(SYSDATE)
+                """;
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sqlMultas);
+                 ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    stats.prestamosConMulta = rs.getInt("total");
+                }
+            }
+            
+            System.out.println("📊 Estadísticas de préstamos calculadas");
+            
+        } catch (SQLException e) {
+            System.err.println("❌ Error calculando estadísticas de préstamos: " + e.getMessage());
+        }
+        
+        return stats;
+    }
+    
+    /**
+     * Clase interna para estadísticas rápidas de préstamos
+     */
+    public static class EstadisticasPrestamos {
+        public int prestamosProximosAVencer = 0;
+        public int prestamosConMulta = 0;
     }
 } 

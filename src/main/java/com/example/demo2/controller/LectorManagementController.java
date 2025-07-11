@@ -366,13 +366,13 @@ public class LectorManagementController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(true);
             
-            // Configurar tamaño estandarizado del modal
-            stage.setWidth(700);
-            stage.setHeight(650);
-            stage.setMinWidth(650);
-            stage.setMinHeight(600);
-            stage.setMaxWidth(800);
-            stage.setMaxHeight(700);
+            // Configurar tamaño ampliado del modal para mostrar todo el contenido
+            stage.setWidth(850);
+            stage.setHeight(800);
+            stage.setMinWidth(800);
+            stage.setMinHeight(750);
+            stage.setMaxWidth(950);
+            stage.setMaxHeight(850);
             
             // Callback cuando se cierra el formulario
             stage.setOnHidden(e -> {

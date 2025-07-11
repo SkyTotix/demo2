@@ -47,7 +47,6 @@ public class BibliotecarioManagementController {
     @FXML private TableColumn<Usuario, Void> colAcciones;
     @FXML private Button btnNuevoBibliotecario;
     @FXML private Button btnRefrescar;
-    @FXML private Button btnExportar;
     @FXML private Label lblTotalBibliotecarios;
     @FXML private Label lblBibliotecariasActivos;
     @FXML private Label lblBibliotecariasInactivos;
@@ -303,55 +302,7 @@ public class BibliotecarioManagementController {
         // ELIMINADO: Notificación innecesaria de lista actualizada
     }
     
-    @FXML
-    private void handleExportar() {
-        System.out.println("📊 Exportando lista de bibliotecarios");
-        
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Exportar Bibliotecarios");
-        fileChooser.getExtensionFilters().add(
-            new FileChooser.ExtensionFilter("Archivos CSV", "*.csv")
-        );
-        fileChooser.setInitialFileName("bibliotecarios_" + 
-            LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + ".csv");
-        
-        Stage stage = (Stage) btnExportar.getScene().getWindow();
-        File file = fileChooser.showSaveDialog(stage);
-        
-        if (file != null) {
-            exportarCSV(file);
-        }
-    }
-    
-    private void exportarCSV(File file) {
-        try (FileWriter writer = new FileWriter(file)) {
-            // Escribir encabezados
-            writer.write("Nombre,Apellido,Email,Teléfono,Fecha Creación,Estado,Última Conexión\n");
-            
-            // Escribir datos
-            for (Usuario usuario : bibliotecariosFiltrados) {
-                writer.write(String.format("%s,%s,%s,%s,%s,%s,%s\n",
-                    usuario.getNombre(),
-                    usuario.getApellido(),
-                    usuario.getEmail(),
-                    usuario.getTelefono() != null ? usuario.getTelefono() : "",
-                    usuario.getFechaCreacionAsLocalDate() != null ? 
-                        usuario.getFechaCreacionAsLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "",
-                    usuario.isActivo() ? "Activo" : "Inactivo",
-                    usuario.getUltimaConexion() != null ? 
-                        usuario.getUltimaConexion().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "Nunca"
-                ));
-            }
-            
-            // ELIMINADO: Notificación innecesaria de exportación exitosa
-            
-            System.out.println("✅ Bibliotecarios exportados a: " + file.getAbsolutePath());
-            
-        } catch (IOException e) {
-            System.err.println("❌ Error exportando bibliotecarios: " + e.getMessage());
-            mostrarError("Error de Exportación", "No se pudo exportar el archivo");
-        }
-    }
+    // Métodos de exportar eliminados - funcionalidad no requerida
     
     private void abrirFormularioBibliotecario(Usuario usuario) {
         try {
@@ -370,13 +321,13 @@ public class BibliotecarioManagementController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(true);
             
-            // Tamaño de ventana normal, contenido compacto
-            stage.setWidth(750);
-            stage.setHeight(780);
-            stage.setMinWidth(700);
-            stage.setMinHeight(720);
-            stage.setMaxWidth(850);
-            stage.setMaxHeight(860);
+            // Tamaño de ventana ampliado para mostrar todo el contenido sin scroll
+            stage.setWidth(900);
+            stage.setHeight(950);
+            stage.setMinWidth(850);
+            stage.setMinHeight(900);
+            stage.setMaxWidth(1000);
+            stage.setMaxHeight(1000);
             
             // Callback para actualizar la lista cuando se cierre el formulario
             stage.setOnHidden(e -> {

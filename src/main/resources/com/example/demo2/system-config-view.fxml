@@ -11,8 +11,8 @@
          <children>
             <Label styleClass="page-title" text="Configuración del Sistema" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="btnSaveAll" onAction="#handleSaveAll" styleClass="btn-primary" text="💾 Guardar Todo" />
-            <Button fx:id="btnResetDefaults" onAction="#handleResetDefaults" styleClass="btn-secondary" text="🔄 Restaurar" />
+            <Button fx:id="btnSaveAll" onAction="#handleSaveAll" styleClass="btn-primary" text="Guardar Todo" />
+            <Button fx:id="btnResetDefaults" onAction="#handleResetDefaults" styleClass="btn-secondary" text="Restaurar" />
          </children>
       </HBox>
       
@@ -20,7 +20,7 @@
       <TabPane fx:id="configTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
          
          <!-- Tab: Configuración General -->
-         <Tab text="⚙️ General">
+         <Tab text="General">
             <VBox spacing="20.0">
                <children>
                   <Label styleClass="section-title" text="Configuración General del Sistema" />
@@ -83,7 +83,7 @@
          </Tab>
          
          <!-- Tab: Base de Datos -->
-         <Tab text="🗄️ Base de Datos">
+         <Tab text="Base de Datos">
             <VBox spacing="20.0">
                <children>
                   <Label styleClass="section-title" text="Configuración de Base de Datos" />
@@ -96,7 +96,7 @@
                         <GridPane hgap="15.0" vgap="12.0">
                            <children>
                               <Label text="Estado:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                              <Label fx:id="lblDbConnectionStatus" styleClass="status-connected" text="✅ Conectado" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                              <Label fx:id="lblDbConnectionStatus" styleClass="status-connected" text="Conectado" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                               
                               <Label text="Servidor:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                               <Label fx:id="lblDbServer" text="Oracle Cloud Infrastructure" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -115,8 +115,8 @@
                         
                         <HBox spacing="10.0">
                            <children>
-                              <Button fx:id="btnTestConnection" onAction="#handleTestConnection" styleClass="btn-secondary" text="🔍 Probar Conexión" />
-                              <Button fx:id="btnReconnect" onAction="#handleReconnect" styleClass="btn-secondary" text="🔄 Reconectar" />
+                              <Button fx:id="btnTestConnection" onAction="#handleTestConnection" styleClass="btn-secondary" text="Probar Conexión" />
+                              <Button fx:id="btnReconnect" onAction="#handleReconnect" styleClass="btn-secondary" text="Reconectar" />
                            </children>
                         </HBox>
                      </children>
@@ -153,7 +153,7 @@
          </Tab>
          
          <!-- Tab: Seguridad -->
-         <Tab text="🔐 Seguridad">
+         <Tab text="Seguridad">
             <VBox spacing="20.0">
                <children>
                   <Label styleClass="section-title" text="Configuración de Seguridad" />
@@ -219,7 +219,7 @@
          </Tab>
          
          <!-- Tab: Backups -->
-         <Tab text="💾 Backups">
+         <Tab text="Backups">
             <VBox spacing="20.0">
                <children>
                   <Label styleClass="section-title" text="Configuración de Backups" />
@@ -262,7 +262,7 @@
                               <Label fx:id="lblLastBackup" text="Hoy a las 02:00" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                               
                               <Label text="Estado:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                              <Label fx:id="lblBackupStatus" styleClass="status-success" text="✅ Exitoso" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="lblBackupStatus" styleClass="status-success" text="Exitoso" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               
                               <Label text="Próximo backup:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                               <Label fx:id="lblNextBackup" text="Mañana a las 02:00" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -275,10 +275,79 @@
                         
                         <HBox spacing="10.0">
                            <children>
-                              <Button fx:id="btnRunBackup" onAction="#handleRunBackup" styleClass="btn-primary" text="▶️ Ejecutar Backup Ahora" />
-                              <Button fx:id="btnRestoreBackup" onAction="#handleRestoreBackup" styleClass="btn-secondary" text="📥 Restaurar Backup" />
+                              <Button fx:id="btnRunBackup" onAction="#handleRunBackup" styleClass="btn-primary" text="Ejecutar Backup Ahora" />
+                              <Button fx:id="btnRestoreBackup" onAction="#handleRestoreBackup" styleClass="btn-secondary" text="Restaurar Backup" />
                            </children>
                         </HBox>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+         </Tab>
+         
+         <!-- Tab: Multas -->
+         <Tab text="Multas">
+            <VBox spacing="20.0">
+               <children>
+                  <Label styleClass="section-title" text="Configuración de Multas por Préstamos" />
+                  
+                  <!-- Configuración de multas -->
+                  <VBox spacing="15.0" styleClass="config-section">
+                     <children>
+                        <Label styleClass="config-section-title" text="Parámetros de Multas" />
+                        
+                        <GridPane hgap="15.0" vgap="12.0">
+                           <children>
+                              <Label text="Días de gracia:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <HBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                 <children>
+                                    <Spinner fx:id="spnDiasGraciaMulta" editable="true" max="30" min="0" prefWidth="80.0" />
+                                    <Label text="días sin multa después del vencimiento" />
+                                 </children>
+                              </HBox>
+                              
+                              <Label text="Multa por día:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                              <HBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <children>
+                                    <Label text="$" />
+                                    <Spinner fx:id="spnMontoMultaDiario" editable="true" prefWidth="80.0" />
+                                    <Label text="pesos por día de retraso" />
+                                 </children>
+                              </HBox>
+                              
+                              <Label text="Multa máxima:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                              <HBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <children>
+                                    <Label text="$" />
+                                    <Spinner fx:id="spnMontoMultaMaxima" editable="true" prefWidth="80.0" />
+                                    <Label text="pesos (monto máximo por préstamo)" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="150.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                        </GridPane>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Información sobre multas -->
+                  <VBox spacing="15.0" styleClass="config-section">
+                     <children>
+                        <Label styleClass="config-section-title" text="Información sobre el Cálculo" />
+                        
+                        <VBox spacing="8.0">
+                           <children>
+                              <Label text="• Los días de gracia se cuentan después de la fecha de vencimiento del préstamo" />
+                              <Label text="• La multa se calcula multiplicando los días de retraso por el monto diario" />
+                              <Label text="• El monto total de la multa no puede exceder el monto máximo configurado" />
+                              <Label text="• Ejemplo: Con 3 días de gracia y $5.00 por día, un préstamo con 10 días de retraso tendrá una multa de $35.00" />
+                           </children>
+                        </VBox>
                      </children>
                   </VBox>
                </children>

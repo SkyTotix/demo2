@@ -48,9 +48,6 @@ public class PrestamoManagementController implements Initializable {
     @FXML private Button renovarListaBtn;
     @FXML private Button btnBuscar;
     @FXML private Button btnLimpiarBusqueda;
-    @FXML private Button btnExportarPrestamos;
-
-    @FXML private Button btnNotificarVencidos;
     
     private PrestamoService prestamoService;
     private NotificationService notificationService;
@@ -249,16 +246,7 @@ public class PrestamoManagementController implements Initializable {
             });
         }
         
-        // Configurar botones del footer (placeholder funcionalidad)
-        if (btnExportarPrestamos != null) {
-            btnExportarPrestamos.setOnAction(e -> mostrarMensajeDesarrollo("Exportar Préstamos"));
-        }
-        
-
-        
-        if (btnNotificarVencidos != null) {
-            btnNotificarVencidos.setOnAction(e -> mostrarMensajeDesarrollo("Notificar Vencidos"));
-        }
+        // Botones de footer eliminados - funcionalidades no requeridas
     }
     
     private void mostrarMensajeDesarrollo(String funcionalidad) {
@@ -380,13 +368,13 @@ public class PrestamoManagementController implements Initializable {
             stage.initOwner(nuevoPrestamoBtn.getScene().getWindow());
             stage.setResizable(true);
             
-            // Configurar tamaño estandarizado del modal
-            stage.setWidth(700);
-            stage.setHeight(650);
-            stage.setMinWidth(650);
-            stage.setMinHeight(600);
-            stage.setMaxWidth(800);
-            stage.setMaxHeight(700);
+            // Configurar tamaño ampliado del modal para mostrar todo el contenido
+            stage.setWidth(800);
+            stage.setHeight(750);
+            stage.setMinWidth(750);
+            stage.setMinHeight(700);
+            stage.setMaxWidth(900);
+            stage.setMaxHeight(800);
             
             stage.centerOnScreen();
             stage.showAndWait();

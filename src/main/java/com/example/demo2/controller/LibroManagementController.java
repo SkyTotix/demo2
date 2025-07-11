@@ -36,8 +36,6 @@ public class LibroManagementController {
     @FXML private Button btnLimpiarBusqueda;
     @FXML private Button btnActualizar;
     @FXML private Button btnNuevoLibro;
-    @FXML private Button btnExportarExcel;
-    @FXML private Button btnImportarLibros;
     
     @FXML private Label lblTotalLibros;
     @FXML private Label lblLibrosActivos;
@@ -313,9 +311,7 @@ public class LibroManagementController {
             }
         });
         
-        // Botones de footer (placeholder)
-        btnExportarExcel.setOnAction(e -> mostrarMensajeDesarrollo("Exportar a Excel"));
-        btnImportarLibros.setOnAction(e -> mostrarMensajeDesarrollo("Importar Libros"));
+        // Botones de footer eliminados (exportar/importar no requeridos)
         
         // Doble click en tabla para editar
         tableLibros.setRowFactory(tv -> {
@@ -454,13 +450,13 @@ public class LibroManagementController {
             stage.setScene(scene);
             stage.setResizable(true);
             
-            // Configurar tamaño del modal
-            stage.setWidth(700);
-            stage.setHeight(650);
-            stage.setMinWidth(650);
-            stage.setMinHeight(600);
-            stage.setMaxWidth(800);
-            stage.setMaxHeight(700);
+            // Configurar tamaño ampliado del modal para mostrar todo el contenido
+            stage.setWidth(800);
+            stage.setHeight(750);
+            stage.setMinWidth(750);
+            stage.setMinHeight(700);
+            stage.setMaxWidth(900);
+            stage.setMaxHeight(800);
             
             // Configurar controlador
             LibroFormController controller = loader.getController();
@@ -491,13 +487,13 @@ public class LibroManagementController {
             stage.setScene(scene);
             stage.setResizable(true);
             
-            // Configurar tamaño del modal
-            stage.setWidth(700);
-            stage.setHeight(650);
-            stage.setMinWidth(650);
-            stage.setMinHeight(600);
-            stage.setMaxWidth(800);
-            stage.setMaxHeight(700);
+            // Configurar tamaño ampliado del modal para mostrar todo el contenido
+            stage.setWidth(800);
+            stage.setHeight(750);
+            stage.setMinWidth(750);
+            stage.setMinHeight(700);
+            stage.setMaxWidth(900);
+            stage.setMaxHeight(800);
             
             // Configurar controlador con datos del libro
             LibroFormController controller = loader.getController();
