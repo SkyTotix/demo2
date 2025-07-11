@@ -19,6 +19,7 @@ import org.kordamp.bootstrapfx.BootstrapFX;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * CONTROLADOR DE PANTALLA DE LOGIN - PUNTO DE ENTRADA AL SISTEMA
@@ -289,20 +290,17 @@ public class LoginController {
             if (config.isLogoPersonalizado()) {
                 // Intentar cargar logo personalizado desde archivo fijo
                 try {
-                    java.io.File logoFile = new java.io.File("config/logo-personalizado.png");
+                    java.io.File logoFile = new java.io.File(Paths.get("config", "logo-personalizado.png").toString());
                     if (logoFile.exists()) {
-                        // Limpiar cache de JavaFX agregando timestamp a la URL
-                        String logoUrl = logoFile.toURI().toString() + "?t=" + System.currentTimeMillis();
-                        
-                        // Cargar y mostrar imagen personalizada
-                        Image logoImage = new Image(logoUrl);
+                        String logoUrl = logoFile.toURI().toURL().toExternalForm() + "?t=" + System.currentTimeMillis();
+                        Image logoImage = new Image(logoUrl, true); // Cargar asincrónicamente
                         loginLogoImage.setImage(logoImage);
                         loginLogoImage.setFitWidth(50);
                         loginLogoImage.setFitHeight(50);
                         loginLogoImage.setPreserveRatio(true);
                         loginLogoImage.setVisible(true);
                         loginLogo.setVisible(false);
-                        System.out.println("✅ Logo personalizado cargado en login desde: " + logoFile.getPath());
+                        System.out.println("✅ Logo personalizado cargado en login desde: " + logoFile.getAbsolutePath());
                     } else {
                         // Si no existe el archivo, mostrar logo por defecto
                         mostrarLogoDefaultLogin();
