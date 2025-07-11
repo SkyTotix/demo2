@@ -193,6 +193,7 @@ public class MainController {
             case SUPERADMIN:
                 addMenuSection("Gestión de Sistema");
                 addMenuItem(IconHelper.getAdminIcon(), "Administradores", "administradores", false);
+                // No agregar más items para simplificar
                 break;
                 
             case ADMIN:
@@ -342,11 +343,7 @@ public class MainController {
         switch (tipoUsuario) {
             case SUPERADMIN:
                 addQuickAction(IconHelper.getNewAdminIcon(), "Nuevo Admin", "nuevo-admin");
-        
-                addQuickAction(IconHelper.createIcon(org.kordamp.ikonli.fontawesome5.FontAwesomeSolid.DATABASE, IconHelper.MEDIUM_SIZE, IconHelper.PRIMARY_COLOR), "Gestión BD", "gestion-bd");
-                addQuickAction(IconHelper.createIcon(org.kordamp.ikonli.fontawesome5.FontAwesomeSolid.SHIELD_ALT, IconHelper.MEDIUM_SIZE, IconHelper.WARNING_COLOR), "Seguridad", "seguridad");
-                addQuickAction(IconHelper.createIcon(org.kordamp.ikonli.fontawesome5.FontAwesomeSolid.COG, IconHelper.MEDIUM_SIZE, IconHelper.SECONDARY_COLOR), "Mantenimiento", "mantenimiento");
-                addQuickAction(IconHelper.createIcon(org.kordamp.ikonli.fontawesome5.FontAwesomeSolid.DOWNLOAD, IconHelper.MEDIUM_SIZE, IconHelper.SUCCESS_COLOR), "Backup", "backup");
+                // Remover las otras acciones para simplificar el dashboard
                 break;
                 
             case ADMIN:
@@ -489,14 +486,14 @@ public class MainController {
         contentScrollPane.setContent(dashboardContainer);
         contentScrollPane.setVisible(true);
         
-        // Aplicar efecto de carga completada y actualizar estadísticas
+        // Aplicar efecto de carga completada y actualizar estadísticas solo si aplica
         javafx.application.Platform.runLater(() -> {
             contentScrollPane.getStyleClass().remove("content-transition");
             contentScrollPane.getStyleClass().add("content-loaded");
             
-            // Recargar estadísticas para administradores
+            // Recargar estadísticas solo para ADMIN
             TipoUsuario tipoUsuario = authService.getUsuarioActual().getTipoUsuario();
-            if ((tipoUsuario == TipoUsuario.ADMIN || tipoUsuario == TipoUsuario.SUPERADMIN) && 
+            if (tipoUsuario == TipoUsuario.ADMIN && 
                 statisticsSection != null && statisticsSection.isVisible()) {
                 cargarEstadisticasInteractivas();
             }
@@ -698,8 +695,8 @@ public class MainController {
     private void setupStatistics() {
         TipoUsuario tipoUsuario = authService.getUsuarioActual().getTipoUsuario();
         
-        // Solo mostrar estadísticas para administradores
-        if (tipoUsuario == TipoUsuario.ADMIN || tipoUsuario == TipoUsuario.SUPERADMIN) {
+        // Solo mostrar estadísticas para ADMIN (no para SUPERADMIN para simplificar)
+        if (tipoUsuario == TipoUsuario.ADMIN) {
             if (statisticsSection != null) {
                 statisticsSection.setVisible(true);
                 statisticsSection.setManaged(true);
