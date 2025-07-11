@@ -155,7 +155,7 @@ public class LoginController {
                     com.example.demo2.service.PrestamoService.getInstance().crearPrestamosDePrueba();
                     
                     javafx.application.Platform.runLater(() -> 
-                        showMessage("Sistema listo - Usuario: admin / admin123", "info"));
+                        showMessage("Sistema listo", "info"));
                 } else {
                     javafx.application.Platform.runLater(() -> 
                         showMessage("Error: No se pudieron crear las tablas", "error"));
@@ -263,10 +263,10 @@ public class LoginController {
     }
     
     private void showDefaultCredentials() {
-        // Solo en desarrollo - mostrar credenciales por defecto
-        if (messageLabel != null) {
-            showMessage("Usuario por defecto: admin / admin123", "info");
-        }
+        // Comentado para no mostrar credenciales por defecto
+        // if (messageLabel != null) {
+        //     showMessage("Usuario por defecto: admin / admin123", "info");
+        // }
     }
     
     @FXML
@@ -297,6 +297,9 @@ public class LoginController {
                         // Cargar y mostrar imagen personalizada
                         Image logoImage = new Image(logoUrl);
                         loginLogoImage.setImage(logoImage);
+                        loginLogoImage.setFitWidth(50);
+                        loginLogoImage.setFitHeight(50);
+                        loginLogoImage.setPreserveRatio(true);
                         loginLogoImage.setVisible(true);
                         loginLogo.setVisible(false);
                         System.out.println("✅ Logo personalizado cargado en login desde: " + logoFile.getPath());
@@ -325,7 +328,7 @@ public class LoginController {
         if (loginLogo != null && loginLogoImage != null) {
             loginLogo.setIconLiteral("fas-book");
             loginLogo.setIconColor(Color.web("#3B82F6"));
-            loginLogo.setIconSize(30);
+            loginLogo.setIconSize(50);
             loginLogo.setVisible(true);
             loginLogoImage.setVisible(false);
         }

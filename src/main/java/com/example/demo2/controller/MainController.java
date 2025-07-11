@@ -1294,6 +1294,9 @@ public class MainController {
                         // Cargar y mostrar imagen personalizada
                         Image logoImage = new Image(logoUrl);
                         headerLogoImage.setImage(logoImage);
+                        headerLogoImage.setFitWidth(40);
+                        headerLogoImage.setFitHeight(40);
+                        headerLogoImage.setPreserveRatio(true);
                         headerLogoImage.setVisible(true);
                         headerLogo.setVisible(false);
                         System.out.println("✅ Logo personalizado cargado desde: " + logoFile.getPath());
@@ -1322,7 +1325,7 @@ public class MainController {
         if (headerLogo != null && headerLogoImage != null) {
             headerLogo.setIconLiteral("fas-book");
             headerLogo.setIconColor(Color.web("#3B82F6"));
-            headerLogo.setIconSize(24);
+            headerLogo.setIconSize(40);
             headerLogo.setVisible(true);
             headerLogoImage.setVisible(false);
         }
