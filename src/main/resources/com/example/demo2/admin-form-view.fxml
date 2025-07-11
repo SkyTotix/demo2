@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.controller.AdminFormController">
+   <children>
+      <!-- Header -->
+      <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="content-header">
+         <children>
+            <Label fx:id="lblTitulo" styleClass="page-title" text="Nuevo Administrador" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnVolver" onAction="#handleVolver" styleClass="btn-secondary" text="← Volver" />
+         </children>
+      </HBox>
+      
+      <!-- Formulario -->
+      <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+         <content>
+            <VBox spacing="25.0" styleClass="form-container">
+               <children>
+                  <!-- Información Personal -->
+                  <VBox spacing="15.0" styleClass="form-section">
+                     <children>
+                        <Label styleClass="section-title" text="Información Personal" />
+                        
+                        <HBox spacing="20.0">
+                           <children>
+                              <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label styleClass="field-label" text="Nombre *" />
+                                    <TextField fx:id="txtNombre" promptText="Ingrese el nombre" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label styleClass="field-label" text="Apellido *" />
+                                    <TextField fx:id="txtApellido" promptText="Ingrese el apellido" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        
+                        <VBox spacing="8.0">
+                           <children>
+                              <Label styleClass="field-label" text="Email *" />
+                              <TextField fx:id="txtEmail" promptText="ejemplo@correo.com" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Información de Cuenta -->
+                  <VBox spacing="15.0" styleClass="form-section">
+                     <children>
+                        <Label styleClass="section-title" text="Información de Cuenta" />
+                        
+                        <VBox spacing="8.0">
+                           <children>
+                              <Label styleClass="field-label" text="Nombre de Usuario *" />
+                              <TextField fx:id="txtUsername" promptText="Nombre de usuario único" />
+                           </children>
+                        </VBox>
+                        
+                        <VBox fx:id="passwordSection" spacing="8.0">
+                           <children>
+                              <Label styleClass="field-label" text="Contraseña *" />
+                              <PasswordField fx:id="txtPassword" promptText="Mínimo 6 caracteres" />
+                           </children>
+                        </VBox>
+                        
+                        <VBox fx:id="confirmPasswordSection" spacing="8.0">
+                           <children>
+                              <Label styleClass="field-label" text="Confirmar Contraseña *" />
+                              <PasswordField fx:id="txtConfirmPassword" promptText="Repita la contraseña" />
+                           </children>
+                        </VBox>
+                        
+                        <CheckBox fx:id="chkActivo" selected="true" text="Usuario activo" />
+                     </children>
+                  </VBox>
+                  
+                  <!-- Mensaje de estado -->
+                  <Label fx:id="lblMensaje" styleClass="status-message" visible="false" />
+                  
+                  <!-- Botones de acción -->
+                  <HBox alignment="CENTER_RIGHT" spacing="15.0" styleClass="form-actions">
+                     <children>
+                        <Button fx:id="btnCancelar" onAction="#handleCancelar" styleClass="btn-secondary" text="Cancelar" />
+                        <Button fx:id="btnGuardar" onAction="#handleGuardar" styleClass="btn-primary" text="Guardar Administrador" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </content>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </ScrollPane>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+   </padding>
+</VBox> 

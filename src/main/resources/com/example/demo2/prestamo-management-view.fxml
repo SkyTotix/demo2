@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.controller.PrestamoManagementController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   
+   <!-- Header Section -->
+   <VBox spacing="10" styleClass="content-header">
+      <HBox alignment="CENTER_LEFT" spacing="15">
+         <FontIcon iconLiteral="fas-handshake" iconSize="28" iconColor="#3B82F6" />
+         <VBox>
+            <Label text="Gestión de Préstamos" styleClass="page-title" />
+            <Label text="Administra los préstamos de libros del sistema" styleClass="page-subtitle" />
+         </VBox>
+         <Region HBox.hgrow="ALWAYS" />
+         <Button fx:id="nuevoPrestamoBtn" text="Nuevo Préstamo" styleClass="btn, btn-primary">
+            <graphic>
+               <FontIcon iconLiteral="fas-plus" iconSize="14" iconColor="white" />
+            </graphic>
+         </Button>
+      </HBox>
+   </VBox>
+   
+   <!-- Search and Filter Section -->
+   <VBox spacing="15" styleClass="search-section">
+      <HBox spacing="15" alignment="CENTER_LEFT">
+         <!-- Search Field -->
+         <VBox spacing="5">
+            <Label text="Buscar:" styleClass="form-label" />
+            <HBox spacing="10" alignment="CENTER_LEFT">
+               <TextField fx:id="searchField" promptText="Buscar por código, libro, lector o ISBN..." prefWidth="350" styleClass="form-control" />
+               <Button fx:id="btnBuscar" styleClass="btn, btn-secondary">
+                  <graphic>
+                     <FontIcon iconLiteral="fas-search" iconSize="14" iconColor="white" />
+                  </graphic>
+                  <tooltip>
+                     <Tooltip text="Buscar préstamos" />
+                  </tooltip>
+               </Button>
+               <Button fx:id="btnLimpiarBusqueda" styleClass="btn, btn-outline-secondary">
+                  <graphic>
+                     <FontIcon iconLiteral="fas-times" iconSize="14" iconColor="#64748B" />
+                  </graphic>
+                  <tooltip>
+                     <Tooltip text="Limpiar búsqueda" />
+                  </tooltip>
+               </Button>
+            </HBox>
+         </VBox>
+         
+         <!-- Filter by Status -->
+         <VBox spacing="5">
+            <Label text="Estado:" styleClass="form-label" />
+            <ComboBox fx:id="estadoFilter" prefWidth="150" styleClass="form-control" />
+         </VBox>
+         
+         <Region HBox.hgrow="ALWAYS" />
+         
+         <!-- Action Buttons -->
+         <Button fx:id="renovarListaBtn" styleClass="btn, btn-outline-primary">
+            <graphic>
+               <FontIcon iconLiteral="fas-sync-alt" iconSize="14" iconColor="#3B82F6" />
+            </graphic>
+            <tooltip>
+               <Tooltip text="Actualizar lista" />
+            </tooltip>
+         </Button>
+      </HBox>
+   </VBox>
+   
+   <!-- Statistics Section -->
+   <HBox spacing="20" styleClass="stats-section">
+      <VBox spacing="5" styleClass="stat-item">
+         <Label fx:id="totalPrestamosLabel" text="0" styleClass="stat-number" />
+         <Label text="Total Préstamos" styleClass="stat-label" />
+      </VBox>
+      <VBox spacing="5" styleClass="stat-item">
+         <Label fx:id="prestamosActivosLabel" text="0" styleClass="stat-number" />
+         <Label text="Activos" styleClass="stat-label" />
+      </VBox>
+      <VBox spacing="5" styleClass="stat-item">
+         <Label fx:id="prestamosVencidosLabel" text="0" styleClass="stat-number" />
+         <Label text="Vencidos" styleClass="stat-label" />
+      </VBox>
+      <VBox spacing="5" styleClass="stat-item">
+         <Label fx:id="prestamosDevueltosLabel" text="0" styleClass="stat-number" />
+         <Label text="Devueltos" styleClass="stat-label" />
+      </VBox>
+   </HBox>
+   
+   <!-- Table Section -->
+   <VBox spacing="10" VBox.vgrow="ALWAYS" styleClass="table-section">
+      <HBox alignment="CENTER_LEFT" spacing="10">
+         <Label text="Gestión de Préstamos" styleClass="section-title" />
+         <Region HBox.hgrow="ALWAYS" />
+         <Label fx:id="lblResultados" text="Mostrando 0 préstamos" styleClass="results-info" />
+      </HBox>
+      
+      <TableView fx:id="prestamosTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
+         <columns>
+            <TableColumn fx:id="codigoColumn" prefWidth="120" text="Código" />
+            <TableColumn fx:id="libroColumn" prefWidth="220" text="Libro" />
+            <TableColumn fx:id="lectorColumn" prefWidth="180" text="Lector" />
+            <TableColumn fx:id="fechaPrestamoColumn" prefWidth="130" text="F. Préstamo" />
+            <TableColumn fx:id="fechaDevolucionColumn" prefWidth="130" text="F. Devolución" />
+            <TableColumn fx:id="estadoColumn" prefWidth="120" text="Estado" />
+            <TableColumn fx:id="accionesColumn" prefWidth="180" text="Acciones" />
+         </columns>
+         
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+         
+         <placeholder>
+            <VBox alignment="CENTER" spacing="10" styleClass="empty-table-placeholder">
+               <FontIcon iconLiteral="fas-handshake" iconSize="48" iconColor="#E5E7EB" />
+               <Label text="No se encontraron préstamos" styleClass="empty-table-message" />
+               <Label text="Usa los filtros de búsqueda o registra un nuevo préstamo" styleClass="empty-table-hint" />
+            </VBox>
+         </placeholder>
+      </TableView>
+   </VBox>
+   
+   <!-- Footer with additional actions -->
+   <HBox spacing="15" alignment="CENTER_LEFT" styleClass="footer-actions">
+      <Button fx:id="btnExportarPrestamos" text="Exportar a Excel" styleClass="btn, btn-outline-success">
+         <graphic>
+            <FontIcon iconLiteral="fas-file-excel" iconSize="14" iconColor="#10B981" />
+         </graphic>
+      </Button>
+
+      <Button fx:id="btnNotificarVencidos" text="Notificar Vencidos" styleClass="btn, btn-outline-warning">
+         <graphic>
+            <FontIcon iconLiteral="fas-bell" iconSize="14" iconColor="#F59E0B" />
+         </graphic>
+      </Button>
+      <Region HBox.hgrow="ALWAYS" />
+      <Label fx:id="lblUltimaActualizacion" text="Última actualización: --" styleClass="last-updated" />
+   </HBox>
+</VBox> 

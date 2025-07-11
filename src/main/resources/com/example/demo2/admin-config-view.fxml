@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.controller.AdminConfigController" spacing="24.0" styleClass="config-container">
+   <padding>
+      <Insets top="20.0" bottom="20.0" left="30.0" right="30.0" />
+   </padding>
+   
+   <!-- Header -->
+   <HBox spacing="16.0" alignment="CENTER_LEFT">
+      <children>
+         <FontIcon iconLiteral="fas-cog" iconSize="24" iconColor="#3B82F6" />
+         <VBox spacing="4.0">
+            <children>
+               <Label text="Configuraciones del Sistema" styleClass="config-title">
+                  <font>
+                     <Font name="System Bold" size="20.0" />
+                  </font>
+               </Label>
+               <Label text="Personaliza la apariencia de la aplicación" styleClass="config-subtitle">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Label>
+            </children>
+         </VBox>
+      </children>
+   </HBox>
+   
+
+   
+   <!-- Configuración de Logo -->
+   <VBox spacing="16.0" styleClass="config-section">
+      <children>
+         <Label text="🖼️ Personalización de Logo" styleClass="section-title">
+            <font>
+               <Font name="System Bold" size="16.0" />
+            </font>
+         </Label>
+         
+         <HBox spacing="20.0" alignment="CENTER_LEFT">
+            <children>
+               <!-- Preview del logo actual -->
+               <VBox spacing="8.0" alignment="CENTER">
+                  <children>
+                     <Label text="Logo Actual:" styleClass="config-label" />
+                     <StackPane fx:id="logoPreview" styleClass="logo-preview">
+                        <children>
+                           <FontIcon fx:id="currentLogoIcon" iconLiteral="fas-book" iconSize="48" iconColor="#3B82F6" />
+                           <ImageView fx:id="customLogoImage" visible="false" />
+                        </children>
+                     </StackPane>
+                  </children>
+               </VBox>
+               
+               <!-- Opciones de logo -->
+               <VBox spacing="12.0">
+                  <children>
+                     <Label text="Seleccionar Logo:" styleClass="config-label" />
+                     
+                     <RadioButton fx:id="rbLogoDefault" text="📖 Logo por Defecto (Icono Libro)" selected="true" toggleGroup="$logoGroup" onAction="#cambiarLogoDefault" styleClass="logo-option" />
+                     <RadioButton fx:id="rbLogoCustom" text="🖼️ Logo Personalizado (Seleccionar Imagen)" toggleGroup="$logoGroup" onAction="#cambiarLogoCustom" styleClass="logo-option" />
+                     
+                     <HBox spacing="8.0">
+                        <children>
+                           <Button fx:id="btnSeleccionarArchivo" text="📁 Seleccionar Imagen" styleClass="preview-button" />
+                        </children>
+                     </HBox>
+                     
+                     <HBox spacing="8.0">
+                        <children>
+                           <Button fx:id="btnAplicarLogo" text="✅ Aplicar Logo" onAction="#aplicarLogo" styleClass="apply-button" />
+                           <Button fx:id="btnVistaPrevia" text="👁️ Vista Previa" onAction="#vistaPrevia" styleClass="preview-button" />
+                        </children>
+                     </HBox>
+                  </children>
+               </VBox>
+            </children>
+         </HBox>
+      </children>
+   </VBox>
+   
+   <!-- Información y Estado -->
+   <VBox spacing="16.0" styleClass="config-section">
+      <children>
+         <Label text="ℹ️ Información del Sistema" styleClass="section-title">
+            <font>
+               <Font name="System Bold" size="16.0" />
+            </font>
+         </Label>
+         
+         <GridPane hgap="20.0" vgap="8.0">
+            <columnConstraints>
+               <ColumnConstraints minWidth="150.0" />
+               <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+            
+            <Label text="Estado de Configuración:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="config-label" />
+            <Label fx:id="lblEstadoConfig" text="Configuración por defecto" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="status-text" />
+            
+            <Label text="Última Modificación:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="config-label" />
+            <Label fx:id="lblUltimaModificacion" text="Sin modificaciones" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="status-text" />
+            
+            <Label fx:id="lblMensaje" text="" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2" styleClass="message-text" />
+         </GridPane>
+      </children>
+   </VBox>
+   
+   <!-- Botones de Acción -->
+   <HBox spacing="16.0" alignment="CENTER_RIGHT">
+      <children>
+         <Button fx:id="btnGuardarConfig" text="💾 Guardar Configuración" onAction="#guardarConfiguracion" styleClass="save-button" />
+         <Button fx:id="btnCancelar" text="❌ Cancelar" onAction="#cancelar" styleClass="cancel-button" />
+      </children>
+   </HBox>
+</VBox> 

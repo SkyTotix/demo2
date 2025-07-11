@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.controller.PrestamoFormController" styleClass="content-area">
+   <children>
+      <!-- Header -->
+      <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="header-section">
+         <children>
+            <Label fx:id="tituloLabel" styleClass="form-title" text="Nuevo Préstamo" />
+            <Region HBox.hgrow="ALWAYS" />
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </HBox>
+      
+      <!-- Error Label -->
+      <Label fx:id="errorLabel" managed="false" styleClass="error-message" text="Error message" visible="false">
+         <VBox.margin>
+            <Insets bottom="10.0" left="20.0" right="20.0" />
+         </VBox.margin>
+      </Label>
+      
+      <!-- Form Content -->
+      <ScrollPane fitToWidth="true" styleClass="form-container" VBox.vgrow="ALWAYS">
+         <content>
+            <VBox spacing="20.0">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <children>
+                  <!-- Información del Préstamo -->
+                  <VBox spacing="15.0">
+                     <children>
+                        <Label styleClass="section-title" text="Información del Préstamo" />
+                        
+                        <!-- Código del Préstamo -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Código del Préstamo:" />
+                              <TextField fx:id="codigoField" styleClass="field-readonly" />
+                           </children>
+                        </VBox>
+                        
+                        <!-- Libro -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Libro: *" />
+                              <ComboBox fx:id="libroCombo" maxWidth="1.7976931348623157E308" promptText="Seleccione un libro..." />
+                           </children>
+                        </VBox>
+                        
+                        <!-- Lector -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Lector: *" />
+                              <ComboBox fx:id="lectorCombo" maxWidth="1.7976931348623157E308" promptText="Seleccione un lector..." />
+                           </children>
+                        </VBox>
+                        
+                        <!-- Fecha de Devolución -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Fecha de Devolución Esperada: *" />
+                              <DatePicker fx:id="fechaDevolucionPicker" maxWidth="200.0" />
+                           </children>
+                        </VBox>
+                        
+                        <!-- Condición del Libro -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Condición del Libro: *" />
+                              <ComboBox fx:id="condicionCombo" maxWidth="200.0" />
+                           </children>
+                        </VBox>
+                        
+                        <!-- Observaciones -->
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Observaciones:" />
+                              <TextArea fx:id="observacionesArea" prefRowCount="3" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Nota sobre campos obligatorios -->
+                  <Label styleClass="required-note" text="* Campos obligatorios" />
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+      
+      <!-- Botones -->
+      <HBox alignment="CENTER_RIGHT" spacing="10.0" styleClass="button-section">
+         <children>
+            <Button fx:id="cancelarBtn" mnemonicParsing="false" styleClass="btn,btn-outline-secondary" text="Cancelar" />
+            <Button fx:id="guardarBtn" mnemonicParsing="false" styleClass="btn,btn-primary" text="Guardar" />
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox> 

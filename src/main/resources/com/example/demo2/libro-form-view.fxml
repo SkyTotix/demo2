@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.controller.LibroFormController">
+   <!-- Header -->
+   <top>
+      <VBox spacing="15" styleClass="form-header">
+         <padding>
+            <Insets bottom="15.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         <HBox spacing="12" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="fas-book" iconSize="24" iconColor="#3B82F6" />
+            <VBox>
+               <Label fx:id="lblTitulo" text="Nuevo Libro" styleClass="form-title" />
+               <Label text="Complete la información del libro" styleClass="form-subtitle" />
+            </VBox>
+         </HBox>
+         <Separator />
+      </VBox>
+   </top>
+   
+   <!-- Form Content -->
+   <center>
+      <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+         <VBox spacing="20" styleClass="form-content">
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+            </padding>
+            
+            <!-- ISBN and Basic Info Section -->
+            <VBox spacing="15" styleClass="form-section">
+               <Label text="Información Básica" styleClass="section-header" />
+               
+               <GridPane hgap="15" vgap="12">
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120" />
+                     <ColumnConstraints hgrow="ALWAYS" />
+                  </columnConstraints>
+                  
+                  <!-- ISBN -->
+                  <Label text="ISBN*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                     <TextField fx:id="txtIsbn" promptText="978-84-376-0494-7" styleClass="form-control" maxWidth="300" />
+                     <Label fx:id="lblErrorIsbn" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Título -->
+                  <Label text="Título*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <TextField fx:id="txtTitulo" promptText="Don Quijote de la Mancha" styleClass="form-control" />
+                     <Label fx:id="lblErrorTitulo" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Autor -->
+                  <Label text="Autor*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <TextField fx:id="txtAutor" promptText="Miguel de Cervantes" styleClass="form-control" />
+                     <Label fx:id="lblErrorAutor" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Editorial -->
+                  <Label text="Editorial*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <TextField fx:id="txtEditorial" promptText="Editorial Planeta" styleClass="form-control" />
+                     <Label fx:id="lblErrorEditorial" styleClass="error-message" visible="false" />
+                  </VBox>
+               </GridPane>
+            </VBox>
+            
+            <!-- Category and Year Section -->
+            <VBox spacing="15" styleClass="form-section">
+               <Label text="Clasificación" styleClass="section-header" />
+               
+               <GridPane hgap="15" vgap="12">
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120" />
+                     <ColumnConstraints hgrow="ALWAYS" />
+                  </columnConstraints>
+                  
+                  <!-- Categoría -->
+                  <Label text="Categoría*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                     <ComboBox fx:id="cmbCategoria" editable="true" promptText="Seleccione o escriba una categoría" styleClass="form-control" prefWidth="250" />
+                     <Label fx:id="lblErrorCategoria" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Año de Publicación -->
+                  <Label text="Año de Publicación*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="txtAnioPublicacion" promptText="2023" styleClass="form-control" prefWidth="100" />
+                        <Label text="(Entre 1000 y 2024)" styleClass="help-text" />
+                     </HBox>
+                     <Label fx:id="lblErrorAnio" styleClass="error-message" visible="false" />
+                  </VBox>
+               </GridPane>
+            </VBox>
+            
+            <!-- Inventory Section -->
+            <VBox spacing="15" styleClass="form-section">
+               <Label text="Inventario" styleClass="section-header" />
+               
+               <GridPane hgap="15" vgap="12">
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120" />
+                     <ColumnConstraints hgrow="ALWAYS" />
+                  </columnConstraints>
+                  
+                  <!-- Cantidad Total -->
+                  <Label text="Cantidad Total*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                     <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="txtCantidadTotal" promptText="1" styleClass="form-control" prefWidth="100" />
+                        <Label text="(Número de ejemplares total)" styleClass="help-text" />
+                     </HBox>
+                     <Label fx:id="lblErrorCantidadTotal" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Cantidad Disponible -->
+                  <Label text="Cantidad Disponible*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="txtCantidadDisponible" promptText="1" styleClass="form-control" prefWidth="100" />
+                        <Label text="(Número disponible para préstamo)" styleClass="help-text" />
+                     </HBox>
+                     <Label fx:id="lblErrorCantidadDisponible" styleClass="error-message" visible="false" />
+                  </VBox>
+               </GridPane>
+            </VBox>
+            
+            <!-- Description Section -->
+            <VBox spacing="15" styleClass="form-section">
+               <Label text="Información Adicional" styleClass="section-header" />
+               
+               <GridPane hgap="15" vgap="12">
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120" />
+                     <ColumnConstraints hgrow="ALWAYS" />
+                  </columnConstraints>
+                  
+                  <!-- Descripción -->
+                  <Label text="Descripción:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                     <TextArea fx:id="txtDescripcion" promptText="Breve descripción del libro, sinopsis o notas adicionales..." 
+                              styleClass="form-control" prefRowCount="4" wrapText="true" />
+                     <Label text="(Opcional - máximo 500 caracteres)" styleClass="help-text" />
+                  </VBox>
+                  
+                  <!-- Estado -->
+                  <Label text="Estado:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <CheckBox fx:id="chkActivo" text="Libro activo y disponible" styleClass="form-checkbox" 
+                           GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </GridPane>
+            </VBox>
+            
+            <!-- Required Fields Note -->
+            <HBox spacing="8" alignment="CENTER_LEFT" styleClass="required-note">
+               <FontIcon iconLiteral="fas-info-circle" iconSize="14" iconColor="#64748B" />
+               <Label text="Los campos marcados con * son obligatorios" styleClass="help-text" />
+            </HBox>
+         </VBox>
+      </ScrollPane>
+   </center>
+   
+   <!-- Footer with Action Buttons -->
+   <bottom>
+      <VBox spacing="10" styleClass="form-footer">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
+         </padding>
+         
+         <Separator />
+         
+         <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Button fx:id="btnCancelar" text="Cancelar" onAction="#cancelar" styleClass="btn, btn-outline-secondary" prefWidth="100">
+               <graphic>
+                  <FontIcon iconLiteral="fas-times" iconSize="14" iconColor="#64748B" />
+               </graphic>
+            </Button>
+            
+            <Button fx:id="btnValidar" text="Validar ISBN" onAction="#validarIsbn" styleClass="btn, btn-outline-info" prefWidth="120">
+               <graphic>
+                  <FontIcon iconLiteral="fas-check-circle" iconSize="14" iconColor="#3B82F6" />
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Validar formato del ISBN" />
+               </tooltip>
+            </Button>
+            
+            <Button fx:id="btnGuardar" text="Guardar" onAction="#guardar" styleClass="btn, btn-primary" prefWidth="100">
+               <graphic>
+                  <FontIcon iconLiteral="fas-save" iconSize="14" iconColor="white" />
+               </graphic>
+            </Button>
+         </HBox>
+      </VBox>
+   </bottom>
+</BorderPane> 

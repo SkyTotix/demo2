@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.controller.MainController" styleClass="main-background">
+   
+   <!-- Header / Barra Superior -->
+   <top>
+      <HBox styleClass="header-bar" spacing="0.0" alignment="CENTER_LEFT">
+         <padding>
+            <Insets top="16.0" bottom="16.0" left="24.0" right="24.0" />
+         </padding>
+         
+         <!-- Logo y Título -->
+         <HBox spacing="12.0" alignment="CENTER_LEFT">
+            <children>
+               <StackPane fx:id="logoContainer" styleClass="header-logo-container">
+                  <children>
+                     <FontIcon fx:id="headerLogo" iconLiteral="fas-book" iconSize="24" iconColor="#3B82F6" styleClass="header-logo" />
+                     <ImageView fx:id="headerLogoImage" fitHeight="32.0" fitWidth="32.0" preserveRatio="true" visible="false" />
+                  </children>
+               </StackPane>
+               <Label text="BiblioSystem" styleClass="header-title">
+                  <font>
+                     <Font name="System Bold" size="18.0" />
+                  </font>
+               </Label>
+            </children>
+         </HBox>
+         
+         <!-- Spacer -->
+         <Region HBox.hgrow="ALWAYS" />
+         
+         <!-- Info del Usuario y Cerrar Sesión -->
+         <HBox spacing="16.0" alignment="CENTER_RIGHT">
+            <children>
+               <VBox alignment="CENTER_RIGHT" spacing="2.0">
+                  <children>
+                     <Label fx:id="userNameLabel" text="Usuario Actual" styleClass="user-name">
+                        <font>
+                           <Font name="System Bold" size="14.0" />
+                        </font>
+                     </Label>
+                     <Label fx:id="userRoleLabel" text="Administrador" styleClass="user-role">
+                        <font>
+                           <Font size="12.0" />
+                        </font>
+                     </Label>
+                  </children>
+               </VBox>
+               
+               <!-- Centro de Notificaciones -->
+               <Button fx:id="notificationButton" onAction="#handleShowNotifications" styleClass="notification-button">
+                  <graphic>
+                     <StackPane>
+                        <FontIcon iconLiteral="fas-bell" iconSize="18" iconColor="#64748B" styleClass="notification-icon" />
+                        <Label fx:id="notificationBadge" styleClass="notification-badge" text="0" visible="false" />
+                     </StackPane>
+                  </graphic>
+               </Button>
+               
+               <Button fx:id="logoutButton" text="Cerrar Sesión" styleClass="logout-button" onAction="#handleLogout">
+                  <font>
+                     <Font size="13.0" />
+                  </font>
+               </Button>
+            </children>
+         </HBox>
+      </HBox>
+   </top>
+   
+   <!-- Sidebar / Menú Lateral -->
+   <left>
+      <VBox styleClass="sidebar" spacing="8.0" prefWidth="250.0">
+         <padding>
+            <Insets top="24.0" bottom="24.0" left="16.0" right="16.0" />
+         </padding>
+         
+         <!-- Título del Menú -->
+         <Label text="Menú Principal" styleClass="sidebar-title">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font>
+            <VBox.margin>
+               <Insets bottom="16.0" />
+            </VBox.margin>
+         </Label>
+         
+         <!-- Opciones del Menú según Rol -->
+         <VBox fx:id="menuContainer" spacing="4.0">
+            <!-- Los elementos del menú se cargarán dinámicamente según el rol -->
+         </VBox>
+         
+         <!-- Spacer -->
+         <Region VBox.vgrow="ALWAYS" />
+         
+         <!-- Footer del Sidebar -->
+         <VBox spacing="8.0" styleClass="sidebar-footer">
+            <children>
+               <Separator />
+               <Label text="BiblioSystem v1.0" styleClass="sidebar-footer-text">
+                  <font>
+                     <Font size="11.0" />
+                  </font>
+               </Label>
+            </children>
+         </VBox>
+      </VBox>
+   </left>
+   
+   <!-- Área de Contenido Principal -->
+   <center>
+      <StackPane styleClass="content-area">
+         <padding>
+            <Insets top="24.0" bottom="24.0" left="24.0" right="24.0" />
+         </padding>
+         
+         <!-- Dashboard Principal -->
+         <ScrollPane fx:id="contentScrollPane" styleClass="content-scroll" fitToWidth="true" fitToHeight="true">
+            <content>
+               <VBox fx:id="dashboardContainer" spacing="24.0" styleClass="dashboard-container">
+                  
+                  <!-- Panel de Bienvenida Mejorado -->
+                  <VBox spacing="16.0" styleClass="welcome-panel">
+                     <children>
+                        <HBox spacing="16.0" alignment="CENTER_LEFT">
+                           <children>
+                              <VBox spacing="8.0">
+                                 <children>
+                                    <Label fx:id="welcomeLabel" text="¡Bienvenido al Sistema!" styleClass="dashboard-title">
+                                       <font>
+                                          <Font name="System Bold" size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="dashboardSubtitle" text="Panel de control del sistema de gestión bibliotecaria" styleClass="dashboard-subtitle">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <VBox spacing="4.0" alignment="CENTER_RIGHT">
+                                 <children>
+                                    <Label text="🌟 Sistema Activo" styleClass="status-indicator">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Conectado a la base de datos" styleClass="status-text">
+                                       <font>
+                                          <Font name="System Regular" size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        
+                        <!-- Información adicional del panel -->
+                        <HBox spacing="24.0" alignment="CENTER_LEFT">
+                           <children>
+                              <VBox spacing="4.0">
+                                 <children>
+                                    <Label text="📅 Última Actualización" styleClass="info-label">
+                                       <font>
+                                          <Font name="System Bold" size="11.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Diciembre 2024" styleClass="info-value">
+                                       <font>
+                                          <Font name="System Regular" size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox spacing="4.0">
+                                 <children>
+                                    <Label text="⚡ Rendimiento" styleClass="info-label">
+                                       <font>
+                                          <Font name="System Bold" size="11.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Excelente" styleClass="info-value">
+                                       <font>
+                                          <Font name="System Regular" size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox spacing="4.0">
+                                 <children>
+                                    <Label text="🔐 Seguridad" styleClass="info-label">
+                                       <font>
+                                          <Font name="System Bold" size="11.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Protegido" styleClass="info-value">
+                                       <font>
+                                          <Font name="System Regular" size="10.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  
+
+                  
+                  <!-- Sección de Acciones Rápidas -->
+                  <VBox spacing="16.0">
+                     <children>
+                        <Label text="Acciones Rápidas" styleClass="section-title">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <FlowPane fx:id="quickActionsPane" hgap="12.0" vgap="12.0" styleClass="quick-actions">
+                           <!-- Los botones de acciones rápidas se cargarán dinámicamente -->
+                        </FlowPane>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Panel de Información del Sistema -->
+                  <VBox spacing="16.0">
+                     <children>
+                        <Label text="Información del Sistema" styleClass="section-title">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <HBox spacing="16.0">
+                           <children>
+                              <!-- Panel de Estado -->
+                              <VBox spacing="12.0" styleClass="info-panel">
+                                 <children>
+                                    <Label text="Estado General" styleClass="info-panel-title">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                       <children>
+                                          <Label text="🟢" style="-fx-font-size: 16px;" />
+                                          <Label text="Sistema Operativo" styleClass="info-text" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                       <children>
+                                          <Label text="🟢" style="-fx-font-size: 16px;" />
+                                          <Label text="Base de Datos Activa" styleClass="info-text" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                       <children>
+                                          <Label text="🟢" style="-fx-font-size: 16px;" />
+                                          <Label text="Servicios Funcionando" styleClass="info-text" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Panel de Versión -->
+                              <VBox spacing="12.0" styleClass="info-panel">
+                                 <children>
+                                    <Label text="Versión del Sistema" styleClass="info-panel-title">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                       <children>
+                                          <Label text="📦" style="-fx-font-size: 16px;" />
+                                          <Label text="BiblioSystem v1.0" styleClass="info-text" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                       <children>
+                                          <Label text="📅" style="-fx-font-size: 16px;" />
+                                          <Label text="Actualizado: Diciembre 2024" styleClass="info-text" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                       <children>
+                                          <Label text="⚡" style="-fx-font-size: 16px;" />
+                                          <Label text="Rendimiento: Óptimo" styleClass="info-text" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              
+                              <!-- Panel de Acceso Rápido -->
+                              <VBox spacing="12.0" styleClass="info-panel">
+                                 <children>
+                                    <Label text="Acceso Rápido" styleClass="info-panel-title">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                       <children>
+                                          <Label text="👥" style="-fx-font-size: 16px;" />
+                                          <Label text="Gestión de Usuarios" styleClass="info-text clickable-text" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                       <children>
+                                          <Label text="📊" style="-fx-font-size: 16px;" />
+                           
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                       <children>
+                                          <Label text="🔧" style="-fx-font-size: 16px;" />
+                                          <Label text="Herramientas Admin" styleClass="info-text clickable-text" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  
+
+                  
+               </VBox>
+            </content>
+         </ScrollPane>
+      </StackPane>
+   </center>
+   
+</BorderPane> 

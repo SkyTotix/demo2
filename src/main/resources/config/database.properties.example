@@ -1,0 +1,29 @@
+# Configuración de Base de Datos Oracle Cloud - ARCHIVO DE EJEMPLO
+# =============================================================
+# Copia este archivo a 'database.properties' y configura tus credenciales
+
+# Configuración Oracle Cloud (Autonomous Database)
+# IMPORTANTE: Reemplaza estos valores con tus credenciales reales
+db.cloud.tns_admin=src/main/resources/wallet
+db.cloud.service_name=NOMBRE_DE_TU_DB_medium
+db.cloud.username=ADMIN
+db.cloud.password=TU_PASSWORD_SEGURA
+
+# Connection Pool Settings
+db.pool.initial_size=5
+db.pool.min_size=2
+db.pool.max_size=20
+
+# Timeout settings (en segundos)
+db.connection.timeout=30
+db.query.timeout=60
+
+# ====================================
+# INSTRUCCIONES DE CONFIGURACIÓN:
+# ====================================
+# 1. Crea tu Autonomous Database en Oracle Cloud
+# 2. Descarga el Wallet desde el botón "DB Connection"
+# 3. Descomprime el wallet en src/main/resources/wallet/
+# 4. Copia este archivo a 'database.properties'
+# 5. Reemplaza los valores con tus credenciales reales
+# 6. Ejecuta la aplicación 

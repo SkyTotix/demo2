@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<StackPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.controller.LoginController" styleClass="main-background">
+   <!-- Contenedor principal centrado -->
+   <VBox alignment="CENTER" spacing="20.0" styleClass="login-card" maxWidth="340.0" minWidth="340.0">
+      <padding>
+         <Insets top="26.0" bottom="26.0" left="26.0" right="26.0" />
+      </padding>
+      
+      <!-- Logo y título -->
+      <VBox alignment="CENTER" spacing="8.0">
+         <children>
+            <StackPane fx:id="logoContainer" styleClass="login-logo-container">
+               <children>
+                  <FontIcon fx:id="loginLogo" iconLiteral="fas-book" iconSize="30" iconColor="#3B82F6" styleClass="main-logo" />
+                  <ImageView fx:id="loginLogoImage" fitHeight="48.0" fitWidth="48.0" preserveRatio="true" visible="false" />
+               </children>
+            </StackPane>
+            <Label text="BiblioSystem" styleClass="main-title">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label text="Sistema de Gestión Bibliotecaria" styleClass="main-subtitle" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      
+      <!-- Separador visual -->
+      <Region styleClass="divider" maxHeight="1.0" minHeight="1.0" prefHeight="1.0">
+         <VBox.margin>
+            <Insets top="2.0" bottom="2.0" />
+         </VBox.margin>
+      </Region>
+      
+      <!-- Mensaje de estado -->
+      <Label fx:id="messageLabel" styleClass="status-message" text="Bienvenido Super Admin" visible="true" wrapText="true" />
+      
+      <!-- Formulario de login -->
+      <VBox spacing="12.0" styleClass="login-form">
+         <children>
+            <!-- Campo Usuario -->
+            <VBox spacing="6.0">
+               <children>
+                  <Label text="Usuario:" styleClass="field-label" />
+                  <TextField fx:id="usernameField" prefHeight="36.0" promptText="Ingrese su nombre de usuario" styleClass="modern-field">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </VBox>
+            
+            <!-- Campo Contraseña -->
+            <VBox spacing="6.0">
+               <children>
+                  <Label text="Contraseña:" styleClass="field-label" />
+                  <PasswordField fx:id="passwordField" prefHeight="36.0" promptText="Ingrese su contraseña" styleClass="modern-field">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </PasswordField>
+               </children>
+            </VBox>
+            
+            <!-- Botón de login -->
+            <Button fx:id="loginButton" text="Iniciar Sesión" styleClass="modern-button" prefHeight="38.0" maxWidth="1.7976931348623157E308">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="8.0" />
+               </VBox.margin>
+            </Button>
+            
+            <!-- Indicador de carga -->
+            <HBox alignment="CENTER">
+               <children>
+                  <ProgressIndicator fx:id="loadingIndicator" maxHeight="20.0" maxWidth="20.0" visible="false" styleClass="progress-indicator" />
+               </children>
+               <VBox.margin>
+                  <Insets top="6.0" />
+               </VBox.margin>
+            </HBox>
+            
+            <!-- Link de contraseña olvidada -->
+            <HBox alignment="CENTER">
+               <children>
+                  <Button onAction="#handleForgotPassword" text="¿Olvidó su contraseña?" styleClass="link-button" />
+               </children>
+               <VBox.margin>
+                  <Insets top="2.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+      
+      <!-- Separador visual inferior -->
+      <Region styleClass="divider" maxHeight="1.0" minHeight="1.0" prefHeight="1.0">
+         <VBox.margin>
+            <Insets top="6.0" bottom="6.0" />
+         </VBox.margin>
+      </Region>
+      
+      <!-- Footer -->
+      <VBox alignment="CENTER" spacing="4.0" styleClass="footer">
+         <children>
+            <Label text="BiblioSystem v1.0" styleClass="footer-text">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label text="© 2024 - Sistema de Gestión Bibliotecaria" styleClass="footer-text">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </VBox>
+</StackPane> 

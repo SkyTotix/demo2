@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.controller.SystemConfigController">
+   <children>
+      <!-- Header -->
+      <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="content-header">
+         <children>
+            <Label styleClass="page-title" text="Configuración del Sistema" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnSaveAll" onAction="#handleSaveAll" styleClass="btn-primary" text="💾 Guardar Todo" />
+            <Button fx:id="btnResetDefaults" onAction="#handleResetDefaults" styleClass="btn-secondary" text="🔄 Restaurar" />
+         </children>
+      </HBox>
+      
+      <!-- Tabs de configuración -->
+      <TabPane fx:id="configTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+         
+         <!-- Tab: Configuración General -->
+         <Tab text="⚙️ General">
+            <VBox spacing="20.0">
+               <children>
+                  <Label styleClass="section-title" text="Configuración General del Sistema" />
+                  
+                  <!-- Configuración de la aplicación -->
+                  <VBox spacing="15.0" styleClass="config-section">
+                     <children>
+                        <Label styleClass="config-section-title" text="Aplicación" />
+                        
+                        <GridPane hgap="15.0" vgap="12.0">
+                           <children>
+                              <Label text="Nombre del Sistema:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <TextField fx:id="txtSystemName" promptText="BiblioSystem" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                              
+                              <Label text="Versión:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtSystemVersion" promptText="1.0.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              
+                              <Label text="Modo de Mantenimiento:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                              <CheckBox fx:id="chkMaintenanceMode" text="Activar modo de mantenimiento" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              
+                              <Label text="Logs detallados:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                              <CheckBox fx:id="chkDetailedLogs" text="Habilitar logs detallados" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="150.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                        </GridPane>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Configuración de sesiones -->
+                  <VBox spacing="15.0" styleClass="config-section">
+                     <children>
+                        <Label styleClass="config-section-title" text="Sesiones de Usuario" />
+                        
+                        <GridPane hgap="15.0" vgap="12.0">
+                           <children>
+                              <Label text="Tiempo de sesión (minutos):" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <Spinner fx:id="spnSessionTimeout" editable="true" max="480" min="5" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                              
+                              <Label text="Máx. sesiones concurrentes:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                              <Spinner fx:id="spnMaxConcurrentSessions" editable="true" max="100" min="1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              
+                              <Label text="Recordar sesión:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                              <CheckBox fx:id="chkRememberSession" text="Permitir 'Recordar sesión'" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="150.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                        </GridPane>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+         </Tab>
+         
+         <!-- Tab: Base de Datos -->
+         <Tab text="🗄️ Base de Datos">
+            <VBox spacing="20.0">
+               <children>
+                  <Label styleClass="section-title" text="Configuración de Base de Datos" />
+                  
+                  <!-- Estado de la conexión -->
+                  <VBox spacing="15.0" styleClass="config-section">
+                     <children>
+                        <Label styleClass="config-section-title" text="Estado de Conexión" />
+                        
+                        <GridPane hgap="15.0" vgap="12.0">
+                           <children>
+                              <Label text="Estado:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <Label fx:id="lblDbConnectionStatus" styleClass="status-connected" text="✅ Conectado" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                              
+                              <Label text="Servidor:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                              <Label fx:id="lblDbServer" text="Oracle Cloud Infrastructure" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              
+                              <Label text="Base de Datos:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                              <Label fx:id="lblDbName" text="INTEGRADORA" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              
+                              <Label text="Usuario:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                              <Label fx:id="lblDbUser" text="ADMIN" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="150.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                        </GridPane>
+                        
+                        <HBox spacing="10.0">
+                           <children>
+                              <Button fx:id="btnTestConnection" onAction="#handleTestConnection" styleClass="btn-secondary" text="🔍 Probar Conexión" />
+                              <Button fx:id="btnReconnect" onAction="#handleReconnect" styleClass="btn-secondary" text="🔄 Reconectar" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Configuración del pool de conexiones -->
+                  <VBox spacing="15.0" styleClass="config-section">
+                     <children>
+                        <Label styleClass="config-section-title" text="Pool de Conexiones" />
+                        
+                        <GridPane hgap="15.0" vgap="12.0">
+                           <children>
+                              <Label text="Conexiones mínimas:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <Spinner fx:id="spnMinConnections" editable="true" max="50" min="1" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                              
+                              <Label text="Conexiones máximas:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                              <Spinner fx:id="spnMaxConnections" editable="true" max="200" min="5" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              
+                              <Label text="Timeout conexión (seg):" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                              <Spinner fx:id="spnConnectionTimeout" editable="true" max="300" min="5" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="150.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                        </GridPane>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+         </Tab>
+         
+         <!-- Tab: Seguridad -->
+         <Tab text="🔐 Seguridad">
+            <VBox spacing="20.0">
+               <children>
+                  <Label styleClass="section-title" text="Configuración de Seguridad" />
+                  
+                  <!-- Políticas de contraseñas -->
+                  <VBox spacing="15.0" styleClass="config-section">
+                     <children>
+                        <Label styleClass="config-section-title" text="Políticas de Contraseñas" />
+                        
+                        <GridPane hgap="15.0" vgap="12.0">
+                           <children>
+                              <Label text="Longitud mínima:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <Spinner fx:id="spnMinPasswordLength" editable="true" max="50" min="4" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                              
+                              <Label text="Requerir mayúsculas:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                              <CheckBox fx:id="chkRequireUppercase" text="Al menos una mayúscula" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              
+                              <Label text="Requerir números:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                              <CheckBox fx:id="chkRequireNumbers" text="Al menos un número" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              
+                              <Label text="Requerir símbolos:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                              <CheckBox fx:id="chkRequireSymbols" text="Al menos un símbolo especial" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              
+                              <Label text="Expiración (días):" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                              <Spinner fx:id="spnPasswordExpiration" editable="true" max="365" min="0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="150.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                        </GridPane>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Configuración de intentos de login -->
+                  <VBox spacing="15.0" styleClass="config-section">
+                     <children>
+                        <Label styleClass="config-section-title" text="Control de Acceso" />
+                        
+                        <GridPane hgap="15.0" vgap="12.0">
+                           <children>
+                              <Label text="Máx. intentos fallidos:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <Spinner fx:id="spnMaxLoginAttempts" editable="true" max="10" min="1" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                              
+                              <Label text="Tiempo de bloqueo (min):" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                              <Spinner fx:id="spnLockoutDuration" editable="true" max="1440" min="1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              
+                              <Label text="Auditoría de accesos:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                              <CheckBox fx:id="chkAuditAccess" text="Registrar todos los accesos" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="150.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                        </GridPane>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+         </Tab>
+         
+         <!-- Tab: Backups -->
+         <Tab text="💾 Backups">
+            <VBox spacing="20.0">
+               <children>
+                  <Label styleClass="section-title" text="Configuración de Backups" />
+                  
+                  <!-- Configuración de backups automáticos -->
+                  <VBox spacing="15.0" styleClass="config-section">
+                     <children>
+                        <Label styleClass="config-section-title" text="Backups Automáticos" />
+                        
+                        <GridPane hgap="15.0" vgap="12.0">
+                           <children>
+                              <Label text="Habilitar backups:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <CheckBox fx:id="chkEnableBackups" text="Activar backups automáticos" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                              
+                              <Label text="Frecuencia:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                              <ComboBox fx:id="cmbBackupFrequency" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              
+                              <Label text="Hora de backup:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                              <ComboBox fx:id="cmbBackupTime" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              
+                              <Label text="Retener backups (días):" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                              <Spinner fx:id="spnBackupRetention" editable="true" max="365" min="1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="150.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                        </GridPane>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Estado de backups -->
+                  <VBox spacing="15.0" styleClass="config-section">
+                     <children>
+                        <Label styleClass="config-section-title" text="Estado de Backups" />
+                        
+                        <GridPane hgap="15.0" vgap="12.0">
+                           <children>
+                              <Label text="Último backup:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <Label fx:id="lblLastBackup" text="Hoy a las 02:00" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                              
+                              <Label text="Estado:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                              <Label fx:id="lblBackupStatus" styleClass="status-success" text="✅ Exitoso" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              
+                              <Label text="Próximo backup:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                              <Label fx:id="lblNextBackup" text="Mañana a las 02:00" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="150.0" />
+                              <ColumnConstraints hgrow="ALWAYS" />
+                           </columnConstraints>
+                        </GridPane>
+                        
+                        <HBox spacing="10.0">
+                           <children>
+                              <Button fx:id="btnRunBackup" onAction="#handleRunBackup" styleClass="btn-primary" text="▶️ Ejecutar Backup Ahora" />
+                              <Button fx:id="btnRestoreBackup" onAction="#handleRestoreBackup" styleClass="btn-secondary" text="📥 Restaurar Backup" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+         </Tab>
+         
+      </TabPane>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+   </padding>
+</VBox> 

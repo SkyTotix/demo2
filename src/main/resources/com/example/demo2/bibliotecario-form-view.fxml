@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.controller.BibliotecarioFormController">
+   <!-- Header -->
+   <top>
+      <VBox spacing="8" styleClass="form-header">
+         <padding>
+            <Insets bottom="8.0" left="20.0" right="20.0" top="12.0" />
+         </padding>
+         <HBox spacing="8" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="fas-user-tie" iconSize="20" iconColor="#3B82F6" />
+            <VBox>
+               <Label fx:id="lblTitulo" text="Nuevo Bibliotecario" styleClass="form-title" />
+               <Label text="Complete la información del bibliotecario" styleClass="form-subtitle" />
+            </VBox>
+         </HBox>
+         <Separator />
+      </VBox>
+   </top>
+   
+   <!-- Form Content -->
+   <center>
+      <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+         <VBox spacing="3" styleClass="form-content">
+            <padding>
+               <Insets bottom="10.0" left="20.0" right="20.0" top="3.0" />
+            </padding>
+            
+            <!-- Personal Info Section -->
+            <VBox spacing="2" styleClass="form-section">
+               <Label text="Información Personal" styleClass="section-header" />
+               
+               <GridPane hgap="10" vgap="2">
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120" />
+                     <ColumnConstraints hgrow="ALWAYS" />
+                  </columnConstraints>
+                  
+                  <!-- Nombre -->
+                  <Label text="Nombre*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <VBox spacing="0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                     <TextField fx:id="txtNombre" promptText="Ingrese el nombre" styleClass="form-control" />
+                     <Label fx:id="lblErrorNombre" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Apellido -->
+                  <Label text="Apellido*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <VBox spacing="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <TextField fx:id="txtApellido" promptText="Ingrese el apellido" styleClass="form-control" />
+                     <Label fx:id="lblErrorApellido" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Email -->
+                  <Label text="Email*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <VBox spacing="0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <TextField fx:id="txtEmail" promptText="correo@ejemplo.com" styleClass="form-control" />
+                     <Label fx:id="lblErrorEmail" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Teléfono -->
+                  <Label text="Teléfono:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                  <VBox spacing="0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <TextField fx:id="txtTelefono" promptText="Ej: +52 555 123 4567" styleClass="form-control" maxWidth="200" />
+                     <Label fx:id="lblErrorTelefono" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Fecha de Nacimiento -->
+                  <Label text="Fecha Nacimiento:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                  <VBox spacing="0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <DatePicker fx:id="dpFechaNacimiento" promptText="Seleccione la fecha" styleClass="form-control" prefWidth="200" />
+                     <Label fx:id="lblErrorFechaNacimiento" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Dirección -->
+                  <Label text="Dirección:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                  <VBox spacing="0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                     <TextField fx:id="txtDireccion" promptText="Dirección completa" styleClass="form-control" />
+                     <Label fx:id="lblErrorDireccion" styleClass="error-message" visible="false" />
+                  </VBox>
+               </GridPane>
+            </VBox>
+            
+            <!-- Account Info Section -->
+            <VBox spacing="2" styleClass="form-section">
+               <Label text="Información de Cuenta" styleClass="section-header" />
+               
+               <GridPane hgap="10" vgap="2">
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120" />
+                     <ColumnConstraints hgrow="ALWAYS" />
+                  </columnConstraints>
+                  
+                  <!-- Nombre de Usuario -->
+                  <Label text="Nombre de Usuario*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <VBox spacing="0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                     <TextField fx:id="txtUsername" promptText="Nombre de usuario único" styleClass="form-control" maxWidth="250" />
+                     <Label fx:id="lblErrorUsername" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+               </GridPane>
+            </VBox>
+            
+            <!-- Password Section (can be hidden when editing) -->
+            <VBox fx:id="vboxPassword" spacing="2" styleClass="form-section">
+               <Label text="Configuración de Contraseña" styleClass="section-header" />
+               
+               <GridPane hgap="10" vgap="2">
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120" />
+                     <ColumnConstraints hgrow="ALWAYS" />
+                  </columnConstraints>
+                  
+                  <!-- Contraseña -->
+                  <Label text="Contraseña*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <VBox spacing="0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                     <PasswordField fx:id="txtPassword" promptText="Mínimo 8 caracteres" styleClass="form-control" maxWidth="250" />
+                     <Label fx:id="lblErrorPassword" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Confirmar Contraseña -->
+                  <Label text="Confirmar Contraseña*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <VBox spacing="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <PasswordField fx:id="txtConfirmPassword" promptText="Repita la contraseña" styleClass="form-control" maxWidth="250" />
+                     <Label fx:id="lblErrorConfirmPassword" styleClass="error-message" visible="false" />
+                  </VBox>
+               </GridPane>
+            </VBox>
+            
+            <!-- Configuration Section -->
+            <VBox spacing="2" styleClass="form-section">
+               <Label text="Configuración del Puesto" styleClass="section-header" />
+               
+               <GridPane hgap="10" vgap="2">
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120" />
+                     <ColumnConstraints hgrow="ALWAYS" />
+                  </columnConstraints>
+                  
+                  <!-- Estado -->
+                  <Label text="Estado de Cuenta:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <VBox spacing="0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                     <ComboBox fx:id="cmbEstado" styleClass="form-control" prefWidth="200" />
+                     <Label text="(Estado inicial de la cuenta)" styleClass="help-text" />
+                  </VBox>
+                  
+                  <!-- Turno -->
+                  <Label text="Turno de Trabajo:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <VBox spacing="0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <ComboBox fx:id="cmbTurno" styleClass="form-control" prefWidth="200" />
+                     <Label text="(Horario asignado)" styleClass="help-text" />
+                  </VBox>
+                  
+                  <!-- Permisos -->
+                  <Label text="Permisos Especiales:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <VBox spacing="2" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <HBox spacing="15">
+                        <CheckBox fx:id="chkGestionUsuarios" text="Gestión de Usuarios" />
+                        <CheckBox fx:id="chkConfiguracionSistema" text="Configuración Básica" />
+                     </HBox>
+                     <Label text="(Permisos adicionales del sistema)" styleClass="help-text" />
+                  </VBox>
+               </GridPane>
+            </VBox>
+            
+            <!-- Notes Section -->
+            <VBox spacing="2" styleClass="form-section">
+               <Label text="Información Adicional" styleClass="section-header" />
+               
+               <GridPane hgap="10" vgap="2">
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120" />
+                     <ColumnConstraints hgrow="ALWAYS" />
+                  </columnConstraints>
+                  
+                  <!-- Observaciones -->
+                  <Label text="Observaciones:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <VBox spacing="0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                     <TextArea fx:id="txtNotas" promptText="Información adicional sobre el bibliotecario..." styleClass="form-control" prefRowCount="2" wrapText="true" />
+                     <Label text="(Opcional - notas adicionales)" styleClass="help-text" />
+                  </VBox>
+               </GridPane>
+            </VBox>
+            
+            <!-- Required Fields Note -->
+            <HBox spacing="6" alignment="CENTER_LEFT" styleClass="required-note">
+               <FontIcon iconLiteral="fas-info-circle" iconSize="12" iconColor="#64748B" />
+               <Label text="Los campos marcados con * son obligatorios" styleClass="help-text" />
+            </HBox>
+         </VBox>
+      </ScrollPane>
+   </center>
+   
+   <!-- Footer with Action Buttons -->
+   <bottom>
+      <VBox spacing="8" styleClass="form-footer">
+         <padding>
+            <Insets bottom="15.0" left="20.0" right="20.0" top="10.0" />
+         </padding>
+         
+         <Separator />
+         
+         <!-- Status Message Label -->
+         <HBox alignment="CENTER_LEFT">
+            <Label fx:id="lblEstadoGuardado" styleClass="status-message" visible="false" />
+         </HBox>
+         
+         <HBox spacing="12" alignment="CENTER_RIGHT">
+            <Button fx:id="btnCancelar" text="Cancelar" onAction="#handleCancelar" styleClass="btn, btn-outline-secondary" prefWidth="95">
+               <graphic>
+                  <FontIcon iconLiteral="fas-times" iconSize="13" iconColor="#64748B" />
+               </graphic>
+            </Button>
+            
+            <Button fx:id="btnLimpiar" text="Limpiar" onAction="#handleLimpiar" styleClass="btn, btn-outline-info" prefWidth="95">
+               <graphic>
+                  <FontIcon iconLiteral="fas-eraser" iconSize="13" iconColor="#3B82F6" />
+               </graphic>
+            </Button>
+            
+            <Button fx:id="btnGuardar" text="Guardar" onAction="#handleGuardar" styleClass="btn, btn-primary" prefWidth="95">
+               <graphic>
+                  <FontIcon iconLiteral="fas-save" iconSize="13" iconColor="white" />
+               </graphic>
+            </Button>
+         </HBox>
+      </VBox>
+   </bottom>
+</BorderPane> 

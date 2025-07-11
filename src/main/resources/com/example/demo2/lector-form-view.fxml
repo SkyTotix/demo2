@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.controller.LectorFormController">
+   <!-- Header -->
+   <top>
+      <VBox spacing="15" styleClass="form-header">
+         <padding>
+            <Insets bottom="15.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         <HBox spacing="12" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="fas-user" iconSize="24" iconColor="#3B82F6" />
+            <VBox>
+               <Label fx:id="lblTitulo" text="Nuevo Lector" styleClass="form-title" />
+               <Label text="Complete la información del lector" styleClass="form-subtitle" />
+            </VBox>
+         </HBox>
+         <Separator />
+      </VBox>
+   </top>
+   
+   <!-- Form Content -->
+   <center>
+      <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+         <VBox spacing="20" styleClass="form-content">
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+            </padding>
+            
+            <!-- Basic Info Section -->
+            <VBox spacing="15" styleClass="form-section">
+               <Label text="Información Personal" styleClass="section-header" />
+               
+               <GridPane hgap="15" vgap="12">
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120" />
+                     <ColumnConstraints hgrow="ALWAYS" />
+                  </columnConstraints>
+                  
+                  <!-- Código -->
+                  <Label text="Código:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <TextField fx:id="txtCodigo" editable="false" styleClass="field-readonly" maxWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                  
+                  <!-- Nombre -->
+                  <Label text="Nombre*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <TextField fx:id="txtNombre" promptText="Ingrese el nombre" styleClass="form-control" />
+                     <Label fx:id="lblErrorNombre" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Apellido -->
+                  <Label text="Apellido*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <TextField fx:id="txtApellido" promptText="Ingrese el apellido" styleClass="form-control" />
+                     <Label fx:id="lblErrorApellido" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Email -->
+                  <Label text="Email*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <TextField fx:id="txtEmail" promptText="correo@ejemplo.com" styleClass="form-control" />
+                     <Label fx:id="lblErrorEmail" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Teléfono -->
+                  <Label text="Teléfono*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <TextField fx:id="txtTelefono" promptText="Ingrese teléfono" styleClass="form-control" maxWidth="200" />
+                     <Label fx:id="lblErrorTelefono" styleClass="error-message" visible="false" />
+                  </VBox>
+               </GridPane>
+            </VBox>
+            
+            <!-- Document Section -->
+            <VBox spacing="15" styleClass="form-section">
+               <Label text="Identificación" styleClass="section-header" />
+               
+               <GridPane hgap="15" vgap="12">
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120" />
+                     <ColumnConstraints hgrow="ALWAYS" />
+                  </columnConstraints>
+                  
+                  <!-- Tipo de Documento -->
+                  <Label text="Tipo Documento*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                     <ComboBox fx:id="cmbTipoDocumento" styleClass="form-control" prefWidth="200" />
+                     <Label fx:id="lblErrorTipoDocumento" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Número de Documento -->
+                  <Label text="Nro. Documento*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <TextField fx:id="txtNumeroDocumento" promptText="Ingrese número de documento" styleClass="form-control" maxWidth="250" />
+                     <Label fx:id="lblErrorNumeroDocumento" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Fecha de Nacimiento -->
+                  <Label text="Fecha Nacimiento*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <HBox spacing="10" alignment="CENTER_LEFT">
+                        <DatePicker fx:id="dpFechaNacimiento" styleClass="form-control" prefWidth="200" />
+                        <Label fx:id="lblEdad" styleClass="help-text" />
+                     </HBox>
+                     <Label fx:id="lblErrorFechaNacimiento" styleClass="error-message" visible="false" />
+                  </VBox>
+               </GridPane>
+            </VBox>
+            
+            <!-- Address Section -->
+            <VBox spacing="15" styleClass="form-section">
+               <Label text="Información Adicional" styleClass="section-header" />
+               
+               <GridPane hgap="15" vgap="12">
+                  <columnConstraints>
+                     <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120" />
+                     <ColumnConstraints hgrow="ALWAYS" />
+                  </columnConstraints>
+                  
+                  <!-- Dirección -->
+                  <Label text="Dirección*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                     <TextArea fx:id="txtDireccion" promptText="Ingrese dirección completa" styleClass="form-control" prefRowCount="2" wrapText="true" />
+                     <Label fx:id="lblErrorDireccion" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Fecha de Vencimiento -->
+                  <Label text="Fecha Vencimiento*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <HBox spacing="10" alignment="CENTER_LEFT">
+                        <DatePicker fx:id="dpFechaVencimiento" styleClass="form-control" prefWidth="200" />
+                        <Label text="(Fecha límite de membresía)" styleClass="help-text" />
+                     </HBox>
+                     <Label fx:id="lblErrorFechaVencimiento" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Estado -->
+                  <Label text="Estado*:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <ComboBox fx:id="cmbEstado" styleClass="form-control" prefWidth="200" />
+                     <Label fx:id="lblErrorEstado" styleClass="error-message" visible="false" />
+                  </VBox>
+                  
+                  <!-- Observaciones -->
+                  <Label text="Observaciones:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                  <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <TextArea fx:id="txtObservaciones" promptText="Observaciones opcionales" styleClass="form-control" prefRowCount="3" wrapText="true" />
+                     <Label text="(Opcional - información adicional)" styleClass="help-text" />
+                  </VBox>
+               </GridPane>
+            </VBox>
+            
+            <!-- Required Fields Note -->
+            <HBox spacing="8" alignment="CENTER_LEFT" styleClass="required-note">
+               <FontIcon iconLiteral="fas-info-circle" iconSize="14" iconColor="#64748B" />
+               <Label text="Los campos marcados con * son obligatorios" styleClass="help-text" />
+            </HBox>
+         </VBox>
+      </ScrollPane>
+   </center>
+   
+   <!-- Footer with Action Buttons -->
+   <bottom>
+      <VBox spacing="10" styleClass="form-footer">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
+         </padding>
+         
+         <Separator />
+         
+         <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Button fx:id="btnCancelar" text="Cancelar" onAction="#cancelar" styleClass="btn, btn-outline-secondary" prefWidth="100">
+               <graphic>
+                  <FontIcon iconLiteral="fas-times" iconSize="14" iconColor="#64748B" />
+               </graphic>
+            </Button>
+            
+            <Button fx:id="btnGuardar" text="Guardar" onAction="#guardar" styleClass="btn, btn-primary" prefWidth="100">
+               <graphic>
+                  <FontIcon iconLiteral="fas-save" iconSize="14" iconColor="white" />
+               </graphic>
+            </Button>
+         </HBox>
+      </VBox>
+   </bottom>
+</BorderPane> 

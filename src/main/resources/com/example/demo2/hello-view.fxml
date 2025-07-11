@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" 
+           fx:controller="com.example.demo2.HelloController"
+           styleClass="bg-light">
+    
+    <!-- Header -->
+    <top>
+        <VBox styleClass="bg-primary, text-white" spacing="10">
+            <padding>
+                <Insets top="20" left="20" right="20" bottom="20"/>
+            </padding>
+            <Label text="☁️ Oracle Cloud Database - Proyecto Integradora" 
+                   styleClass="h3, text-white"/>
+            <Label fx:id="statusLabel" text="Inicializando conexión..." 
+                   styleClass="text-white-50"/>
+        </VBox>
+    </top>
+    
+    <!-- Main Content -->
+    <center>
+        <VBox spacing="20" alignment="CENTER">
+            <padding>
+                <Insets top="30" left="30" right="30" bottom="30"/>
+            </padding>
+            
+            <!-- Connection Status Card -->
+            <VBox styleClass="card" spacing="15" maxWidth="600">
+                <padding>
+                    <Insets top="20" left="20" right="20" bottom="20"/>
+                </padding>
+                
+                <Label text="🔌 Estado de la Conexión" styleClass="h5"/>
+                <Label fx:id="connectionStatusLabel" text="Verificando..." 
+                       styleClass="text-muted"/>
+                
+                <HBox spacing="10" alignment="CENTER">
+                    <Button fx:id="testConnectionBtn" text="🧪 Probar Conexión" 
+                            styleClass="btn, btn-outline-primary"
+                            onAction="#onTestConnection"/>
+                    <Button fx:id="dbInfoBtn" text="ℹ️ Info Base de Datos" 
+                            styleClass="btn, btn-outline-info"
+                            onAction="#onShowDatabaseInfo"/>
+                    <Button fx:id="highPerfBtn" text="🚀 Test Alto Rendimiento" 
+                            styleClass="btn, btn-outline-warning"
+                            onAction="#onHighPerformanceTest"/>
+                </HBox>
+            </VBox>
+            
+            <!-- Database Operations Card -->
+            <VBox styleClass="card" spacing="15" maxWidth="600">
+                <padding>
+                    <Insets top="20" left="20" right="20" bottom="20"/>
+                </padding>
+                
+                <Label text="🛠️ Operaciones de Base de Datos" styleClass="h5"/>
+                
+                <HBox spacing="10" alignment="CENTER" styleClass="btn-group">
+                    <Button fx:id="runTestsBtn" text="🚀 Ejecutar Pruebas Completas" 
+                            styleClass="btn, btn-primary"
+                            onAction="#onRunFullTests"/>
+                    <Button fx:id="createTableBtn" text="📋 Crear Tabla Demo" 
+                            styleClass="btn, btn-success"
+                            onAction="#onCreateTable"/>
+                </HBox>
+                
+                <ProgressBar fx:id="progressBar" visible="false" 
+                           prefWidth="300" styleClass="progress"/>
+                <Label fx:id="progressLabel" text="" styleClass="text-muted"/>
+            </VBox>
+            
+            <!-- Results Card -->
+            <VBox styleClass="card" spacing="15" maxWidth="800">
+    <padding>
+                    <Insets top="20" left="20" right="20" bottom="20"/>
+    </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📄 Resultados" styleClass="h5"/>
+                    <Button fx:id="clearResultsBtn" text="🗑️ Limpiar" 
+                            styleClass="btn, btn-outline-secondary, btn-sm"
+                            onAction="#onClearResults"/>
+                </HBox>
+                
+                <ScrollPane fitToWidth="true" prefHeight="300">
+                    <TextArea fx:id="resultsArea" editable="false" 
+                            wrapText="true" styleClass="form-control"
+                            text="✨ Bienvenido al sistema de pruebas Oracle Cloud&#10;Haz clic en los botones para probar la conectividad..."/>
+                </ScrollPane>
+</VBox>
+            
+        </VBox>
+    </center>
+    
+    <!-- Footer -->
+    <bottom>
+        <HBox alignment="CENTER" spacing="20" styleClass="bg-secondary">
+            <padding>
+                <Insets top="15" left="20" right="20" bottom="15"/>
+            </padding>
+            <Label text="💻 JavaFX + BootstrapFX" styleClass="text-white-50"/>
+            <Separator orientation="VERTICAL"/>
+            <Label text="☁️ Oracle Autonomous Database" styleClass="text-white-50"/>
+            <Separator orientation="VERTICAL"/> 
+            <Label text="🎓 Proyecto Integradora" styleClass="text-white-50"/>
+        </HBox>
+    </bottom>
+    
+</BorderPane>
