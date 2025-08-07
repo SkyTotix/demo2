@@ -142,11 +142,7 @@
                                           <Font size="16.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="dashboardSubtitle" text="Estadísticas generales del sistema bibliotecario" styleClass="dashboard-description">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
+
                                  </children>
                               </VBox>
 
@@ -157,142 +153,7 @@
                   
 
                   
-                  <!-- Sección Inferior: Acceso Rápido y Actividad -->
-                  <HBox spacing="24.0" alignment="TOP_CENTER">
-                     <children>
-                        <!-- Acceso Rápido -->
-                        <VBox spacing="16.0" styleClass="section-panel" HBox.hgrow="ALWAYS">
-                           <children>
-                              <Label text="Acceso Rápido" styleClass="section-header">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Label>
-                              
-                              <!-- Gestión de Libros -->
-                              <HBox spacing="16.0" alignment="CENTER_LEFT" styleClass="quick-access-item">
-                                 <children>
-                                    <StackPane styleClass="quick-icon blue">
-                                       <children>
-                                          <Label text="📚" style="-fx-font-size: 20px;" />
-                                       </children>
-                                    </StackPane>
-                                    <VBox spacing="4.0">
-                                       <children>
-                                          <Label text="Gestión de Libros" styleClass="quick-title" />
-                                          <Label text="Administrar catálogo de libros" styleClass="quick-desc" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                              
-                              <!-- Gestión de Usuarios -->
-                              <HBox spacing="16.0" alignment="CENTER_LEFT" styleClass="quick-access-item">
-                                 <children>
-                                    <StackPane styleClass="quick-icon green">
-                                       <children>
-                                          <Label text="👥" style="-fx-font-size: 20px;" />
-                                       </children>
-                                    </StackPane>
-                                    <VBox spacing="4.0">
-                                       <children>
-                                          <Label text="Gestión de Usuarios" styleClass="quick-title" />
-                                          <Label text="Administrar usuarios y devoluciones" styleClass="quick-desc" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                              
-                              <!-- Préstamos -->
-                              <HBox spacing="16.0" alignment="CENTER_LEFT" styleClass="quick-access-item">
-                                 <children>
-                                    <StackPane styleClass="quick-icon orange">
-                                       <children>
-                                          <Label text="📋" style="-fx-font-size: 20px;" />
-                                       </children>
-                                    </StackPane>
-                                    <VBox spacing="4.0">
-                                       <children>
-                                          <Label text="Préstamos" styleClass="quick-title" />
-                                          <Label text="Gestionar préstamos y devoluciones" styleClass="quick-desc" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                              
-                              <!-- Reportes -->
-                              <HBox spacing="16.0" alignment="CENTER_LEFT" styleClass="quick-access-item">
-                                 <children>
-                                    <StackPane styleClass="quick-icon purple">
-                                       <children>
-                                          <Label text="📊" style="-fx-font-size: 20px;" />
-                                       </children>
-                                    </StackPane>
-                                    <VBox spacing="4.0">
-                                       <children>
-                                          <Label text="Reportes" styleClass="quick-title" />
-                                          <Label text="Generar reportes y estadísticas" styleClass="quick-desc" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        
-                        <!-- Libros Más Prestados -->
-                        <VBox spacing="16.0" styleClass="section-panel" HBox.hgrow="ALWAYS">
-                           <children>
-                              <Label text="Libros Más Prestados" styleClass="section-header">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Label>
-                              
-                              <!-- Libro 1 -->
-                              <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="book-ranking-item">
-                                 <children>
-                                    <Label text="1" styleClass="ranking-number first" />
-                                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
-                                       <children>
-                                          <Label text="El Quijote" styleClass="book-name" />
-                                          <Label text="Miguel de Cervantes" styleClass="book-author-name" />
-                                       </children>
-                                    </VBox>
-                                    <Label text="24 préstamos" styleClass="loan-count" />
-                                 </children>
-                              </HBox>
-                              
-                              <!-- Libro 2 -->
-                              <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="book-ranking-item">
-                                 <children>
-                                    <Label text="2" styleClass="ranking-number second" />
-                                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
-                                       <children>
-                                          <Label text="Cien Años de Soledad" styleClass="book-name" />
-                                          <Label text="Gabriel García Márquez" styleClass="book-author-name" />
-                                       </children>
-                                    </VBox>
-                                    <Label text="18 préstamos" styleClass="loan-count" />
-                                 </children>
-                              </HBox>
-                              
-                              <!-- Libro 3 -->
-                              <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="book-ranking-item">
-                                 <children>
-                                    <Label text="3" styleClass="ranking-number third" />
-                                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
-                                       <children>
-                                          <Label text="1984" styleClass="book-name" />
-                                          <Label text="George Orwell" styleClass="book-author-name" />
-                                       </children>
-                                    </VBox>
-                                    <Label text="15 préstamos" styleClass="loan-count" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
+
                </VBox>
             </content>
          </ScrollPane>

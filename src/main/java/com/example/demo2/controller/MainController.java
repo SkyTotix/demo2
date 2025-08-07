@@ -252,7 +252,8 @@ public class MainController {
     private void setupDashboard() {
         TipoUsuario tipoUsuario = authService.getUsuarioActual().getTipoUsuario();
         
-        switch (tipoUsuario) {
+        // Comentado: dashboardSubtitle eliminado del FXML
+        /*switch (tipoUsuario) {
             case SUPERADMIN:
                 dashboardSubtitle.setText("Panel de administración del sistema - Control total");
                 break;
@@ -262,7 +263,7 @@ public class MainController {
             case BIBLIOTECARIO:
                 dashboardSubtitle.setText("Panel de operaciones bibliotecarias - Gestión diaria");
                 break;
-        }
+        }*/
         
         // Proteger el título de clicks accidentales
         protegerTituloDashboard();
@@ -274,7 +275,7 @@ public class MainController {
     private void protegerTituloDashboard() {
         // Asegurar que el título y subtítulo mantengan sus propiedades
         // welcomeLabel.setMouseTransparent(true); // Evitar que reciba eventos de mouse - Comentado: welcomeLabel no existe
-        dashboardSubtitle.setMouseTransparent(true); // Proteger también el subtítulo
+        // dashboardSubtitle.setMouseTransparent(true); // Proteger también el subtítulo - Comentado: dashboardSubtitle eliminado del FXML
         
         // Restaurar título y subtítulo si es necesario
         restaurarTituloDashboard();
@@ -318,14 +319,14 @@ public class MainController {
             welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-font-family: 'System Bold';");
         }*/ // Comentado: welcomeLabel no existe
         
-        if (dashboardSubtitle != null) {
+        /*if (dashboardSubtitle != null) {
             // Asegurar que el estilo CSS se mantenga para el subtítulo
             dashboardSubtitle.getStyleClass().clear();
             dashboardSubtitle.getStyleClass().add("dashboard-subtitle");
             
             // Agregar estilo inline como respaldo para el subtítulo
             dashboardSubtitle.setStyle("-fx-font-size: 14px; -fx-font-family: 'System';");
-        }
+        }*/ // Comentado: dashboardSubtitle eliminado del FXML
     }
     
 
