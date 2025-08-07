@@ -1,0 +1,29 @@
+=== CREDENCIALES DE ACCESO AL SISTEMA BIBLIOSYSTEM ===
+
+Fecha de creación: $(Get-Date)
+
+🔐 CREDENCIALES POR DEFECTO:
+
+SUPER ADMINISTRADOR:
+- Usuario: admin
+- Contraseña: admin123
+- Email: admin@bibliosystem.com
+- Permisos: Acceso completo al sistema
+
+NOTAS IMPORTANTES:
+- Estas credenciales se crean automáticamente al iniciar la aplicación por primera vez
+- El Super Admin tiene acceso completo a todas las funcionalidades
+- Se recomienda cambiar la contraseña después del primer acceso
+- Las contraseñas en la base de datos están hasheadas por seguridad
+
+UBICACIÓN DEL CÓDIGO:
+- Método de creación: AuthService.crearSuperAdminInicial()
+- Archivo: src/main/java/com/example/demo2/service/AuthService.java
+- Líneas: 149-177
+
+ESTADO DEL SISTEMA:
+- La aplicación debe estar ejecutándose para que las credenciales funcionen
+- Si no puedes acceder, verifica que la base de datos esté conectada
+- El usuario se crea automáticamente si no existe un Super Admin
+
+=== ARCHIVO TEMPORAL - ELIMINAR DESPUÉS DEL USO ===

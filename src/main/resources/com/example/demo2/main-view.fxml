@@ -125,19 +125,24 @@
             <content>
                <VBox fx:id="dashboardContainer" spacing="24.0" styleClass="dashboard-container">
                   
-                  <!-- Panel de Bienvenida Mejorado -->
-                  <VBox spacing="16.0" styleClass="welcome-panel">
+                  <!-- Header del Dashboard -->
+                  <VBox spacing="8.0" styleClass="dashboard-header">
                      <children>
                         <HBox spacing="16.0" alignment="CENTER_LEFT">
                            <children>
-                              <VBox spacing="8.0">
+                              <VBox spacing="4.0">
                                  <children>
-                                    <Label fx:id="welcomeLabel" text="¡Bienvenido al Sistema!" styleClass="dashboard-title">
+                                    <Label text="BiblioSystem" styleClass="dashboard-main-title">
                                        <font>
-                                          <Font name="System Bold" size="24.0" />
+                                          <Font name="System Bold" size="28.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="dashboardSubtitle" text="Panel de control del sistema de gestión bibliotecaria" styleClass="dashboard-subtitle">
+                                    <Label text="Dashboard Principal" styleClass="dashboard-main-subtitle">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="dashboardSubtitle" text="Estadísticas generales del sistema bibliotecario" styleClass="dashboard-description">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
@@ -145,286 +150,249 @@
                                  </children>
                               </VBox>
                               <Region HBox.hgrow="ALWAYS" />
-                              <VBox spacing="4.0" alignment="CENTER_RIGHT">
-                                 <children>
-                                    <Label text="🌟 Sistema Activo" styleClass="status-indicator">
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Conectado a la base de datos" styleClass="status-text">
-                                       <font>
-                                          <Font name="System Regular" size="10.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
+                              <Button text="Cerrar Sesión" styleClass="header-close-btn">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Button>
                            </children>
                         </HBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Estadísticas Principales -->
+                  <HBox spacing="20.0" alignment="CENTER">
+                     <children>
+                        <!-- Total Libros -->
+                        <VBox spacing="8.0" styleClass="stat-card-modern" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox spacing="12.0" alignment="CENTER_LEFT">
+                                 <children>
+                                    <StackPane styleClass="stat-icon-container blue">
+                                       <children>
+                                          <Label text="📚" style="-fx-font-size: 24px;" />
+                                       </children>
+                                    </StackPane>
+                                    <VBox spacing="2.0">
+                                       <children>
+                                          <Label text="Total Libros" styleClass="stat-label-modern" />
+                                          <Label fx:id="totalLibrosLabel" text="2,456" styleClass="stat-value-modern" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <Label text="+12% este mes" styleClass="stat-trend positive" />
+                           </children>
+                        </VBox>
                         
-                        <!-- Información adicional del panel -->
-                        <HBox spacing="24.0" alignment="CENTER_LEFT">
+                        <!-- Usuarios Activos -->
+                        <VBox spacing="8.0" styleClass="stat-card-modern" HBox.hgrow="ALWAYS">
                            <children>
-                              <VBox spacing="4.0">
+                              <HBox spacing="12.0" alignment="CENTER_LEFT">
                                  <children>
-                                    <Label text="📅 Última Actualización" styleClass="info-label">
-                                       <font>
-                                          <Font name="System Bold" size="11.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Diciembre 2024" styleClass="info-value">
-                                       <font>
-                                          <Font name="System Regular" size="10.0" />
-                                       </font>
-                                    </Label>
+                                    <StackPane styleClass="stat-icon-container green">
+                                       <children>
+                                          <Label text="👥" style="-fx-font-size: 24px;" />
+                                       </children>
+                                    </StackPane>
+                                    <VBox spacing="2.0">
+                                       <children>
+                                          <Label text="Usuarios Activos" styleClass="stat-label-modern" />
+                                          <Label fx:id="usuariosActivosLabel" text="1,234" styleClass="stat-value-modern" />
+                                       </children>
+                                    </VBox>
                                  </children>
-                              </VBox>
-                              <VBox spacing="4.0">
-                                 <children>
-                                    <Label text="⚡ Rendimiento" styleClass="info-label">
-                                       <font>
-                                          <Font name="System Bold" size="11.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Excelente" styleClass="info-value">
-                                       <font>
-                                          <Font name="System Regular" size="10.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
-                              <VBox spacing="4.0">
-                                 <children>
-                                    <Label text="🔐 Seguridad" styleClass="info-label">
-                                       <font>
-                                          <Font name="System Bold" size="11.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Protegido" styleClass="info-value">
-                                       <font>
-                                          <Font name="System Regular" size="10.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </VBox>
+                              </HBox>
+                              <Label text="+8% este mes" styleClass="stat-trend positive" />
                            </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-                  
-                  <!-- Sección de Estadísticas del Sistema - Listas Interactivas -->
-                  <VBox spacing="16.0" fx:id="statisticsSection" visible="false" managed="false">
-                     <children>
-                        <Label text="📊 Estadísticas del Sistema" styleClass="section-title">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                        <HBox spacing="16.0" alignment="TOP_LEFT">
+                        </VBox>
+                        
+                        <!-- Préstamos Activos -->
+                        <VBox spacing="8.0" styleClass="stat-card-modern" HBox.hgrow="ALWAYS">
                            <children>
-                              <!-- Panel de Préstamos Próximos a Vencer -->
-                              <VBox spacing="12.0" styleClass="stats-panel warning-panel" prefWidth="350.0">
+                              <HBox spacing="12.0" alignment="CENTER_LEFT">
                                  <children>
-                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                    <StackPane styleClass="stat-icon-container orange">
                                        <children>
-                                          <Label text="⏰ Próximos a Vencer" styleClass="stats-title">
-                                             <font>
-                                                <Font name="System Bold" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Label fx:id="lblProximosVencer" text="(0)" styleClass="stats-count">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Label>
+                                          <Label text="📖" style="-fx-font-size: 24px;" />
                                        </children>
-                                    </HBox>
-                                    <Label text="Doble clic para ver detalles del préstamo" styleClass="stats-hint">
-                                       <font>
-                                          <Font size="10.0" />
-                                       </font>
-                                    </Label>
-                                    <ListView fx:id="listProximosVencer" prefHeight="160.0" styleClass="stats-list" />
-                                 </children>
-                              </VBox>
-                              
-                              <!-- Panel de Usuarios con Multa -->
-                              <VBox spacing="12.0" styleClass="stats-panel error-panel" prefWidth="350.0">
-                                 <children>
-                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                    </StackPane>
+                                    <VBox spacing="2.0">
                                        <children>
-                                          <Label text="💰 Con Multa Pendiente" styleClass="stats-title">
-                                             <font>
-                                                <Font name="System Bold" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Label fx:id="lblConMulta" text="(0)" styleClass="stats-count">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Label>
+                                          <Label text="Préstamos Activos" styleClass="stat-label-modern" />
+                                          <Label fx:id="prestamosActivosLabel" text="456" styleClass="stat-value-modern" />
                                        </children>
-                                    </HBox>
-                                    <Label text="Doble clic para ver detalles del préstamo" styleClass="stats-hint">
-                                       <font>
-                                          <Font size="10.0" />
-                                       </font>
-                                    </Label>
-                                    <ListView fx:id="listConMulta" prefHeight="160.0" styleClass="stats-list" />
+                                    </VBox>
                                  </children>
-                              </VBox>
-                              
-                              <!-- Panel de Libros con Una Existencia -->
-                              <VBox spacing="12.0" styleClass="stats-panel info-panel" prefWidth="350.0">
-                                 <children>
-                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
-                                       <children>
-                                          <Label text="📖 Ejemplar Único" styleClass="stats-title">
-                                             <font>
-                                                <Font name="System Bold" size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Label fx:id="lblUnaExistencia" text="(0)" styleClass="stats-count">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                    <Label text="Doble clic para ver información del libro" styleClass="stats-hint">
-                                       <font>
-                                          <Font size="10.0" />
-                                       </font>
-                                    </Label>
-                                    <ListView fx:id="listUnaExistencia" prefHeight="160.0" styleClass="stats-list" />
-                                 </children>
-                              </VBox>
+                              </HBox>
+                              <Label text="-3% este mes" styleClass="stat-trend negative" />
                            </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-                  
-                  <!-- Sección de Acciones Rápidas -->
-                  <VBox spacing="16.0">
-                     <children>
-                        <Label text="Acciones Rápidas" styleClass="section-title">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                        <FlowPane fx:id="quickActionsPane" hgap="12.0" vgap="12.0" styleClass="quick-actions">
-                           <!-- Los botones de acciones rápidas se cargarán dinámicamente -->
-                        </FlowPane>
-                     </children>
-                  </VBox>
-                  
-                  <!-- Panel de Información del Sistema -->
-                  <VBox spacing="16.0">
-                     <children>
-                        <Label text="Información del Sistema" styleClass="section-title">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                        <HBox spacing="16.0">
+                        </VBox>
+                        
+                        <!-- Bibliotecarios -->
+                        <VBox spacing="8.0" styleClass="stat-card-modern" HBox.hgrow="ALWAYS">
                            <children>
-                              <!-- Panel de Estado -->
-                              <VBox spacing="12.0" styleClass="info-panel">
+                              <HBox spacing="12.0" alignment="CENTER_LEFT">
                                  <children>
-                                    <Label text="Estado General" styleClass="info-panel-title">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                    <StackPane styleClass="stat-icon-container purple">
                                        <children>
-                                          <Label text="🟢" style="-fx-font-size: 16px;" />
-                                          <Label text="Sistema Operativo" styleClass="info-text" />
+                                          <Label text="👨‍💼" style="-fx-font-size: 24px;" />
                                        </children>
-                                    </HBox>
-                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                    </StackPane>
+                                    <VBox spacing="2.0">
                                        <children>
-                                          <Label text="🟢" style="-fx-font-size: 16px;" />
-                                          <Label text="Base de Datos Activa" styleClass="info-text" />
+                                          <Label text="Bibliotecarios" styleClass="stat-label-modern" />
+                                          <Label fx:id="bibliotecariosLabel" text="24" styleClass="stat-value-modern" />
                                        </children>
-                                    </HBox>
-                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
-                                       <children>
-                                          <Label text="🟢" style="-fx-font-size: 16px;" />
-                                          <Label text="Servicios Funcionando" styleClass="info-text" />
-                                       </children>
-                                    </HBox>
+                                    </VBox>
                                  </children>
-                              </VBox>
-                              
-                              <!-- Panel de Versión -->
-                              <VBox spacing="12.0" styleClass="info-panel">
-                                 <children>
-                                    <Label text="Versión del Sistema" styleClass="info-panel-title">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
-                                       <children>
-                                          <Label text="📦" style="-fx-font-size: 16px;" />
-                                          <Label text="BiblioSystem v1.0" styleClass="info-text" />
-                                       </children>
-                                    </HBox>
-                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
-                                       <children>
-                                          <Label text="📅" style="-fx-font-size: 16px;" />
-                                          <Label text="Actualizado: Diciembre 2024" styleClass="info-text" />
-                                       </children>
-                                    </HBox>
-                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
-                                       <children>
-                                          <Label text="⚡" style="-fx-font-size: 16px;" />
-                                          <Label text="Rendimiento: Óptimo" styleClass="info-text" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              
-                              <!-- Panel de Acceso Rápido -->
-                              <VBox spacing="12.0" styleClass="info-panel">
-                                 <children>
-                                    <Label text="Acceso Rápido" styleClass="info-panel-title">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
-                                       <children>
-                                          <Label text="👥" style="-fx-font-size: 16px;" />
-                                          <Label text="Gestión de Usuarios" styleClass="info-text clickable-text" />
-                                       </children>
-                                    </HBox>
-                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
-                                       <children>
-                                          <Label text="📊" style="-fx-font-size: 16px;" />
-                           
-                                       </children>
-                                    </HBox>
-                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
-                                       <children>
-                                          <Label text="🔧" style="-fx-font-size: 16px;" />
-                                          <Label text="Herramientas Admin" styleClass="info-text clickable-text" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
+                              </HBox>
+                              <Label text="+2 nuevos" styleClass="stat-trend positive" />
                            </children>
-                        </HBox>
+                        </VBox>
                      </children>
-                  </VBox>
+                  </HBox>
                   
-
-                  
+                  <!-- Sección Inferior: Acceso Rápido y Actividad -->
+                  <HBox spacing="24.0" alignment="TOP_CENTER">
+                     <children>
+                        <!-- Acceso Rápido -->
+                        <VBox spacing="16.0" styleClass="section-panel" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="Acceso Rápido" styleClass="section-header">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              
+                              <!-- Gestión de Libros -->
+                              <HBox spacing="16.0" alignment="CENTER_LEFT" styleClass="quick-access-item">
+                                 <children>
+                                    <StackPane styleClass="quick-icon blue">
+                                       <children>
+                                          <Label text="📚" style="-fx-font-size: 20px;" />
+                                       </children>
+                                    </StackPane>
+                                    <VBox spacing="4.0">
+                                       <children>
+                                          <Label text="Gestión de Libros" styleClass="quick-title" />
+                                          <Label text="Administrar catálogo de libros" styleClass="quick-desc" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              
+                              <!-- Gestión de Usuarios -->
+                              <HBox spacing="16.0" alignment="CENTER_LEFT" styleClass="quick-access-item">
+                                 <children>
+                                    <StackPane styleClass="quick-icon green">
+                                       <children>
+                                          <Label text="👥" style="-fx-font-size: 20px;" />
+                                       </children>
+                                    </StackPane>
+                                    <VBox spacing="4.0">
+                                       <children>
+                                          <Label text="Gestión de Usuarios" styleClass="quick-title" />
+                                          <Label text="Administrar usuarios y devoluciones" styleClass="quick-desc" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              
+                              <!-- Préstamos -->
+                              <HBox spacing="16.0" alignment="CENTER_LEFT" styleClass="quick-access-item">
+                                 <children>
+                                    <StackPane styleClass="quick-icon orange">
+                                       <children>
+                                          <Label text="📋" style="-fx-font-size: 20px;" />
+                                       </children>
+                                    </StackPane>
+                                    <VBox spacing="4.0">
+                                       <children>
+                                          <Label text="Préstamos" styleClass="quick-title" />
+                                          <Label text="Gestionar préstamos y devoluciones" styleClass="quick-desc" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              
+                              <!-- Reportes -->
+                              <HBox spacing="16.0" alignment="CENTER_LEFT" styleClass="quick-access-item">
+                                 <children>
+                                    <StackPane styleClass="quick-icon purple">
+                                       <children>
+                                          <Label text="📊" style="-fx-font-size: 20px;" />
+                                       </children>
+                                    </StackPane>
+                                    <VBox spacing="4.0">
+                                       <children>
+                                          <Label text="Reportes" styleClass="quick-title" />
+                                          <Label text="Generar reportes y estadísticas" styleClass="quick-desc" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        
+                        <!-- Libros Más Prestados -->
+                        <VBox spacing="16.0" styleClass="section-panel" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="Libros Más Prestados" styleClass="section-header">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              
+                              <!-- Libro 1 -->
+                              <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="book-ranking-item">
+                                 <children>
+                                    <Label text="1" styleClass="ranking-number first" />
+                                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="El Quijote" styleClass="book-name" />
+                                          <Label text="Miguel de Cervantes" styleClass="book-author-name" />
+                                       </children>
+                                    </VBox>
+                                    <Label text="24 préstamos" styleClass="loan-count" />
+                                 </children>
+                              </HBox>
+                              
+                              <!-- Libro 2 -->
+                              <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="book-ranking-item">
+                                 <children>
+                                    <Label text="2" styleClass="ranking-number second" />
+                                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Cien Años de Soledad" styleClass="book-name" />
+                                          <Label text="Gabriel García Márquez" styleClass="book-author-name" />
+                                       </children>
+                                    </VBox>
+                                    <Label text="18 préstamos" styleClass="loan-count" />
+                                 </children>
+                              </HBox>
+                              
+                              <!-- Libro 3 -->
+                              <HBox spacing="12.0" alignment="CENTER_LEFT" styleClass="book-ranking-item">
+                                 <children>
+                                    <Label text="3" styleClass="ranking-number third" />
+                                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="1984" styleClass="book-name" />
+                                          <Label text="George Orwell" styleClass="book-author-name" />
+                                       </children>
+                                    </VBox>
+                                    <Label text="15 préstamos" styleClass="loan-count" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
                </VBox>
             </content>
          </ScrollPane>
       </StackPane>
    </center>
    
-</BorderPane> 
+</BorderPane>

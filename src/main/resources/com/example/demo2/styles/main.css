@@ -111,7 +111,7 @@
     -fx-text-alignment: center;
 }
 
-/* === ÁREA DE CONTENIDO === */
+/* === DASHBOARD / ÁREA DE CONTENIDO === */
 .content-area {
     -fx-background-color: #F8FAFC;
 }
@@ -129,8 +129,300 @@
     -fx-background-color: transparent;
 }
 
+.content-scroll .scroll-bar .track {
+    -fx-background-color: #F1F5F9;
+    -fx-background-radius: 4;
+}
+
+.content-scroll .scroll-bar .thumb {
+    -fx-background-color: #CBD5E1;
+    -fx-background-radius: 4;
+}
+
+.content-scroll .scroll-bar .thumb:hover {
+    -fx-background-color: #94A3B8;
+}
+
 .dashboard-container {
     -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* === NUEVO DASHBOARD MODERNO === */
+
+/* Header del Dashboard */
+.dashboard-header {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16;
+    -fx-padding: 32 24 24 24;
+    -fx-effect: dropshadow(gaussian, #00000010, 12, 0, 0, 4);
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+}
+
+.dashboard-main-title {
+    -fx-text-fill: #1E40AF;
+    -fx-font-weight: bold;
+    -fx-font-size: 28px;
+}
+
+.dashboard-main-subtitle {
+    -fx-text-fill: #374151;
+    -fx-font-weight: 600;
+    -fx-font-size: 16px;
+}
+
+.dashboard-description {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 14px;
+}
+
+.header-close-btn {
+    -fx-background-color: #EF4444;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 8;
+    -fx-border-width: 0;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+    -fx-font-weight: 600;
+    -fx-font-size: 12px;
+}
+
+.header-close-btn:hover {
+    -fx-background-color: #DC2626;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* Tarjetas de Estadísticas Modernas */
+.stat-card-modern {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16;
+    -fx-padding: 24 20;
+    -fx-effect: dropshadow(gaussian, #00000012, 16, 0, 0, 4);
+    -fx-border-color: #F1F5F9;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+    -fx-cursor: hand;
+}
+
+.stat-card-modern:hover {
+    -fx-effect: dropshadow(gaussian, #00000020, 20, 0, 0, 8);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.stat-icon-container {
+    -fx-background-radius: 12;
+    -fx-pref-width: 48;
+    -fx-pref-height: 48;
+    -fx-min-width: 48;
+    -fx-min-height: 48;
+    -fx-max-width: 48;
+    -fx-max-height: 48;
+}
+
+.stat-icon-container.blue {
+    -fx-background-color: #EFF6FF;
+}
+
+.stat-icon-container.green {
+    -fx-background-color: #F0FDF4;
+}
+
+.stat-icon-container.orange {
+    -fx-background-color: #FFF7ED;
+}
+
+.stat-icon-container.purple {
+    -fx-background-color: #FAF5FF;
+}
+
+.stat-label-modern {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+.stat-value-modern {
+    -fx-text-fill: #111827;
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+}
+
+.stat-trend {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.stat-trend.positive {
+    -fx-text-fill: #059669;
+}
+
+.stat-trend.negative {
+    -fx-text-fill: #DC2626;
+}
+
+/* Paneles de Sección */
+.section-panel {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16;
+    -fx-padding: 24;
+    -fx-effect: dropshadow(gaussian, #00000010, 12, 0, 0, 4);
+    -fx-border-color: #F1F5F9;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+}
+
+.section-header {
+    -fx-text-fill: #111827;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+
+/* Acceso Rápido */
+.quick-access-item {
+    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+    -fx-cursor: hand;
+}
+
+.quick-access-item:hover {
+    -fx-background-color: #F1F5F9;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.quick-icon {
+    -fx-background-radius: 10;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-min-width: 40;
+    -fx-min-height: 40;
+    -fx-max-width: 40;
+    -fx-max-height: 40;
+}
+
+.quick-icon.blue {
+    -fx-background-color: #3B82F6;
+}
+
+.quick-icon.green {
+    -fx-background-color: #10B981;
+}
+
+.quick-icon.orange {
+    -fx-background-color: #F59E0B;
+}
+
+.quick-icon.purple {
+    -fx-background-color: #8B5CF6;
+}
+
+.quick-title {
+    -fx-text-fill: #111827;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.quick-desc {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 12px;
+}
+
+/* Ranking de Libros */
+.book-ranking-item {
+    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 8;
+    -fx-padding: 12;
+    -fx-cursor: hand;
+}
+
+.book-ranking-item:hover {
+    -fx-background-color: #F1F5F9;
+}
+
+.ranking-number {
+    -fx-background-radius: 20;
+    -fx-pref-width: 32;
+    -fx-pref-height: 32;
+    -fx-min-width: 32;
+    -fx-min-height: 32;
+    -fx-max-width: 32;
+    -fx-max-height: 32;
+    -fx-alignment: center;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.ranking-number.first {
+    -fx-background-color: #3B82F6;
+}
+
+.ranking-number.second {
+    -fx-background-color: #10B981;
+}
+
+.ranking-number.third {
+    -fx-background-color: #F59E0B;
+}
+
+.book-name {
+    -fx-text-fill: #111827;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.book-author-name {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 12px;
+}
+
+.loan-count {
+    -fx-text-fill: #374151;
+    -fx-font-weight: 600;
+    -fx-font-size: 12px;
+}
+
+/* Panel de Bienvenida (Legacy - mantener por compatibilidad) */
+.welcome-panel {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12;
+    -fx-padding: 24;
+    -fx-effect: dropshadow(gaussian, #00000008, 8, 0, 0, 2);
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+}
+
+.dashboard-title {
+    -fx-text-fill: #0F172A;
+    -fx-font-weight: bold;
+}
+
+.dashboard-subtitle {
+    -fx-text-fill: #64748B;
+}
+
+.status-indicator {
+    -fx-text-fill: #059669;
+    -fx-font-weight: 600;
+}
+
+.time-label {
+    -fx-text-fill: #94A3B8;
+}
+
+.info-label {
+    -fx-text-fill: #475569;
+    -fx-font-weight: 600;
+}
+
+.info-value {
+    -fx-text-fill: #64748B;
 }
 
 /* === TÍTULOS Y TEXTO === */
@@ -143,7 +435,6 @@
     -fx-mouse-transparent: true;
 }
 
-/* Protección adicional para el título del dashboard */
 .dashboard-title:hover {
     -fx-text-fill: #0F172A;
     -fx-font-weight: bold;

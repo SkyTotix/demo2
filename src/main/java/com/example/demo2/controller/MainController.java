@@ -107,10 +107,10 @@ public class MainController {
     @FXML private StackPane contentArea;        // Área donde se cargan diferentes vistas
     
     // DASHBOARD - Elementos del panel principal
-    @FXML private Label welcomeLabel;           // Título de bienvenida personalizado
+    // @FXML private Label welcomeLabel;           // Título de bienvenida personalizado - Comentado: no existe en FXML
     @FXML private Label dashboardSubtitle;      // Subtítulo descriptivo del rol
 
-    @FXML private FlowPane quickActionsPane;   // Panel de acciones rápidas
+    // @FXML private FlowPane quickActionsPane;   // Panel de acciones rápidas - Comentado: no existe en FXML
     
     // ESTADÍSTICAS - Elementos de la sección de estadísticas
     @FXML private VBox statisticsSection;           // Sección completa de estadísticas
@@ -153,8 +153,8 @@ public class MainController {
         // Configurar estadísticas según el rol
         setupStatistics();
         
-        // Configurar acciones rápidas
-        setupQuickActions();
+        // Configurar acciones rápidas - COMENTADO: quickActionsPane no existe en FXML
+        // setupQuickActions();
         
         // Configurar notificaciones
         setupNotifications();
@@ -173,7 +173,7 @@ public class MainController {
         if (authService.getUsuarioActual() != null) {
             userNameLabel.setText(authService.getUsuarioActual().getNombreCompleto());
             userRoleLabel.setText(authService.getUsuarioActual().getTipoUsuario().getDescripcion());
-            welcomeLabel.setText("¡Bienvenido, " + authService.getUsuarioActual().getNombre() + "!");
+            // welcomeLabel.setText("¡Bienvenido, " + authService.getUsuarioActual().getNombre() + "!"); // Comentado: welcomeLabel no existe en FXML
         }
     }
     
@@ -273,7 +273,7 @@ public class MainController {
      */
     private void protegerTituloDashboard() {
         // Asegurar que el título y subtítulo mantengan sus propiedades
-        welcomeLabel.setMouseTransparent(true); // Evitar que reciba eventos de mouse
+        // welcomeLabel.setMouseTransparent(true); // Evitar que reciba eventos de mouse - Comentado: welcomeLabel no existe
         dashboardSubtitle.setMouseTransparent(true); // Proteger también el subtítulo
         
         // Restaurar título y subtítulo si es necesario
@@ -293,12 +293,12 @@ public class MainController {
         });
         
         // Proteger también el área de títulos específicamente
-        if (welcomeLabel.getParent() != null) {
+        /*if (welcomeLabel.getParent() != null) {
             welcomeLabel.getParent().setOnMouseClicked(event -> {
                 // Consumir el evento para que no afecte los títulos
                 event.consume();
             });
-        }
+        }*/ // Comentado: welcomeLabel no existe
         
 
         
@@ -309,14 +309,14 @@ public class MainController {
      * Restaura el título y subtítulo del dashboard a su estado correcto
      */
     private void restaurarTituloDashboard() {
-        if (welcomeLabel != null) {
+        /*if (welcomeLabel != null) {
             // Asegurar que el estilo CSS se mantenga para el título
             welcomeLabel.getStyleClass().clear();
             welcomeLabel.getStyleClass().add("dashboard-title");
             
             // Agregar estilo inline como respaldo para el título
             welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-font-family: 'System Bold';");
-        }
+        }*/ // Comentado: welcomeLabel no existe
         
         if (dashboardSubtitle != null) {
             // Asegurar que el estilo CSS se mantenga para el subtítulo
@@ -333,8 +333,9 @@ public class MainController {
 
     
     /**
-     * Configura las acciones rápidas
+     * Configura las acciones rápidas - COMENTADO: quickActionsPane no existe en FXML
      */
+    /*
     private void setupQuickActions() {
         quickActionsPane.getChildren().clear();
         
@@ -363,8 +364,9 @@ public class MainController {
     }
     
     /**
-     * Agrega un botón de acción rápida con icono
+     * Agrega un botón de acción rápida con icono - COMENTADO: quickActionsPane no existe en FXML
      */
+    /*
     private void addQuickAction(FontIcon icon, String text, String action) {
         Button actionButton = new Button(text);
         actionButton.setGraphic(icon);
@@ -374,6 +376,7 @@ public class MainController {
         
         quickActionsPane.getChildren().add(actionButton);
     }
+    */
     
 
     
@@ -1439,4 +1442,4 @@ public class MainController {
     }
     
 
-} 
+}
