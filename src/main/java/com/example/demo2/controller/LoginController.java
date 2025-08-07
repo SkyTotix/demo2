@@ -109,63 +109,56 @@ public class LoginController {
     private void initializeDatabase() {
         new Thread(() -> {
             try {
-                javafx.application.Platform.runLater(() -> 
-                    showMessage("Verificando base de datos...", "info"));
-                
-                // Primero listar las tablas existentes para debug
-                com.example.demo2.service.DatabaseInitService.listarTablas();
-                
-                // Verificar si las tablas existen
-                boolean tablasExisten = com.example.demo2.service.DatabaseInitService.verificarTablas();
+                // Verificación rápida de tablas sin logs verbosos
+                boolean tablasExisten = com.example.demo2.service.DatabaseInitService.verificarTablasRapido();
                 
                 if (!tablasExisten) {
                     javafx.application.Platform.runLater(() -> 
-                        showMessage("Creando estructura de base de datos...", "info"));
+                        showMessage("Configurando base de datos...", "info"));
                     
-                    // Intentar crear las tablas
-                    com.example.demo2.service.DatabaseInitService.inicializarBaseDatos();
-                    
-                    // Verificar nuevamente
-                    if (!com.example.demo2.service.DatabaseInitService.verificarTablas()) {
-                        // Si aún no existen, forzar recreación
-                        javafx.application.Platform.runLater(() -> 
-                            showMessage("Forzando recreación de tablas...", "info"));
-                        
-                        com.example.demo2.service.DatabaseInitService.recrearTablas();
-                    }
+                    // Crear tablas básicas sin logs excesivos
+                    com.example.demo2.service.DatabaseInitService.inicializarBaseDatosRapido();
                 }
                 
-                // Verificar una vez más antes de continuar
-                if (com.example.demo2.service.DatabaseInitService.verificarTablas()) {
-                    // Actualizar estructura de la tabla usuarios con nuevos campos
-                    com.example.demo2.service.DatabaseInitService.actualizarEstructuraUsuarios();
-                    
-                    // Actualizar estructura de la tabla prestamos para corregir problemas de columnas
-                    com.example.demo2.service.DatabaseInitService.actualizarEstructuraPrestamos();
-                    
-                    // Crear usuario super admin inicial si no existe
-                    authService.crearSuperAdminInicial();
-                    
-                    // Crear usuarios de prueba con teléfonos
-                    com.example.demo2.service.UsuarioService.getInstance().crearUsuariosDePrueba();
-                    
-                    // Crear lectores de prueba
-                    com.example.demo2.service.LectorService.getInstance().crearLectoresDePrueba();
-                    
-                    // Crear préstamos de prueba
-                    com.example.demo2.service.PrestamoService.getInstance().crearPrestamosDePrueba();
-                    
-                    javafx.application.Platform.runLater(() -> 
-                        showMessage("Sistema listo", "info"));
-                } else {
-                    javafx.application.Platform.runLater(() -> 
-                        showMessage("Error: No se pudieron crear las tablas", "error"));
-                }
+                // Solo crear usuario admin si no existe (esencial para login)
+                authService.crearSuperAdminInicial();
+                
+                javafx.application.Platform.runLater(() -> 
+                    showMessage("Sistema listo", "info"));
+                
+                // Crear datos de prueba en segundo plano (opcional)
+                crearDatosPruebaEnSegundoPlano();
                 
             } catch (Exception e) {
                 javafx.application.Platform.runLater(() -> 
                     showMessage("Error inicializando sistema: " + e.getMessage(), "error"));
                 e.printStackTrace();
+            }
+        }).start();
+    }
+    
+    /**
+     * Crea datos de prueba en segundo plano sin afectar el login
+     */
+    private void crearDatosPruebaEnSegundoPlano() {
+        new Thread(() -> {
+            try {
+                // Esperar un poco para no interferir con el login
+                Thread.sleep(2000);
+                
+                // Actualizar estructuras si es necesario
+                com.example.demo2.service.DatabaseInitService.actualizarEstructuraUsuarios();
+                com.example.demo2.service.DatabaseInitService.actualizarEstructuraPrestamos();
+                
+                // Crear datos de prueba
+                com.example.demo2.service.UsuarioService.getInstance().crearUsuariosDePrueba();
+                com.example.demo2.service.LectorService.getInstance().crearLectoresDePrueba();
+                com.example.demo2.service.PrestamoService.getInstance().crearPrestamosDePrueba();
+                
+                System.out.println("✅ Datos de prueba creados en segundo plano");
+                
+            } catch (Exception e) {
+                System.err.println("⚠️ Error creando datos de prueba: " + e.getMessage());
             }
         }).start();
     }
@@ -331,4 +324,4 @@ public class LoginController {
             loginLogoImage.setVisible(false);
         }
     }
-} 
+}

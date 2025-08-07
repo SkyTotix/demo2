@@ -149,109 +149,13 @@
                                     </Label>
                                  </children>
                               </VBox>
-                              <Region HBox.hgrow="ALWAYS" />
-                              <Button text="Cerrar Sesión" styleClass="header-close-btn">
-                                 <font>
-                                    <Font size="12.0" />
-                                 </font>
-                              </Button>
+
                            </children>
                         </HBox>
                      </children>
                   </VBox>
                   
-                  <!-- Estadísticas Principales -->
-                  <HBox spacing="20.0" alignment="CENTER">
-                     <children>
-                        <!-- Total Libros -->
-                        <VBox spacing="8.0" styleClass="stat-card-modern" HBox.hgrow="ALWAYS">
-                           <children>
-                              <HBox spacing="12.0" alignment="CENTER_LEFT">
-                                 <children>
-                                    <StackPane styleClass="stat-icon-container blue">
-                                       <children>
-                                          <Label text="📚" style="-fx-font-size: 24px;" />
-                                       </children>
-                                    </StackPane>
-                                    <VBox spacing="2.0">
-                                       <children>
-                                          <Label text="Total Libros" styleClass="stat-label-modern" />
-                                          <Label fx:id="totalLibrosLabel" text="2,456" styleClass="stat-value-modern" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                              <Label text="+12% este mes" styleClass="stat-trend positive" />
-                           </children>
-                        </VBox>
-                        
-                        <!-- Usuarios Activos -->
-                        <VBox spacing="8.0" styleClass="stat-card-modern" HBox.hgrow="ALWAYS">
-                           <children>
-                              <HBox spacing="12.0" alignment="CENTER_LEFT">
-                                 <children>
-                                    <StackPane styleClass="stat-icon-container green">
-                                       <children>
-                                          <Label text="👥" style="-fx-font-size: 24px;" />
-                                       </children>
-                                    </StackPane>
-                                    <VBox spacing="2.0">
-                                       <children>
-                                          <Label text="Usuarios Activos" styleClass="stat-label-modern" />
-                                          <Label fx:id="usuariosActivosLabel" text="1,234" styleClass="stat-value-modern" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                              <Label text="+8% este mes" styleClass="stat-trend positive" />
-                           </children>
-                        </VBox>
-                        
-                        <!-- Préstamos Activos -->
-                        <VBox spacing="8.0" styleClass="stat-card-modern" HBox.hgrow="ALWAYS">
-                           <children>
-                              <HBox spacing="12.0" alignment="CENTER_LEFT">
-                                 <children>
-                                    <StackPane styleClass="stat-icon-container orange">
-                                       <children>
-                                          <Label text="📖" style="-fx-font-size: 24px;" />
-                                       </children>
-                                    </StackPane>
-                                    <VBox spacing="2.0">
-                                       <children>
-                                          <Label text="Préstamos Activos" styleClass="stat-label-modern" />
-                                          <Label fx:id="prestamosActivosLabel" text="456" styleClass="stat-value-modern" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                              <Label text="-3% este mes" styleClass="stat-trend negative" />
-                           </children>
-                        </VBox>
-                        
-                        <!-- Bibliotecarios -->
-                        <VBox spacing="8.0" styleClass="stat-card-modern" HBox.hgrow="ALWAYS">
-                           <children>
-                              <HBox spacing="12.0" alignment="CENTER_LEFT">
-                                 <children>
-                                    <StackPane styleClass="stat-icon-container purple">
-                                       <children>
-                                          <Label text="👨‍💼" style="-fx-font-size: 24px;" />
-                                       </children>
-                                    </StackPane>
-                                    <VBox spacing="2.0">
-                                       <children>
-                                          <Label text="Bibliotecarios" styleClass="stat-label-modern" />
-                                          <Label fx:id="bibliotecariosLabel" text="24" styleClass="stat-value-modern" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                              <Label text="+2 nuevos" styleClass="stat-trend positive" />
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
+
                   
                   <!-- Sección Inferior: Acceso Rápido y Actividad -->
                   <HBox spacing="24.0" alignment="TOP_CENTER">
