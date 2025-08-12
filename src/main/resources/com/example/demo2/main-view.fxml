@@ -151,6 +151,166 @@
                      </children>
                   </VBox>
                   
+                  <!-- Tarjetas de Información -->
+                  <GridPane hgap="20.0" vgap="20.0" styleClass="stats-grid">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="250.0" prefWidth="250.0" />
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="250.0" prefWidth="250.0" />
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="250.0" prefWidth="250.0" />
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="250.0" prefWidth="250.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints vgrow="NEVER" />
+                     </rowConstraints>
+                     
+                     <!-- Tarjeta Total Libros -->
+                     <VBox styleClass="stats-card, stats-card-blue" spacing="12.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <padding>
+                           <Insets top="20.0" bottom="20.0" left="20.0" right="20.0" />
+                        </padding>
+                        <children>
+                           <HBox alignment="CENTER_LEFT" spacing="12.0">
+                              <children>
+                                 <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                       <Label text="Total Libros" styleClass="stats-label">
+                                          <font>
+                                             <Font size="14.0" />
+                                          </font>
+                                       </Label>
+                                       <Label text="2,456" styleClass="stats-number">
+                                          <font>
+                                             <Font name="System Bold" size="28.0" />
+                                          </font>
+                                       </Label>
+                                       <Label text="+12% este mes" styleClass="stats-change, stats-positive">
+                                          <font>
+                                             <Font size="12.0" />
+                                          </font>
+                                       </Label>
+                                    </children>
+                                 </VBox>
+                                 <StackPane styleClass="stats-icon-container, stats-icon-blue">
+                                    <children>
+                                       <FontIcon iconLiteral="fas-book" iconSize="24" iconColor="#3B82F6" />
+                                    </children>
+                                 </StackPane>
+                              </children>
+                           </HBox>
+                        </children>
+                     </VBox>
+                     
+                     <!-- Tarjeta Usuarios Activos -->
+                     <VBox styleClass="stats-card, stats-card-green" spacing="12.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <padding>
+                           <Insets top="20.0" bottom="20.0" left="20.0" right="20.0" />
+                        </padding>
+                        <children>
+                           <HBox alignment="CENTER_LEFT" spacing="12.0">
+                              <children>
+                                 <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                       <Label text="Usuarios Activos" styleClass="stats-label">
+                                          <font>
+                                             <Font size="14.0" />
+                                          </font>
+                                       </Label>
+                                       <Label text="1,234" styleClass="stats-number">
+                                          <font>
+                                             <Font name="System Bold" size="28.0" />
+                                          </font>
+                                       </Label>
+                                       <Label text="+8% este mes" styleClass="stats-change, stats-positive">
+                                          <font>
+                                             <Font size="12.0" />
+                                          </font>
+                                       </Label>
+                                    </children>
+                                 </VBox>
+                                 <StackPane styleClass="stats-icon-container, stats-icon-green">
+                                    <children>
+                                       <FontIcon iconLiteral="fas-users" iconSize="24" iconColor="#10B981" />
+                                    </children>
+                                 </StackPane>
+                              </children>
+                           </HBox>
+                        </children>
+                     </VBox>
+                     
+                     <!-- Tarjeta Préstamos Activos -->
+                     <VBox styleClass="stats-card, stats-card-orange" spacing="12.0" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                        <padding>
+                           <Insets top="20.0" bottom="20.0" left="20.0" right="20.0" />
+                        </padding>
+                        <children>
+                           <HBox alignment="CENTER_LEFT" spacing="12.0">
+                              <children>
+                                 <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                       <Label text="Préstamos Activos" styleClass="stats-label">
+                                          <font>
+                                             <Font size="14.0" />
+                                          </font>
+                                       </Label>
+                                       <Label text="456" styleClass="stats-number">
+                                          <font>
+                                             <Font name="System Bold" size="28.0" />
+                                          </font>
+                                       </Label>
+                                       <Label text="-3% este mes" styleClass="stats-change, stats-negative">
+                                          <font>
+                                             <Font size="12.0" />
+                                          </font>
+                                       </Label>
+                                    </children>
+                                 </VBox>
+                                 <StackPane styleClass="stats-icon-container, stats-icon-orange">
+                                    <children>
+                                       <FontIcon iconLiteral="fas-book-reader" iconSize="24" iconColor="#F59E0B" />
+                                    </children>
+                                 </StackPane>
+                              </children>
+                           </HBox>
+                        </children>
+                     </VBox>
+                     
+                     <!-- Tarjeta Bibliotecarios -->
+                     <VBox styleClass="stats-card, stats-card-purple" spacing="12.0" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                        <padding>
+                           <Insets top="20.0" bottom="20.0" left="20.0" right="20.0" />
+                        </padding>
+                        <children>
+                           <HBox alignment="CENTER_LEFT" spacing="12.0">
+                              <children>
+                                 <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                       <Label text="Bibliotecarios" styleClass="stats-label">
+                                          <font>
+                                             <Font size="14.0" />
+                                          </font>
+                                       </Label>
+                                       <Label text="24" styleClass="stats-number">
+                                          <font>
+                                             <Font name="System Bold" size="28.0" />
+                                          </font>
+                                       </Label>
+                                       <Label text="+2 nuevos" styleClass="stats-change, stats-positive">
+                                          <font>
+                                             <Font size="12.0" />
+                                          </font>
+                                       </Label>
+                                    </children>
+                                 </VBox>
+                                 <StackPane styleClass="stats-icon-container, stats-icon-purple">
+                                    <children>
+                                       <FontIcon iconLiteral="fas-user-tie" iconSize="24" iconColor="#8B5CF6" />
+                                    </children>
+                                 </StackPane>
+                              </children>
+                           </HBox>
+                        </children>
+                     </VBox>
+                  </GridPane>
 
                   
 

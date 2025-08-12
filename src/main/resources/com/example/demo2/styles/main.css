@@ -922,6 +922,115 @@
     -fx-background-color: #E2E8F0;
 }
 
+/* === TARJETAS DE ESTADÍSTICAS MODERNAS === */
+.stats-grid {
+    -fx-padding: 0;
+}
+
+.stats-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: #F1F5F9;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, #00000008, 8, 0, 0, 2);
+    -fx-cursor: hand;
+}
+
+.stats-card:hover {
+    -fx-effect: dropshadow(gaussian, #00000015, 12, 0, 0, 4);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* Variantes de color para las tarjetas */
+.stats-card-blue {
+    -fx-border-color: #DBEAFE;
+}
+
+.stats-card-blue:hover {
+    -fx-border-color: #BFDBFE;
+    -fx-effect: dropshadow(gaussian, #3B82F620, 12, 0, 0, 4);
+}
+
+.stats-card-green {
+    -fx-border-color: #D1FAE5;
+}
+
+.stats-card-green:hover {
+    -fx-border-color: #A7F3D0;
+    -fx-effect: dropshadow(gaussian, #10B98120, 12, 0, 0, 4);
+}
+
+.stats-card-orange {
+    -fx-border-color: #FED7AA;
+}
+
+.stats-card-orange:hover {
+    -fx-border-color: #FDBA74;
+    -fx-effect: dropshadow(gaussian, #F59E0B20, 12, 0, 0, 4);
+}
+
+.stats-card-purple {
+    -fx-border-color: #E9D5FF;
+}
+
+.stats-card-purple:hover {
+    -fx-border-color: #DDD6FE;
+    -fx-effect: dropshadow(gaussian, #8B5CF620, 12, 0, 0, 4);
+}
+
+/* Estilos para el contenido de las tarjetas */
+.stats-label {
+    -fx-text-fill: #6B7280;
+    -fx-font-weight: 500;
+}
+
+.stats-number {
+    -fx-text-fill: #111827;
+    -fx-font-weight: bold;
+}
+
+.stats-change {
+    -fx-font-weight: 600;
+}
+
+.stats-positive {
+    -fx-text-fill: #059669;
+}
+
+.stats-negative {
+    -fx-text-fill: #DC2626;
+}
+
+/* Contenedores de iconos */
+.stats-icon-container {
+    -fx-pref-width: 48;
+    -fx-pref-height: 48;
+    -fx-min-width: 48;
+    -fx-min-height: 48;
+    -fx-max-width: 48;
+    -fx-max-height: 48;
+    -fx-background-radius: 12;
+    -fx-alignment: center;
+}
+
+.stats-icon-blue {
+    -fx-background-color: #EFF6FF;
+}
+
+.stats-icon-green {
+    -fx-background-color: #F0FDF4;
+}
+
+.stats-icon-orange {
+    -fx-background-color: #FFF7ED;
+}
+
+.stats-icon-purple {
+    -fx-background-color: #FAF5FF;
+}
+
 /* ===== ESTILOS PARA GESTIÓN DE ADMINISTRADORES ===== */
 
 /* Header de contenido */
