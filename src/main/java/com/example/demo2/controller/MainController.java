@@ -14,8 +14,9 @@ import com.example.demo2.service.PrestamoService;        // Operaciones CRUD de 
 // Controladores del sistema
 import com.example.demo2.controller.SystemConfigController; // Controlador de configuraciones
 
-// Utilidad para iconos en la interfaz
+// Utilidades del sistema
 import com.example.demo2.utils.IconHelper;
+import com.example.demo2.utils.AnimationUtils;
 
 // Importaciones de JavaFX para la interfaz de usuario
 import javafx.fxml.FXML;
@@ -29,6 +30,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.animation.*;
+import javafx.util.Duration;
+import javafx.scene.Node;
+import javafx.application.Platform;
 
 // Frameworks de estilos para interfaz moderna
 import org.kordamp.bootstrapfx.BootstrapFX;
@@ -162,8 +167,11 @@ public class MainController {
         // Configurar logo personalizable
         setupLogo();
         
-        // Registrar listener para cambios de logo
-        // Este listener ha sido reemplazado por el nuevo en setupLogo()
+        // Aplicar animaciones de entrada después de que la UI esté completamente cargada
+        Platform.runLater(this::applyEnhancedEntranceAnimations);
+        
+        // Configurar efectos de hover mejorados para elementos interactivos
+        setupEnhancedInteractions();
     }
     
     /**
@@ -1467,5 +1475,248 @@ public class MainController {
         }
     }
     
-
+    // ===================================================================
+    // MÉTODOS DE ANIMACIÓN AVANZADA
+    // ===================================================================
+    
+    /**
+     * Aplica animaciones de entrada mejoradas a todos los elementos de la interfaz
+     * Utiliza técnicas avanzadas de JavaFX para crear transiciones suaves y profesionales
+     */
+    private void applyEnhancedEntranceAnimations() {
+        try {
+            // Lista de elementos principales para animación escalonada
+            java.util.List<Node> mainElements = new java.util.ArrayList<>();
+            
+            // Agregar elementos principales si existen
+            if (logoContainer != null) mainElements.add(logoContainer);
+            if (userNameLabel != null) mainElements.add(userNameLabel);
+            if (userRoleLabel != null) mainElements.add(userRoleLabel);
+            if (menuContainer != null) mainElements.add(menuContainer);
+            if (dashboardContainer != null) mainElements.add(dashboardContainer);
+            if (statisticsSection != null) mainElements.add(statisticsSection);
+            
+            // Aplicar animación escalonada a elementos principales
+            if (!mainElements.isEmpty()) {
+                SequentialTransition staggered = AnimationUtils.staggeredAnimation(
+                    mainElements, 
+                    Duration.millis(100), 
+                    AnimationUtils.AnimationType.FADE_IN, 
+                    null
+                );
+                if (staggered != null) {
+                    staggered.play();
+                }
+            }
+            
+            // Animación especial para el logo con efecto de rebote
+            if (logoContainer != null) {
+                Timeline logoAnimation = AnimationUtils.scaleIn(logoContainer, Duration.millis(600), () -> {
+                    // Después del scale-in, aplicar un pequeño rebote
+                    Timeline bounce = AnimationUtils.bounce(logoContainer, null);
+                    if (bounce != null) {
+                        bounce.play();
+                    }
+                });
+                if (logoAnimation != null) {
+                    logoAnimation.setDelay(Duration.millis(200));
+                    logoAnimation.play();
+                }
+            }
+            
+            // Animación deslizante para el menú lateral
+            if (menuContainer != null) {
+                Timeline menuSlide = AnimationUtils.slideInLeft(menuContainer, Duration.millis(500), null);
+                if (menuSlide != null) {
+                    menuSlide.setDelay(Duration.millis(300));
+                    menuSlide.play();
+                }
+            }
+            
+            // Animación de aparición para las estadísticas
+            if (statisticsSection != null) {
+                Timeline statsAnimation = AnimationUtils.slideInTop(statisticsSection, Duration.millis(400), null);
+                if (statsAnimation != null) {
+                    statsAnimation.setDelay(Duration.millis(500));
+                    statsAnimation.play();
+                }
+            }
+            
+            // Animación de pulso para elementos importantes
+            if (notificationButton != null) {
+                Timeline pulseNotification = AnimationUtils.pulse(notificationButton, 2, null);
+                if (pulseNotification != null) {
+                    pulseNotification.setDelay(Duration.millis(1000));
+                    pulseNotification.play();
+                }
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error aplicando animaciones de entrada: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Configura efectos de hover mejorados para elementos interactivos
+     * Añade feedback visual sofisticado para mejorar la experiencia de usuario
+     */
+    private void setupEnhancedInteractions() {
+        try {
+            // Configurar hover mejorado para botones principales
+            setupButtonHoverEffects(logoutButton);
+            setupButtonHoverEffects(notificationButton);
+            setupButtonHoverEffects(btnVerProximosVencer);
+            setupButtonHoverEffects(btnVerConMulta);
+            setupButtonHoverEffects(btnVerUnaExistencia);
+            
+            // Configurar hover para el logo
+            if (logoContainer != null) {
+                logoContainer.setOnMouseEntered(e -> AnimationUtils.enhancedHover(logoContainer, true));
+                logoContainer.setOnMouseExited(e -> AnimationUtils.enhancedHover(logoContainer, false));
+            }
+            
+            // Configurar efectos para las listas de estadísticas
+            setupListHoverEffects(listProximosVencer);
+            setupListHoverEffects(listConMulta);
+            setupListHoverEffects(listUnaExistencia);
+            
+        } catch (Exception e) {
+            System.err.println("Error configurando interacciones mejoradas: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Configura efectos de hover para botones
+     */
+    private void setupButtonHoverEffects(Button button) {
+        if (button != null) {
+            button.setOnMouseEntered(e -> {
+                AnimationUtils.enhancedHover(button, true);
+                // Añadir efecto de pulso sutil
+                Timeline pulse = AnimationUtils.pulse(button, 1, null);
+                if (pulse != null) {
+                    pulse.play();
+                }
+            });
+            button.setOnMouseExited(e -> AnimationUtils.enhancedHover(button, false));
+        }
+    }
+    
+    /**
+     * Configura efectos de hover para listas
+     */
+    private void setupListHoverEffects(ListView<?> listView) {
+        if (listView != null) {
+            listView.setOnMouseEntered(e -> {
+                Timeline scaleUp = new Timeline(
+                    new KeyFrame(Duration.millis(150),
+                        new KeyValue(listView.scaleXProperty(), 1.02),
+                        new KeyValue(listView.scaleYProperty(), 1.02)
+                    )
+                );
+                scaleUp.play();
+            });
+            
+            listView.setOnMouseExited(e -> {
+                Timeline scaleDown = new Timeline(
+                    new KeyFrame(Duration.millis(150),
+                        new KeyValue(listView.scaleXProperty(), 1.0),
+                        new KeyValue(listView.scaleYProperty(), 1.0)
+                    )
+                );
+                scaleDown.play();
+            });
+        }
+    }
+    
+    /**
+     * Aplica transición suave al cambiar de vista
+     * Utiliza crossfade para transiciones elegantes entre contenidos
+     */
+    private void applyPageTransition(Node newContent) {
+        if (contentArea != null && newContent != null) {
+            try {
+                // Si hay contenido actual, hacer crossfade
+                if (!contentArea.getChildren().isEmpty()) {
+                    Node currentContent = contentArea.getChildren().get(0);
+                    
+                    // Crear transición cruzada
+                    ParallelTransition crossFade = AnimationUtils.crossFade(
+                        currentContent, 
+                        newContent, 
+                        Duration.millis(300), 
+                        () -> {
+                            // Limpiar y establecer nuevo contenido
+                            contentArea.getChildren().clear();
+                            contentArea.getChildren().add(newContent);
+                        }
+                    );
+                    
+                    if (crossFade != null) {
+                        // Añadir el nuevo contenido temporalmente para la animación
+                        contentArea.getChildren().add(newContent);
+                        crossFade.play();
+                    } else {
+                        // Fallback sin animación
+                        contentArea.getChildren().clear();
+                        contentArea.getChildren().add(newContent);
+                    }
+                } else {
+                    // Primera carga, solo fade in
+                    contentArea.getChildren().add(newContent);
+                    Timeline fadeIn = AnimationUtils.fadeIn(newContent, Duration.millis(300), null);
+                    if (fadeIn != null) {
+                        fadeIn.play();
+                    }
+                }
+                
+            } catch (Exception e) {
+                System.err.println("Error en transición de página: " + e.getMessage());
+                // Fallback sin animación
+                contentArea.getChildren().clear();
+                contentArea.getChildren().add(newContent);
+            }
+        }
+    }
+    
+    /**
+     * Aplica animación de feedback para acciones exitosas
+     */
+    private void showSuccessFeedback(Node element) {
+        if (element != null) {
+            Timeline bounce = AnimationUtils.bounce(element, null);
+            if (bounce != null) {
+                bounce.play();
+            }
+        }
+    }
+    
+    /**
+     * Aplica animación de feedback para errores
+     */
+    private void showErrorFeedback(Node element) {
+        if (element != null) {
+            Timeline shake = AnimationUtils.shake(element, null);
+            if (shake != null) {
+                shake.play();
+            }
+        }
+    }
+    
+    /**
+     * Aplica animación de carga para operaciones asíncronas
+     */
+    private RotateTransition showLoadingAnimation(Node element) {
+        if (element != null) {
+            return AnimationUtils.createSpinner(element);
+        }
+        return null;
+    }
+    
+    /**
+     * Detiene todas las animaciones de un elemento
+     */
+    private void stopAnimations(Node element) {
+        AnimationUtils.stopAllAnimations(element);
+    }
 }

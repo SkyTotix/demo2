@@ -196,9 +196,89 @@
     -fx-min-height: 1;
 }
 
-/* Animaciones y transiciones */
-.modern-field, .modern-button, .link-button {
-    -fx-transition: all 0.2s ease-in-out;
+/* === TRANSICIONES Y ANIMACIONES MEJORADAS === */
+.modern-field,
+.modern-button,
+.link-button,
+.login-card,
+.logo-container,
+.login-title,
+.login-subtitle,
+.field-label,
+.status-message,
+.footer-text {
+    -fx-transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Animaciones de entrada para la tarjeta de login */
+.login-card {
+    -fx-transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+/* Animación de logo con rotación sutil */
+.logo-container {
+    -fx-transition: transform 0.3s ease-out, -fx-rotate 0.3s ease-out;
+}
+
+.logo-container:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-rotate: 2;
+}
+
+/* Animaciones de entrada suave para elementos */
+.fade-in-up {
+    -fx-opacity: 0;
+    -fx-translate-y: 20;
+    -fx-transition: opacity 0.5s ease-out, -fx-translate-y 0.5s ease-out;
+}
+
+.fade-in-up.loaded {
+    -fx-opacity: 1;
+    -fx-translate-y: 0;
+}
+
+/* Animación de deslizamiento para campos */
+.slide-in-field {
+    -fx-translate-x: -15;
+    -fx-opacity: 0;
+    -fx-transition: -fx-translate-x 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+.slide-in-field.loaded {
+    -fx-translate-x: 0;
+    -fx-opacity: 1;
+}
+
+/* Efectos de hover mejorados para botones */
+.modern-button:hover {
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.3, 0, 2);
+}
+
+.link-button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* Animación de pulsación para elementos activos */
+.pulse-on-focus {
+    -fx-transition: -fx-effect 0.3s ease-in-out;
+}
+
+.pulse-on-focus:focused {
+    -fx-effect: dropshadow(gaussian, #007acc, 5, 0.5, 0, 0);
+}
+
+/* Animación de carga suave */
+.loading-fade {
+    -fx-opacity: 0.7;
+    -fx-transition: opacity 0.3s ease-in-out;
+}
+
+.loading-fade.loading {
+    -fx-opacity: 0.4;
 }
 
 /* Mejoras de accesibilidad */
@@ -247,4 +327,4 @@
 .icon-info {
     -fx-text-fill: #3B82F6;
     -fx-font-size: 18px;
-} 
+}

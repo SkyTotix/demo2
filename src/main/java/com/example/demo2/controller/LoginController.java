@@ -4,6 +4,9 @@ package com.example.demo2.controller;
 import com.example.demo2.service.AppConfigService;
 import com.example.demo2.service.AuthService;
 
+// Utilidades del sistema
+import com.example.demo2.utils.AnimationUtils;
+
 // Importaciones de JavaFX para la interfaz de usuario
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +18,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.animation.*;
+import javafx.util.Duration;
+import javafx.scene.Node;
+import javafx.application.Platform;
 import org.kordamp.bootstrapfx.BootstrapFX;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -107,6 +114,12 @@ public class LoginController {
         
         // Mostrar credenciales por defecto en desarrollo
         showDefaultCredentials();
+        
+        // Aplicar animaciones de entrada después de que la UI esté completamente cargada
+        Platform.runLater(this::applyLoginEntranceAnimations);
+        
+        // Configurar efectos de hover mejorados
+        setupLoginInteractions();
     }
     
     private void initializeDatabase() {
@@ -173,11 +186,13 @@ public class LoginController {
         
         if (username.isEmpty() || password.isEmpty()) {
             showMessage("Por favor ingrese usuario y contraseña", "error");
+            showLoginErrorAnimation();
             return;
         }
         
-        // Mostrar indicador de carga
+        // Mostrar indicador de carga con animación
         setLoading(true);
+        RotateTransition loadingAnimation = showLoadingAnimation();
         
         // Realizar login en un hilo separado para no bloquear la UI
         new Thread(() -> {
@@ -186,21 +201,38 @@ public class LoginController {
                 
                 // Volver al hilo de JavaFX para actualizar la UI
                 javafx.application.Platform.runLater(() -> {
+                    // Detener animación de carga
+                    if (loadingAnimation != null) {
+                        loadingAnimation.stop();
+                    }
                     setLoading(false);
                     
                     if (success) {
                         showMessage("Bienvenido " + authService.getUsuarioActual().getNombreCompleto(), "success");
-                        openMainApplication();
+                        showLoginSuccessAnimation();
+                        
+                        // Aplicar animación de salida antes de abrir la aplicación principal
+                        Platform.runLater(() -> {
+                            applyLoginExitAnimation(() -> {
+                                openMainApplication();
+                            });
+                        });
                     } else {
                         showMessage("Usuario o contraseña incorrectos", "error");
+                        showLoginErrorAnimation();
                         passwordField.clear();
                         passwordField.requestFocus();
                     }
                 });
             } catch (Exception e) {
                 javafx.application.Platform.runLater(() -> {
+                    // Detener animación de carga
+                    if (loadingAnimation != null) {
+                        loadingAnimation.stop();
+                    }
                     setLoading(false);
                     showMessage("Error de conexión: " + e.getMessage(), "error");
+                    showLoginErrorAnimation();
                     e.printStackTrace();
                 });
             }
@@ -354,6 +386,266 @@ public class LoginController {
         if (tipoLogo.equals("login")) {
             setupLoginLogo();
             System.out.println("🔄 Logo de inicio de sesión actualizado por cambio de configuración");
+        }
+    }
+    
+    // ===================================================================
+    // MÉTODOS DE ANIMACIÓN AVANZADA PARA LOGIN
+    // ===================================================================
+    
+    /**
+     * Aplica animaciones de entrada sofisticadas al formulario de login
+     * Crea una experiencia de bienvenida elegante y profesional
+     */
+    private void applyLoginEntranceAnimations() {
+        try {
+            // Lista de elementos para animación escalonada
+            java.util.List<Node> loginElements = new java.util.ArrayList<>();
+            
+            // Agregar elementos del formulario si existen
+            if (logoContainer != null) loginElements.add(logoContainer);
+            if (usernameField != null) loginElements.add(usernameField);
+            if (passwordField != null) loginElements.add(passwordField);
+            if (loginButton != null) loginElements.add(loginButton);
+            if (messageLabel != null) loginElements.add(messageLabel);
+            
+            // Animación especial para el logo - aparición con rebote
+            if (logoContainer != null) {
+                Timeline logoAnimation = AnimationUtils.scaleIn(logoContainer, Duration.millis(800), () -> {
+                    // Después del scale-in, aplicar efecto de pulso
+                    Timeline pulse = AnimationUtils.pulse(logoContainer, 2, null);
+                    if (pulse != null) {
+                        pulse.play();
+                    }
+                });
+                if (logoAnimation != null) {
+                    logoAnimation.play();
+                }
+            }
+            
+            // Animación deslizante para campos de entrada
+            if (usernameField != null) {
+                Timeline usernameSlide = AnimationUtils.slideInLeft(usernameField, Duration.millis(400), null);
+                if (usernameSlide != null) {
+                    usernameSlide.setDelay(Duration.millis(300));
+                    usernameSlide.play();
+                }
+            }
+            
+            if (passwordField != null) {
+                Timeline passwordSlide = AnimationUtils.slideInLeft(passwordField, Duration.millis(400), null);
+                if (passwordSlide != null) {
+                    passwordSlide.setDelay(Duration.millis(450));
+                    passwordSlide.play();
+                }
+            }
+            
+            // Animación de aparición para el botón de login
+            if (loginButton != null) {
+                Timeline buttonAnimation = AnimationUtils.scaleIn(loginButton, Duration.millis(500), null);
+                if (buttonAnimation != null) {
+                    buttonAnimation.setDelay(Duration.millis(600));
+                    buttonAnimation.play();
+                }
+            }
+            
+            // Animación sutil para el mensaje
+            if (messageLabel != null) {
+                Timeline messageAnimation = AnimationUtils.fadeIn(messageLabel, Duration.millis(300), null);
+                if (messageAnimation != null) {
+                    messageAnimation.setDelay(Duration.millis(800));
+                    messageAnimation.play();
+                }
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error aplicando animaciones de login: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Configura efectos de hover mejorados para elementos del login
+     */
+    private void setupLoginInteractions() {
+        try {
+            // Configurar hover mejorado para el botón de login
+            if (loginButton != null) {
+                loginButton.setOnMouseEntered(e -> {
+                    AnimationUtils.enhancedHover(loginButton, true);
+                    // Efecto de pulso sutil al hacer hover
+                    Timeline pulse = AnimationUtils.pulse(loginButton, 1, null);
+                    if (pulse != null) {
+                        pulse.play();
+                    }
+                });
+                loginButton.setOnMouseExited(e -> AnimationUtils.enhancedHover(loginButton, false));
+            }
+            
+            // Configurar efectos para campos de texto
+            setupFieldFocusEffects(usernameField);
+            setupFieldFocusEffects(passwordField);
+            
+            // Configurar hover para el logo
+            if (logoContainer != null) {
+                logoContainer.setOnMouseEntered(e -> {
+                    Timeline scaleUp = new Timeline(
+                        new KeyFrame(Duration.millis(200),
+                            new KeyValue(logoContainer.scaleXProperty(), 1.1),
+                            new KeyValue(logoContainer.scaleYProperty(), 1.1)
+                        )
+                    );
+                    scaleUp.play();
+                });
+                
+                logoContainer.setOnMouseExited(e -> {
+                    Timeline scaleDown = new Timeline(
+                        new KeyFrame(Duration.millis(200),
+                            new KeyValue(logoContainer.scaleXProperty(), 1.0),
+                            new KeyValue(logoContainer.scaleYProperty(), 1.0)
+                        )
+                    );
+                    scaleDown.play();
+                });
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error configurando interacciones de login: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Configura efectos de focus para campos de texto
+     */
+    private void setupFieldFocusEffects(TextField field) {
+        if (field != null) {
+            field.focusedProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal) {
+                    // Campo recibe focus - efecto de resaltado
+                    Timeline focusIn = new Timeline(
+                        new KeyFrame(Duration.millis(200),
+                            new KeyValue(field.scaleXProperty(), 1.05),
+                            new KeyValue(field.scaleYProperty(), 1.05)
+                        )
+                    );
+                    focusIn.play();
+                } else {
+                    // Campo pierde focus - volver a normal
+                    Timeline focusOut = new Timeline(
+                        new KeyFrame(Duration.millis(200),
+                            new KeyValue(field.scaleXProperty(), 1.0),
+                            new KeyValue(field.scaleYProperty(), 1.0)
+                        )
+                    );
+                    focusOut.play();
+                }
+            });
+        }
+    }
+    
+    /**
+     * Aplica animación de feedback para login exitoso
+     */
+    private void showLoginSuccessAnimation() {
+        if (loginButton != null) {
+            Timeline bounce = AnimationUtils.bounce(loginButton, null);
+            if (bounce != null) {
+                bounce.play();
+            }
+        }
+        
+        // Animación de éxito para todo el formulario
+        java.util.List<Node> allElements = new java.util.ArrayList<>();
+        if (logoContainer != null) allElements.add(logoContainer);
+        if (usernameField != null) allElements.add(usernameField);
+        if (passwordField != null) allElements.add(passwordField);
+        if (loginButton != null) allElements.add(loginButton);
+        
+        if (!allElements.isEmpty()) {
+            SequentialTransition successAnimation = AnimationUtils.staggeredAnimation(
+                allElements,
+                Duration.millis(50),
+                AnimationUtils.AnimationType.PULSE,
+                null
+            );
+            if (successAnimation != null) {
+                successAnimation.play();
+            }
+        }
+    }
+    
+    /**
+     * Aplica animación de feedback para error de login
+     */
+    private void showLoginErrorAnimation() {
+        // Shake para campos de entrada
+        if (usernameField != null) {
+            Timeline shakeUsername = AnimationUtils.shake(usernameField, null);
+            if (shakeUsername != null) {
+                shakeUsername.play();
+            }
+        }
+        
+        if (passwordField != null) {
+            Timeline shakePassword = AnimationUtils.shake(passwordField, null);
+            if (shakePassword != null) {
+                shakePassword.setDelay(Duration.millis(100));
+                shakePassword.play();
+            }
+        }
+        
+        // Pulse para el mensaje de error
+        if (messageLabel != null) {
+            Timeline messagePulse = AnimationUtils.pulse(messageLabel, 2, null);
+            if (messagePulse != null) {
+                messagePulse.play();
+            }
+        }
+    }
+    
+    /**
+     * Aplica animación de carga durante el proceso de autenticación
+     */
+    private RotateTransition showLoadingAnimation() {
+        if (loadingIndicator != null) {
+            return AnimationUtils.createSpinner(loadingIndicator);
+        }
+        return null;
+    }
+    
+    /**
+     * Aplica transición suave al salir del login hacia la aplicación principal
+     */
+    private void applyLoginExitAnimation(Runnable onComplete) {
+        try {
+            // Lista de elementos para animación de salida
+            java.util.List<Node> exitElements = new java.util.ArrayList<>();
+            if (logoContainer != null) exitElements.add(logoContainer);
+            if (usernameField != null) exitElements.add(usernameField);
+            if (passwordField != null) exitElements.add(passwordField);
+            if (loginButton != null) exitElements.add(loginButton);
+            
+            if (!exitElements.isEmpty()) {
+                // Animación escalonada de salida
+                SequentialTransition exitAnimation = AnimationUtils.staggeredAnimation(
+                    exitElements,
+                    Duration.millis(50),
+                    AnimationUtils.AnimationType.FADE_OUT,
+                    onComplete
+                );
+                if (exitAnimation != null) {
+                    exitAnimation.play();
+                } else if (onComplete != null) {
+                    onComplete.run();
+                }
+            } else if (onComplete != null) {
+                onComplete.run();
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error en animación de salida: " + e.getMessage());
+            if (onComplete != null) {
+                onComplete.run();
+            }
         }
     }
 }
