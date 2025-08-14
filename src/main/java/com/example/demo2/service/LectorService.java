@@ -59,6 +59,7 @@ public class LectorService {
                         lector.setId(generatedKeys.getInt(1));
                     }
                 }
+                conn.commit(); // Confirmar la transacción
             }
             
             return lector;
@@ -93,7 +94,11 @@ public class LectorService {
             pstmt.setObject(13, lector.getActualizadoPor());
             pstmt.setInt(14, lector.getId());
             
-            return pstmt.executeUpdate() > 0;
+            int result = pstmt.executeUpdate();
+            if (result > 0) {
+                conn.commit(); // Confirmar la transacción
+            }
+            return result > 0;
         }
     }
     
@@ -107,7 +112,11 @@ public class LectorService {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, id);
-            return pstmt.executeUpdate() > 0;
+            int result = pstmt.executeUpdate();
+            if (result > 0) {
+                conn.commit(); // Confirmar la transacción
+            }
+            return result > 0;
         }
     }
     
@@ -335,7 +344,11 @@ public class LectorService {
         try (Connection conn = DatabaseManager.getInstance().getConnection();
              Statement stmt = conn.createStatement()) {
             
-            return stmt.executeUpdate(sql);
+            int result = stmt.executeUpdate(sql);
+            if (result > 0) {
+                conn.commit(); // Confirmar la transacción
+            }
+            return result;
         }
     }
     
@@ -499,4 +512,4 @@ public class LectorService {
             e.printStackTrace();
         }
     }
-} 
+}

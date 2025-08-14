@@ -3,6 +3,7 @@ package com.example.demo2.controller;
 import com.example.demo2.models.Usuario;
 import com.example.demo2.models.enums.TipoUsuario;
 import com.example.demo2.service.UsuarioService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -113,9 +114,17 @@ public class AdminFormController {
                 crearAdministrador();
             }
             
-            // Actualizar lista en el controlador padre
+            // Actualizar lista en el controlador padre después de un pequeño delay
+            // para asegurar que la transacción se complete
             if (parentController != null) {
-                parentController.actualizarListaAdministradores();
+                Platform.runLater(() -> {
+                    try {
+                        Thread.sleep(100); // Pequeño delay para asegurar commit de BD
+                        parentController.actualizarListaAdministradores();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                });
             }
             
             // Cerrar ventana
@@ -275,4 +284,4 @@ public class AdminFormController {
     private void limpiarMensaje() {
         lblMensaje.setVisible(false);
     }
-} 
+}

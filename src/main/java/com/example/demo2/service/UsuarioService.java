@@ -124,6 +124,9 @@ public class UsuarioService {
                     usuario.setId(rs.getLong(1));
                 }
             }
+            
+            // Confirmar la transacción
+            conn.commit();
         }
     }
     
@@ -155,6 +158,9 @@ public class UsuarioService {
             stmt.setLong(10, usuario.getId());
             
             stmt.executeUpdate();
+            
+            // Confirmar la transacción
+            conn.commit();
         }
     }
     
@@ -289,6 +295,9 @@ public class UsuarioService {
             
             stmt.setLong(1, usuarioId);
             stmt.executeUpdate();
+            
+            // Confirmar la transacción
+            conn.commit();
         }
     }
     
@@ -322,6 +331,9 @@ public class UsuarioService {
             stmt.setLong(2, usuarioId);
             
             stmt.executeUpdate();
+            
+            // Confirmar la transacción
+            conn.commit();
         }
     }
     
@@ -336,6 +348,9 @@ public class UsuarioService {
             
             stmt.setLong(1, usuarioId);
             stmt.executeUpdate();
+            
+            // Confirmar la transacción
+            conn.commit();
         }
     }
     
@@ -385,6 +400,10 @@ public class UsuarioService {
             stmt.setLong(2, usuarioId);
             
             int filasAfectadas = stmt.executeUpdate();
+            
+            // Confirmar la transacción
+            conn.commit();
+            
             return filasAfectadas > 0;
             
         } catch (SQLException e) {
@@ -472,4 +491,4 @@ public class UsuarioService {
         usuario.setUltimoAcceso(rs.getTimestamp("ultimo_acceso"));
         return usuario;
     }
-} 
+}

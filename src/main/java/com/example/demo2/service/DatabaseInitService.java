@@ -505,19 +505,27 @@ public class DatabaseInitService {
             boolean direccionExists = verificarColumnaExiste(conn, "USUARIOS", "DIRECCION");
             
             // Agregar campos faltantes
+            boolean cambiosRealizados = false;
             if (!telefonoExists) {
                 ejecutarSQL(conn, "ALTER TABLE usuarios ADD telefono VARCHAR2(20)");
                 System.out.println("✅ Campo 'telefono' agregado a la tabla usuarios");
+                cambiosRealizados = true;
             }
             
             if (!fechaNacimientoExists) {
                 ejecutarSQL(conn, "ALTER TABLE usuarios ADD fecha_nacimiento DATE");
                 System.out.println("✅ Campo 'fecha_nacimiento' agregado a la tabla usuarios");
+                cambiosRealizados = true;
             }
             
             if (!direccionExists) {
                 ejecutarSQL(conn, "ALTER TABLE usuarios ADD direccion VARCHAR2(300)");
                 System.out.println("✅ Campo 'direccion' agregado a la tabla usuarios");
+                cambiosRealizados = true;
+            }
+            
+            if (cambiosRealizados) {
+                conn.commit(); // Confirmar los cambios de estructura
             }
             
             if (telefonoExists && fechaNacimientoExists && direccionExists) {
@@ -648,6 +656,7 @@ public class DatabaseInitService {
     private static void ejecutarSQL(Connection conn, String sql) throws SQLException {
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
+            // Nota: El commit se maneja en el método que llama a ejecutarSQL
         }
     }
 }

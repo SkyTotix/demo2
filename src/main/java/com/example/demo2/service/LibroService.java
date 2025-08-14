@@ -157,6 +157,7 @@ public class LibroService {
             int filasAfectadas = stmt.executeUpdate();
             
             if (filasAfectadas > 0) {
+                conn.commit(); // Confirmar la transacción
                 // Para Oracle, buscar el libro recién creado por ISBN para obtener el ID
                 Libro libroCreado = obtenerLibroPorIsbn(libro.getIsbn());
                 if (libroCreado != null) {
@@ -201,6 +202,7 @@ public class LibroService {
             int filasAfectadas = stmt.executeUpdate();
             
             if (filasAfectadas > 0) {
+                conn.commit(); // Confirmar la transacción
                 System.out.println("✅ Libro actualizado exitosamente: " + libro.getTitulo());
                 return true;
             }
@@ -227,6 +229,7 @@ public class LibroService {
             int filasAfectadas = stmt.executeUpdate();
             
             if (filasAfectadas > 0) {
+                conn.commit(); // Confirmar la transacción
                 System.out.println("✅ Libro desactivado exitosamente");
                 return true;
             }
@@ -651,4 +654,4 @@ public class LibroService {
         public int librosUnaExistencia = 0;
         public int librosSinDisponibilidad = 0;
     }
-} 
+}

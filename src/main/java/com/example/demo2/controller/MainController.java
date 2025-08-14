@@ -1442,7 +1442,7 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/demo2/login-view.fxml"));
             Parent root = loader.load();
             
-            Scene scene = new Scene(root, 500, 650);
+            Scene scene = new Scene(root, 500, 710);
             scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
             scene.getStylesheets().add(getClass().getResource("/com/example/demo2/styles/login.css").toExternalForm());
             

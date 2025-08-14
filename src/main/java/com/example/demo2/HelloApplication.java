@@ -45,8 +45,8 @@ public class HelloApplication extends Application {
         // El FXMLLoader conecta el archivo login-view.fxml con su controlador LoginController
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
         
-        // PASO 2: Crear la escena con dimensiones específicas para login (500x720)
-        Scene scene = new Scene(fxmlLoader.load(), 500, 720);
+        // PASO 2: Crear la escena con dimensiones específicas para login (500x780)
+        Scene scene = new Scene(fxmlLoader.load(), 500, 780);
         
         // PASO 3: Aplicar hojas de estilo para mejorar la apariencia
         // BootstrapFX: Proporciona estilos base similares a Bootstrap web

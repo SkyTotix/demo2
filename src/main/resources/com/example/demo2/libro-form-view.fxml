@@ -175,6 +175,9 @@
          
          <Separator />
          
+         <!-- Status Message -->
+         <Label fx:id="lblEstadoGuardado" styleClass="status-message" visible="false" />
+         
          <HBox spacing="15" alignment="CENTER_RIGHT">
             <Button fx:id="btnCancelar" text="Cancelar" onAction="#cancelar" styleClass="btn, btn-outline-secondary" prefWidth="100">
                <graphic>
@@ -199,4 +202,4 @@
          </HBox>
       </VBox>
    </bottom>
-</BorderPane> 
+</BorderPane>

@@ -1234,6 +1234,15 @@
     -fx-border-width: 1;
 }
 
+.status-message {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 12px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-text-alignment: center;
+}
+
 /* === ESTILOS PARA DASHBOARD MEJORADO === */
 .metrics-grid {
     -fx-hgap: 15;

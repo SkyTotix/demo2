@@ -59,6 +59,7 @@ public class PrestamoService {
                 
                 // Actualizar cantidad disponible del libro
                 actualizarCantidadDisponible(prestamo.getLibroId(), -1);
+                conn.commit(); // Confirmar la transacción
             }
             
             return prestamo;
@@ -97,7 +98,11 @@ public class PrestamoService {
             pstmt.setBoolean(7, prestamo.isMultaPagada());
             pstmt.setLong(8, prestamo.getId());
             
-            return pstmt.executeUpdate() > 0;
+            int result = pstmt.executeUpdate();
+            if (result > 0) {
+                conn.commit(); // Confirmar la transacción
+            }
+            return result > 0;
         }
     }
     
@@ -126,6 +131,7 @@ public class PrestamoService {
                 if (prestamo != null) {
                     actualizarCantidadDisponible(prestamo.getLibroId(), 1);
                 }
+                conn.commit(); // Confirmar la transacción
                 return true;
             }
             
@@ -149,7 +155,11 @@ public class PrestamoService {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setLong(1, id);
-            return pstmt.executeUpdate() > 0;
+            int result = pstmt.executeUpdate();
+            if (result > 0) {
+                conn.commit(); // Confirmar la transacción
+            }
+            return result > 0;
         }
     }
     
@@ -447,7 +457,11 @@ public class PrestamoService {
         try (Connection conn = DatabaseManager.getInstance().getConnection();
              Statement stmt = conn.createStatement()) {
             
-            return stmt.executeUpdate(sql);
+            int result = stmt.executeUpdate(sql);
+            if (result > 0) {
+                conn.commit(); // Confirmar la transacción
+            }
+            return result;
         }
     }
     
@@ -489,6 +503,10 @@ public class PrestamoService {
             pstmt.setInt(4, diasGracia);           // Días de gracia para WHERE
             
             int prestamosActualizados = pstmt.executeUpdate();
+            
+            if (prestamosActualizados > 0) {
+                conn.commit(); // Confirmar la transacción
+            }
             
             System.out.println("💰 Multas calculadas automáticamente:");
             System.out.println("   - Días de gracia: " + diasGracia);
@@ -549,7 +567,11 @@ public class PrestamoService {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setDouble(1, multaPorDia);
-            return pstmt.executeUpdate();
+            int result = pstmt.executeUpdate();
+            if (result > 0) {
+                conn.commit(); // Confirmar la transacción
+            }
+            return result;
         }
     }
     
@@ -625,7 +647,10 @@ public class PrestamoService {
             
             pstmt.setInt(1, cambio);
             pstmt.setLong(2, libroId);
-            pstmt.executeUpdate();
+            int result = pstmt.executeUpdate();
+            if (result > 0) {
+                conn.commit(); // Confirmar la transacción
+            }
         }
     }
     
