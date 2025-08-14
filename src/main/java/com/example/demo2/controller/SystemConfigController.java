@@ -6,6 +6,7 @@ import com.example.demo2.service.ConfigurationService.SystemConfiguration;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
@@ -68,11 +69,17 @@ public class SystemConfigController {
     @FXML private Spinner<Double> spnMontoMultaDiario;
     @FXML private Spinner<Double> spnMontoMultaMaxima;
     
-    // Elementos de personalización de logo
-    @FXML private Label lblLogoActual;
-    @FXML private Button btnSeleccionarLogo;
-    @FXML private Button btnRestaurarLogo;
-    @FXML private Label lblVistaPrevia;
+    // Elementos de personalización de logo de la aplicación
+    @FXML private ImageView imgLogoAppPreview;
+    @FXML private Label lblLogoAppActual;
+    @FXML private Button btnSeleccionarLogoApp;
+    @FXML private Button btnRestaurarLogoApp;
+    
+    // Elementos de personalización de logo de inicio de sesión
+    @FXML private ImageView imgLogoLoginPreview;
+    @FXML private Label lblLogoLoginActual;
+    @FXML private Button btnSeleccionarLogoLogin;
+    @FXML private Button btnRestaurarLogoLogin;
     
     // Botones principales
     @FXML private Button btnSaveAll;
@@ -530,9 +537,18 @@ public class SystemConfigController {
     }
     
     @FXML
-    private void handleSeleccionarLogo() {
-        System.out.println("🖼️ Abriendo selector de logo personalizado...");
-        
+    private void handleSeleccionarLogoApp() {
+        System.out.println("🖼️ Abriendo selector de logo para la aplicación...");
+        seleccionarLogo("app", btnSeleccionarLogoApp);
+    }
+    
+    @FXML
+    private void handleSeleccionarLogoLogin() {
+        System.out.println("🖼️ Abriendo selector de logo para inicio de sesión...");
+        seleccionarLogo("login", btnSeleccionarLogoLogin);
+    }
+    
+    private void seleccionarLogo(String tipoLogo, Button botonOrigen) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar Logo Personalizado");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -548,7 +564,7 @@ public class SystemConfigController {
         fileChooser.setSelectedExtensionFilter(imageFilter);
         
         // Mostrar diálogo de selección
-        File selectedFile = fileChooser.showOpenDialog(btnSeleccionarLogo.getScene().getWindow());
+        File selectedFile = fileChooser.showOpenDialog(botonOrigen.getScene().getWindow());
         
         if (selectedFile != null) {
             try {
@@ -570,7 +586,7 @@ public class SystemConfigController {
                 }
                 
                 // Copiar archivo a directorio de configuración
-                aplicarLogoPersonalizado(selectedFile);
+                aplicarLogoPersonalizado(selectedFile, tipoLogo);
                 
             } catch (Exception e) {
                 System.err.println("❌ Error procesando logo: " + e.getMessage());
@@ -580,25 +596,36 @@ public class SystemConfigController {
     }
     
     @FXML
-    private void handleRestaurarLogo() {
-        System.out.println("🔄 Restaurando logo original...");
+    private void handleRestaurarLogoApp() {
+        System.out.println("🔄 Restaurando logo original de la aplicación...");
+        restaurarLogo("app");
+    }
+    
+    @FXML
+    private void handleRestaurarLogoLogin() {
+        System.out.println("🔄 Restaurando logo original de inicio de sesión...");
+        restaurarLogo("login");
+    }
+    
+    private void restaurarLogo(String tipoLogo) {
+        String tipoTexto = tipoLogo.equals("app") ? "de la aplicación" : "de inicio de sesión";
         
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmAlert.setTitle("Restaurar Logo Original");
-        confirmAlert.setHeaderText("¿Restaurar logo por defecto?");
-        confirmAlert.setContentText("Esta acción restaurará el logo original del sistema.\n\n" +
+        confirmAlert.setHeaderText("¿Restaurar logo por defecto " + tipoTexto + "?");
+        confirmAlert.setContentText("Esta acción restaurará el logo original " + tipoTexto + ".\n\n" +
             "El logo personalizado se mantendrá guardado para uso futuro.\n" +
             "¿Desea continuar?");
         
         confirmAlert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
-                    restaurarLogoOriginal();
+                    restaurarLogoOriginal(tipoLogo);
                     
                     Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                     successAlert.setTitle("Logo Restaurado");
                     successAlert.setHeaderText("Éxito");
-                    successAlert.setContentText("El logo original ha sido restaurado exitosamente.\n\n" +
+                    successAlert.setContentText("El logo original " + tipoTexto + " ha sido restaurado exitosamente.\n\n" +
                         "Los cambios son visibles inmediatamente en la aplicación.");
                     successAlert.showAndWait();
                     
@@ -617,7 +644,7 @@ public class SystemConfigController {
                nombre.endsWith(".bmp");
     }
     
-    private void aplicarLogoPersonalizado(File archivoLogo) throws IOException {
+    private void aplicarLogoPersonalizado(File archivoLogo, String tipoLogo) throws IOException {
         // Crear directorio de configuración si no existe
         Path configDir = Paths.get("config");
         if (!Files.exists(configDir)) {
@@ -625,7 +652,8 @@ public class SystemConfigController {
         }
         
         // NOMBRE FIJO: Siempre usar .png para consistencia
-        Path destino = configDir.resolve("logo-personalizado.png");
+        String nombreArchivo = "logo-" + tipoLogo + ".png";
+        Path destino = configDir.resolve(nombreArchivo);
         
         // Si existe un archivo anterior, eliminarlo para limpiar cache
         if (Files.exists(destino)) {
@@ -637,7 +665,12 @@ public class SystemConfigController {
         Files.copy(archivoLogo.toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
         
         // Actualizar configuración de AppConfigService
-        AppConfigService.getInstance().setLogoPersonalizado(true);
+        if (tipoLogo.equals("app")) {
+            AppConfigService.getInstance().setLogoAppPersonalizado(true);
+        } else if (tipoLogo.equals("login")) {
+            AppConfigService.getInstance().setLogoLoginPersonalizado(true);
+        }
+        
         try {
             AppConfigService.getInstance().guardarConfiguracion();
         } catch (IOException e) {
@@ -645,35 +678,35 @@ public class SystemConfigController {
         }
         
         // Actualizar interfaz
-        if (lblLogoActual != null) {
-            lblLogoActual.setText("Logo personalizado: " + archivoLogo.getName());
-        }
-        if (lblVistaPrevia != null) {
-            lblVistaPrevia.setText("✅ Logo aplicado: " + destino.getFileName());
+        if (tipoLogo.equals("app") && lblLogoAppActual != null) {
+            lblLogoAppActual.setText("Logo personalizado: " + archivoLogo.getName());
+        } else if (tipoLogo.equals("login") && lblLogoLoginActual != null) {
+            lblLogoLoginActual.setText("Logo personalizado: " + archivoLogo.getName());
         }
         
-        System.out.println("✅ Logo personalizado aplicado: " + destino);
+        System.out.println("✅ Logo personalizado " + tipoLogo + " aplicado: " + destino);
         
         // Forzar limpieza de cache y actualización inmediata
         if (mainController != null) {
             try {
                 // Pequeña pausa para asegurar que el archivo esté completamente escrito
                 Thread.sleep(100);
-                mainController.actualizarLogo();
-                System.out.println("🔄 Logo actualizado inmediatamente en la interfaz");
+                mainController.actualizarLogo(tipoLogo);
+                System.out.println("🔄 Logo " + tipoLogo + " actualizado inmediatamente en la interfaz");
             } catch (Exception e) {
                 System.err.println("⚠️ Error actualizando logo en interfaz: " + e.getMessage());
             }
         }
         
         // Notificar a todos los listeners de cambio de logo
-        AppConfigService.notificarCambioLogo();
+        AppConfigService.notificarCambioLogo(tipoLogo);
         
         // Mostrar confirmación
+        String tipoTexto = tipoLogo.equals("app") ? "de la aplicación" : "de inicio de sesión";
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
         successAlert.setTitle("Logo Aplicado");
         successAlert.setHeaderText("✅ Logo Personalizado Aplicado");
-        successAlert.setContentText("Su logo personalizado ha sido aplicado exitosamente.\n\n" +
+        successAlert.setContentText("Su logo personalizado " + tipoTexto + " ha sido aplicado exitosamente.\n\n" +
             "• Archivo: " + archivoLogo.getName() + "\n" +
             "• Ubicación: " + destino + "\n" +
             "• Los cambios son visibles INMEDIATAMENTE\n\n" +
@@ -681,9 +714,14 @@ public class SystemConfigController {
         successAlert.showAndWait();
     }
     
-    private void restaurarLogoOriginal() throws IOException {
+    private void restaurarLogoOriginal(String tipoLogo) throws IOException {
         // Actualizar configuración de AppConfigService
-        AppConfigService.getInstance().setLogoPersonalizado(false);
+        if (tipoLogo.equals("app")) {
+            AppConfigService.getInstance().setLogoAppPersonalizado(false);
+        } else if (tipoLogo.equals("login")) {
+            AppConfigService.getInstance().setLogoLoginPersonalizado(false);
+        }
+        
         try {
             AppConfigService.getInstance().guardarConfiguracion();
         } catch (IOException e) {
@@ -691,27 +729,27 @@ public class SystemConfigController {
         }
         
         // Actualizar interfaz
-        if (lblLogoActual != null) {
-            lblLogoActual.setText("Logo por defecto del sistema");
-        }
-        if (lblVistaPrevia != null) {
-            lblVistaPrevia.setText("🔄 Logo original restaurado");
+        if (tipoLogo.equals("app") && lblLogoAppActual != null) {
+            lblLogoAppActual.setText("Logo por defecto del sistema");
+        } else if (tipoLogo.equals("login") && lblLogoLoginActual != null) {
+            lblLogoLoginActual.setText("Logo por defecto de inicio de sesión");
         }
         
         // Actualizar logo inmediatamente en la interfaz
         if (mainController != null) {
             try {
-                mainController.actualizarLogo();
-                System.out.println("🔄 Logo restaurado inmediatamente en la interfaz");
+                mainController.actualizarLogo(tipoLogo);
+                System.out.println("🔄 Logo " + tipoLogo + " restaurado inmediatamente en la interfaz");
             } catch (Exception e) {
                 System.err.println("⚠️ Error actualizando logo en interfaz: " + e.getMessage());
             }
         }
         
         // Notificar a todos los listeners de cambio de logo
-        AppConfigService.notificarCambioLogo();
+        AppConfigService.notificarCambioLogo(tipoLogo);
         
-        System.out.println("✅ Logo original restaurado");
+        String tipoTexto = tipoLogo.equals("app") ? "de la aplicación" : "de inicio de sesión";
+        System.out.println("✅ Logo original " + tipoTexto + " restaurado");
     }
     
     private String obtenerExtension(String nombreArchivo) {
@@ -720,18 +758,53 @@ public class SystemConfigController {
     }
     
     private void actualizarEstadoLogo() {
-        // Verificar si existe logo personalizado (nombre fijo)
-        Path logoPersonalizado = Paths.get("config/logo-personalizado.png");
+        // Verificar si existe logo personalizado para la aplicación
+        Path logoApp = Paths.get("config/logo-app.png");
+        Path logoLogin = Paths.get("config/logo-login.png");
         
-        if (Files.exists(logoPersonalizado) && lblLogoActual != null) {
-            lblLogoActual.setText("Logo personalizado: " + logoPersonalizado.getFileName());
-            if (lblVistaPrevia != null) {
-                lblVistaPrevia.setText("📁 " + logoPersonalizado.toAbsolutePath());
+        // Actualizar estado del logo de la aplicación
+        if (Files.exists(logoApp) && imgLogoAppPreview != null && lblLogoAppActual != null) {
+            try {
+                // Cargar y mostrar la imagen del logo de la aplicación
+                String logoUrl = logoApp.toUri().toString() + "?t=" + System.currentTimeMillis();
+                javafx.scene.image.Image logoImage = new javafx.scene.image.Image(logoUrl);
+                imgLogoAppPreview.setImage(logoImage);
+                lblLogoAppActual.setText("Logo personalizado del sistema");
+            } catch (Exception e) {
+                System.err.println("❌ Error cargando preview del logo de la aplicación: " + e.getMessage());
+                lblLogoAppActual.setText("Error al cargar logo personalizado");
             }
-        } else if (lblLogoActual != null) {
-            lblLogoActual.setText("Logo por defecto del sistema");
-            if (lblVistaPrevia != null) {
-                lblVistaPrevia.setText("(Seleccione un archivo para ver preview)");
+        } else if (lblLogoAppActual != null) {
+            // Mostrar logo por defecto para la aplicación
+            lblLogoAppActual.setText("Logo por defecto del sistema");
+            try {
+                String defaultLogoUrl = getClass().getResource("/com/example/demo2/images/default-logo.png").toString();
+                imgLogoAppPreview.setImage(new javafx.scene.image.Image(defaultLogoUrl));
+            } catch (Exception e) {
+                System.err.println("❌ Error cargando logo por defecto de la aplicación: " + e.getMessage());
+            }
+        }
+        
+        // Actualizar estado del logo de inicio de sesión
+        if (Files.exists(logoLogin) && imgLogoLoginPreview != null && lblLogoLoginActual != null) {
+            try {
+                // Cargar y mostrar la imagen del logo de inicio de sesión
+                String logoUrl = logoLogin.toUri().toString() + "?t=" + System.currentTimeMillis();
+                javafx.scene.image.Image logoImage = new javafx.scene.image.Image(logoUrl);
+                imgLogoLoginPreview.setImage(logoImage);
+                lblLogoLoginActual.setText("Logo personalizado de inicio de sesión");
+            } catch (Exception e) {
+                System.err.println("❌ Error cargando preview del logo de inicio de sesión: " + e.getMessage());
+                lblLogoLoginActual.setText("Error al cargar logo personalizado");
+            }
+        } else if (lblLogoLoginActual != null) {
+            // Mostrar logo por defecto para inicio de sesión
+            lblLogoLoginActual.setText("Logo por defecto de inicio de sesión");
+            try {
+                String defaultLogoUrl = getClass().getResource("/com/example/demo2/images/default-logo.png").toString();
+                imgLogoLoginPreview.setImage(new javafx.scene.image.Image(defaultLogoUrl));
+            } catch (Exception e) {
+                System.err.println("❌ Error cargando logo por defecto de inicio de sesión: " + e.getMessage());
             }
         }
     }
@@ -743,4 +816,4 @@ public class SystemConfigController {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
-} 
+}

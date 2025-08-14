@@ -16,6 +16,7 @@ module com.example.bibliosystem {
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.fontawesome5;
+    requires javafx.graphics;
 
     opens com.example.demo2 to javafx.fxml;
     opens com.example.demo2.controller to javafx.fxml;

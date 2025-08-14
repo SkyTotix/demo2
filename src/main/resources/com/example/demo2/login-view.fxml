@@ -20,7 +20,7 @@
             <StackPane fx:id="logoContainer" styleClass="login-logo-container">
                <children>
                   <FontIcon fx:id="loginLogo" iconLiteral="fas-book" iconSize="30" iconColor="#3B82F6" styleClass="main-logo" />
-                  <ImageView fx:id="loginLogoImage" fitHeight="48.0" fitWidth="48.0" preserveRatio="true" visible="false" />
+                  <ImageView fx:id="loginLogoImage" fitHeight="120.0" fitWidth="120.0" preserveRatio="true" visible="false" />
                </children>
             </StackPane>
             <Label text="BiblioSystem" styleClass="main-title">
@@ -128,4 +128,4 @@
          </children>
       </VBox>
    </VBox>
-</StackPane> 
+</StackPane>

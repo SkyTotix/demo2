@@ -23,7 +23,12 @@ public class AppConfigService {
     private static final String CONFIG_DIR = "config";
     
     // === LISTENERS PARA CAMBIOS ===
-    private static List<Runnable> logoChangeListeners = new ArrayList<>();
+    private static List<LogoChangeListener> logoChangeListeners = new ArrayList<>();
+    
+    // === INTERFAZ PARA LISTENERS DE CAMBIO DE LOGO ===
+    public interface LogoChangeListener {
+        void onLogoChanged(String tipoLogo);
+    }
     
     private AppConfigService() {
         cargarConfiguracion();
@@ -57,9 +62,12 @@ public class AppConfigService {
                 }
                 
                 // Cargar configuración desde propiedades
-                configuracionActual = new AppConfiguration(
-                    Boolean.parseBoolean(props.getProperty("logo.personalizado", "false"))
-                );
+                boolean logoAppPersonalizado = Boolean.parseBoolean(props.getProperty("logo.app.personalizado", 
+                    props.getProperty("logo.personalizado", "false")));
+                boolean logoLoginPersonalizado = Boolean.parseBoolean(props.getProperty("logo.login.personalizado", 
+                    props.getProperty("logo.personalizado", "false")));
+                
+                configuracionActual = new AppConfiguration(logoAppPersonalizado, logoLoginPersonalizado);
                 
                 // Cargar última modificación si existe
                 String ultimaModStr = props.getProperty("ultima.modificacion");
@@ -91,7 +99,10 @@ public class AppConfigService {
         }
         
         Properties props = new Properties();
-        props.setProperty("logo.personalizado", String.valueOf(configuracionActual.isLogoPersonalizado()));
+        props.setProperty("logo.app.personalizado", String.valueOf(configuracionActual.isLogoAppPersonalizado()));
+        props.setProperty("logo.login.personalizado", String.valueOf(configuracionActual.isLogoLoginPersonalizado()));
+        // Mantener para compatibilidad con versiones anteriores
+        props.setProperty("logo.personalizado", String.valueOf(configuracionActual.isLogoAppPersonalizado()));
         
         // Actualizar fecha de modificación
         configuracionActual.setUltimaModificacion(LocalDateTime.now());
@@ -109,22 +120,49 @@ public class AppConfigService {
     
     // === MÉTODOS PARA LOGO ===
     
+    public void setLogoAppPersonalizado(boolean personalizado) {
+        configuracionActual.setLogoAppPersonalizado(personalizado);
+    }
+    
+    public void setLogoLoginPersonalizado(boolean personalizado) {
+        configuracionActual.setLogoLoginPersonalizado(personalizado);
+    }
+    
+    // Método para compatibilidad con versiones anteriores
     public void setLogoPersonalizado(boolean personalizado) {
         configuracionActual.setLogoPersonalizado(personalizado);
     }
     
-    public static void addLogoChangeListener(Runnable listener) {
+    public static void addLogoChangeListener(LogoChangeListener listener) {
         logoChangeListeners.add(listener);
     }
     
-    public static void notificarCambioLogo() {
-        for (Runnable listener : logoChangeListeners) {
-            try {
-                listener.run();
-            } catch (Exception e) {
-                System.err.println("Error notificando cambio de logo: " + e.getMessage());
+    // Método para compatibilidad con versiones anteriores
+    public static void addLogoChangeListener(Runnable listener) {
+        logoChangeListeners.add(tipoLogo -> listener.run());
+    }
+    
+    public static void notificarCambioLogo(String tipoLogo) {
+        System.out.println("🔄 Notificando cambio de logo: " + tipoLogo + " a " + logoChangeListeners.size() + " listeners");
+        
+        // Forzar actualización inmediata en el hilo de JavaFX
+        javafx.application.Platform.runLater(() -> {
+            for (LogoChangeListener listener : logoChangeListeners) {
+                try {
+                    listener.onLogoChanged(tipoLogo);
+                    System.out.println("✅ Listener notificado exitosamente para logo: " + tipoLogo);
+                } catch (Exception e) {
+                    System.err.println("❌ Error notificando cambio de logo " + tipoLogo + ": " + e.getMessage());
+                    e.printStackTrace();
+                }
             }
-        }
+        });
+    }
+    
+    // Método para compatibilidad con versiones anteriores
+    public static void notificarCambioLogo() {
+        notificarCambioLogo("app");
+        notificarCambioLogo("login");
     }
     
 
@@ -133,26 +171,43 @@ public class AppConfigService {
      * Clase interna para almacenar la configuración
      */
     public static class AppConfiguration {
-        private boolean logoPersonalizado;
+        private boolean logoAppPersonalizado;
+        private boolean logoLoginPersonalizado;
         private LocalDateTime ultimaModificacion;
         
         // Constructor por defecto
         public AppConfiguration() {
-            this(false);
+            this(false, false);
         }
         
-        // Constructor con logo personalizado
+        // Constructor con logos personalizados
+        public AppConfiguration(boolean logoAppPersonalizado, boolean logoLoginPersonalizado) {
+            this.logoAppPersonalizado = logoAppPersonalizado;
+            this.logoLoginPersonalizado = logoLoginPersonalizado;
+        }
+        
+        // Constructor para compatibilidad con versiones anteriores
         public AppConfiguration(boolean logoPersonalizado) {
-            this.logoPersonalizado = logoPersonalizado;
+            this(logoPersonalizado, logoPersonalizado);
         }
         
         // Getters y Setters
-        public boolean isLogoPersonalizado() { return logoPersonalizado; }
-        public void setLogoPersonalizado(boolean logoPersonalizado) { this.logoPersonalizado = logoPersonalizado; }
+        public boolean isLogoAppPersonalizado() { return logoAppPersonalizado; }
+        public void setLogoAppPersonalizado(boolean logoAppPersonalizado) { this.logoAppPersonalizado = logoAppPersonalizado; }
+        
+        public boolean isLogoLoginPersonalizado() { return logoLoginPersonalizado; }
+        public void setLogoLoginPersonalizado(boolean logoLoginPersonalizado) { this.logoLoginPersonalizado = logoLoginPersonalizado; }
+        
+        // Método para compatibilidad con versiones anteriores
+        public boolean isLogoPersonalizado() { return logoAppPersonalizado; }
+        public void setLogoPersonalizado(boolean logoPersonalizado) { 
+            this.logoAppPersonalizado = logoPersonalizado;
+            this.logoLoginPersonalizado = logoPersonalizado;
+        }
         
         public LocalDateTime getUltimaModificacion() { return ultimaModificacion; }
         public void setUltimaModificacion(LocalDateTime ultimaModificacion) { 
             this.ultimaModificacion = ultimaModificacion; 
         }
     }
-} 
+}

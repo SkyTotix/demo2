@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.ArrayList;
 
 /**
  * Controlador para la gestión de préstamos
@@ -51,6 +52,9 @@ public class PrestamoManagementController implements Initializable {
     
     private PrestamoService prestamoService;
     private NotificationService notificationService;
+    private List<Prestamo> prestamosCache; // Cache para evitar consultas innecesarias
+    private long ultimaActualizacionCache = 0;
+    private static final long CACHE_DURATION_MS = 30000; // 30 segundos
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -229,7 +233,8 @@ public class PrestamoManagementController implements Initializable {
         
         // Configurar botón renovar lista
         renovarListaBtn.setOnAction(e -> {
-            cargarPrestamos();
+            System.out.println("🔄 Renovando lista manualmente - invalidando caché...");
+            cargarPrestamos(true); // Forzar actualización
             actualizarEstadisticas();
         });
         
@@ -265,11 +270,40 @@ public class PrestamoManagementController implements Initializable {
     }
     
     /**
-     * Carga todos los préstamos en la tabla
+     * Carga todos los préstamos en la tabla con sistema de caché optimizado
      */
     private void cargarPrestamos() {
+        cargarPrestamos(false);
+    }
+    
+    /**
+     * Carga todos los préstamos en la tabla con opción de forzar actualización
+     */
+    private void cargarPrestamos(boolean forzarActualizacion) {
         try {
-            List<Prestamo> prestamos = prestamoService.obtenerTodos();
+            long tiempoActual = System.currentTimeMillis();
+            boolean cacheValido = prestamosCache != null && 
+                                 (tiempoActual - ultimaActualizacionCache) < CACHE_DURATION_MS;
+            
+            List<Prestamo> prestamos;
+            
+            if (!forzarActualizacion && cacheValido) {
+                System.out.println("📋 Usando caché de préstamos (válido por " + 
+                    ((CACHE_DURATION_MS - (tiempoActual - ultimaActualizacionCache)) / 1000) + " segundos más)");
+                prestamos = prestamosCache;
+            } else {
+                System.out.println("🔄 Aplicando optimizaciones de alto rendimiento para carga de préstamos...");
+                long startTime = System.currentTimeMillis();
+                
+                prestamos = prestamoService.obtenerTodos();
+                prestamosCache = prestamos;
+                ultimaActualizacionCache = tiempoActual;
+                
+                long endTime = System.currentTimeMillis();
+                System.out.println("✅ Conexión obtenida exitosamente - " + prestamos.size() + 
+                    " préstamos cargados en " + (endTime - startTime) + "ms");
+            }
+            
             prestamosTable.getItems().clear();
             prestamosTable.getItems().addAll(prestamos);
             
@@ -287,14 +321,28 @@ public class PrestamoManagementController implements Initializable {
     }
     
     /**
-     * Filtra los préstamos según los criterios seleccionados
+     * Filtra los préstamos según los criterios seleccionados usando caché optimizado
      */
     private void filtrarPrestamos() {
         try {
             String textoBusqueda = searchField.getText().toLowerCase();
             String estadoFiltro = estadoFilter.getValue();
             
-            List<Prestamo> prestamos = prestamoService.obtenerTodos();
+            // Usar caché si está disponible, sino cargar datos
+            List<Prestamo> prestamos;
+            long tiempoActual = System.currentTimeMillis();
+            boolean cacheValido = prestamosCache != null && 
+                                 (tiempoActual - ultimaActualizacionCache) < CACHE_DURATION_MS;
+            
+            if (cacheValido) {
+                System.out.println("🔍 Filtrando usando caché de préstamos");
+                prestamos = prestamosCache;
+            } else {
+                System.out.println("🔄 Actualizando caché para filtrado...");
+                prestamos = prestamoService.obtenerTodos();
+                prestamosCache = prestamos;
+                ultimaActualizacionCache = tiempoActual;
+            }
             
             prestamosTable.getItems().clear();
             
@@ -324,19 +372,24 @@ public class PrestamoManagementController implements Initializable {
     }
     
     /**
-     * Actualiza las estadísticas de préstamos
+     * Actualiza las estadísticas de préstamos usando consulta optimizada
      */
     private void actualizarEstadisticas() {
         try {
-            List<Prestamo> todosPrestamos = prestamoService.obtenerTodos();
-            List<Prestamo> prestamosActivos = prestamoService.obtenerActivos();
-            List<Prestamo> prestamosVencidos = prestamoService.obtenerVencidos();
-            List<Prestamo> prestamosDevueltos = prestamoService.obtenerPorEstado("DEVUELTO");
+            System.out.println("🔄 Aplicando optimizaciones de alto rendimiento para estadísticas...");
+            long startTime = System.currentTimeMillis();
             
-            totalPrestamosLabel.setText(String.valueOf(todosPrestamos.size()));
-            prestamosActivosLabel.setText(String.valueOf(prestamosActivos.size()));
-            prestamosVencidosLabel.setText(String.valueOf(prestamosVencidos.size()));
-            prestamosDevueltosLabel.setText(String.valueOf(prestamosDevueltos.size()));
+            // Usar consulta optimizada que obtiene todas las estadísticas en una sola query
+            PrestamoService.EstadisticasCompletas stats = prestamoService.obtenerEstadisticasCompletas();
+            
+            totalPrestamosLabel.setText(String.valueOf(stats.totalPrestamos));
+            prestamosActivosLabel.setText(String.valueOf(stats.prestamosActivos));
+            prestamosVencidosLabel.setText(String.valueOf(stats.prestamosVencidos));
+            prestamosDevueltosLabel.setText(String.valueOf(stats.prestamosDevueltos));
+            
+            long endTime = System.currentTimeMillis();
+            System.out.println("✅ Estadísticas actualizadas en " + (endTime - startTime) + "ms");
+            
         } catch (SQLException e) {
             notificationService.notifyError("Error al actualizar estadísticas", "Error: " + e.getMessage());
             e.printStackTrace();
@@ -541,10 +594,11 @@ public class PrestamoManagementController implements Initializable {
     }
     
     /**
-     * Método para refrescar la tabla (llamado desde el formulario)
+     * Refresca la tabla de préstamos invalidando el caché
      */
     public void refrescarTabla() {
-        cargarPrestamos();
+        System.out.println("🔄 Refrescando tabla de préstamos - invalidando caché...");
+        cargarPrestamos(true); // Forzar actualización
         actualizarEstadisticas();
     }
-} 
+}

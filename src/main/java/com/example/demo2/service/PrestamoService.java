@@ -943,10 +943,53 @@ public class PrestamoService {
     }
     
     /**
+     * Obtiene estadísticas completas de préstamos en una sola consulta optimizada
+     */
+    public EstadisticasCompletas obtenerEstadisticasCompletas() throws SQLException {
+        String sql = """
+            SELECT 
+                COUNT(*) as total_prestamos,
+                COUNT(CASE WHEN estado = 'ACTIVO' THEN 1 END) as prestamos_activos,
+                COUNT(CASE WHEN estado = 'ACTIVO' AND fecha_devolucion_esperada < TRUNC(SYSDATE) THEN 1 END) as prestamos_vencidos,
+                COUNT(CASE WHEN estado = 'DEVUELTO' THEN 1 END) as prestamos_devueltos,
+                COUNT(CASE WHEN estado = 'ACTIVO' AND fecha_devolucion_esperada BETWEEN TRUNC(SYSDATE) AND (TRUNC(SYSDATE) + 3) THEN 1 END) as prestamos_proximos_vencer
+            FROM prestamos
+            """;
+        
+        try (Connection conn = DatabaseManager.getInstance().getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            if (rs.next()) {
+                EstadisticasCompletas stats = new EstadisticasCompletas();
+                stats.totalPrestamos = rs.getInt("total_prestamos");
+                stats.prestamosActivos = rs.getInt("prestamos_activos");
+                stats.prestamosVencidos = rs.getInt("prestamos_vencidos");
+                stats.prestamosDevueltos = rs.getInt("prestamos_devueltos");
+                stats.prestamosProximosVencer = rs.getInt("prestamos_proximos_vencer");
+                return stats;
+            }
+        }
+        
+        return new EstadisticasCompletas();
+    }
+    
+    /**
      * Clase interna para estadísticas rápidas de préstamos
      */
     public static class EstadisticasPrestamos {
         public int prestamosProximosAVencer = 0;
         public int prestamosConMulta = 0;
+    }
+    
+    /**
+     * Clase interna para estadísticas completas de préstamos
+     */
+    public static class EstadisticasCompletas {
+        public int totalPrestamos = 0;
+        public int prestamosActivos = 0;
+        public int prestamosVencidos = 0;
+        public int prestamosDevueltos = 0;
+        public int prestamosProximosVencer = 0;
     }
 }

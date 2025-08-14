@@ -163,7 +163,7 @@ public class MainController {
         setupLogo();
         
         // Registrar listener para cambios de logo
-        AppConfigService.addLogoChangeListener(this::actualizarLogo);
+        // Este listener ha sido reemplazado por el nuevo en setupLogo()
     }
     
     /**
@@ -1275,51 +1275,72 @@ public class MainController {
      */
     private void setupLogo() {
         actualizarLogo();
+        // Registrar listener para cambios de logo
+        AppConfigService.addLogoChangeListener(this::onLogoChanged);
         System.out.println("🎨 Logo del header configurado");
     }
     
     /**
-     * Actualiza el logo del header según la configuración
+     * Método que se ejecuta cuando cambia el logo
      */
-    public void actualizarLogo() {
-        if (logoContainer != null && headerLogo != null && headerLogoImage != null) {
-            AppConfigService configService = AppConfigService.getInstance();
-            var config = configService.getConfiguracion();
-            
-            if (config.isLogoPersonalizado()) {
-                // Intentar cargar logo personalizado desde archivo fijo
-                try {
-                    java.io.File logoFile = new java.io.File("config/logo-personalizado.png");
-                    
-                    if (logoFile != null && logoFile.exists()) {
-                        // Limpiar cache de JavaFX agregando timestamp a la URL
-                        String logoUrl = logoFile.toURI().toString() + "?t=" + System.currentTimeMillis();
-                        
-                        // Cargar y mostrar imagen personalizada
-                        Image logoImage = new Image(logoUrl);
-                        headerLogoImage.setImage(logoImage);
-                        headerLogoImage.setFitWidth(40);
-                        headerLogoImage.setFitHeight(40);
-                        headerLogoImage.setPreserveRatio(true);
-                        headerLogoImage.setVisible(true);
-                        headerLogo.setVisible(false);
-                        System.out.println("✅ Logo personalizado cargado desde: " + logoFile.getPath());
-                    } else {
-                        // Si no existe el archivo, mostrar logo por defecto
-                        mostrarLogoDefault();
-                        System.out.println("⚠️ Archivo de logo personalizado no encontrado, usando logo por defecto");
-                    }
-                } catch (Exception e) {
-                    System.err.println("❌ Error cargando logo personalizado: " + e.getMessage());
+    private void onLogoChanged(String tipoLogo) {
+        actualizarLogo(tipoLogo);
+    }
+    
+    /**
+     * Actualiza el logo del header según la configuración
+     * @param tipoLogo Tipo de logo a actualizar ("app" o "login"). Si es null, se asume "app".
+     */
+    public void actualizarLogo(String tipoLogo) {
+        // Si no se especifica tipo, asumir que es el logo de la aplicación
+        if (tipoLogo == null || !tipoLogo.equals("login")) {
+            tipoLogo = "app";
+        }
+        
+        // Solo actualizar el logo de la aplicación en este controlador
+        if (tipoLogo.equals("app") && logoContainer != null && headerLogo != null && headerLogoImage != null) {
+            try {
+                // Buscar logo personalizado
+                java.io.File logoFile = new java.io.File("config/logo-app.png");
+                
+                if (logoFile.exists()) {
+                    cargarLogoPersonalizadoHeader(logoFile);
+                } else {
                     mostrarLogoDefault();
                 }
-            } else {
-                // Usar logo por defecto
+                
+            } catch (Exception e) {
+                System.err.println("Error actualizando logo: " + e.getMessage());
                 mostrarLogoDefault();
             }
-            
-            System.out.println("🔄 Logo del header actualizado: " + (config.isLogoPersonalizado() ? "Personalizado" : "Por defecto"));
         }
+    }
+    
+    private void cargarLogoPersonalizadoHeader(java.io.File logoFile) {
+        try {
+            String logoUrl = logoFile.toURI().toURL().toExternalForm();
+            Image logoImage = new Image(logoUrl);
+            
+            headerLogoImage.setImage(logoImage);
+            headerLogoImage.setFitWidth(80);
+            headerLogoImage.setFitHeight(80);
+            headerLogoImage.setPreserveRatio(true);
+            headerLogoImage.setVisible(true);
+            headerLogo.setVisible(false);
+            
+            System.out.println("Logo de aplicación cargado: " + logoFile.getName());
+            
+        } catch (Exception e) {
+            System.err.println("Error cargando logo de aplicación: " + e.getMessage());
+            mostrarLogoDefault();
+        }
+    }
+    
+    /**
+     * Método sobrecargado para mantener compatibilidad con código existente
+     */
+    public void actualizarLogo() {
+        actualizarLogo("app");
     }
     
     /**
@@ -1327,11 +1348,15 @@ public class MainController {
      */
     private void mostrarLogoDefault() {
         if (headerLogo != null && headerLogoImage != null) {
-            headerLogo.setIconLiteral("fas-book");
-            headerLogo.setIconColor(Color.web("#3B82F6"));
-            headerLogo.setIconSize(40);
-            headerLogo.setVisible(true);
-            headerLogoImage.setVisible(false);
+            // SOLUCION: Asegurar que la actualización se ejecute en el hilo de JavaFX
+            javafx.application.Platform.runLater(() -> {
+                headerLogo.setIconLiteral("fas-book");
+                headerLogo.setIconColor(Color.web("#3B82F6"));
+                headerLogo.setIconSize(40);
+                headerLogo.setVisible(true);
+                headerLogoImage.setVisible(false);
+                System.out.println("🔄 Logo por defecto actualizado en JavaFX Thread");
+            });
         }
     }
     

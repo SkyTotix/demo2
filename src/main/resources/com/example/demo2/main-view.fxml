@@ -22,7 +22,7 @@
                <StackPane fx:id="logoContainer" styleClass="header-logo-container">
                   <children>
                      <FontIcon fx:id="headerLogo" iconLiteral="fas-book" iconSize="24" iconColor="#3B82F6" styleClass="header-logo" />
-                     <ImageView fx:id="headerLogoImage" fitHeight="32.0" fitWidth="32.0" preserveRatio="true" visible="false" />
+                     <ImageView fx:id="headerLogoImage" fitHeight="80.0" fitWidth="80.0" preserveRatio="true" visible="false" />
                   </children>
                </StackPane>
                <Label text="BiblioSystem" styleClass="header-title">

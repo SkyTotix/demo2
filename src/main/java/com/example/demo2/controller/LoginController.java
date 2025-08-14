@@ -99,6 +99,9 @@ public class LoginController {
         // Configurar logo personalizable
         setupLoginLogo();
         
+        // Registrar listener para cambios de logo
+        AppConfigService.addLogoChangeListener(this::onLogoChanged);
+        
         // Inicializar base de datos en un hilo separado
         initializeDatabase();
         
@@ -273,42 +276,55 @@ public class LoginController {
     }
     
     /**
-     * Configura el logo personalizable en el login
+     * Configura el logo personalizable en el login - VERSIÓN SIMPLIFICADA
      */
     private void setupLoginLogo() {
-        if (logoContainer != null && loginLogo != null && loginLogoImage != null) {
-            AppConfigService configService = AppConfigService.getInstance();
-            var config = configService.getConfiguracion();
+        if (logoContainer == null || loginLogo == null || loginLogoImage == null) {
+            return;
+        }
+        
+        try {
+            // Buscar logo personalizado en orden de prioridad
+            String[] logoFiles = {
+                "config/logo-login.png",
+                "config/logo-app.png", 
+                "config/logo-personalizado.png"
+            };
             
-            if (config.isLogoPersonalizado()) {
-                // Intentar cargar logo personalizado desde archivo fijo
-                try {
-                    java.io.File logoFile = new java.io.File(Paths.get("config", "logo-personalizado.png").toString());
-                    if (logoFile.exists()) {
-                        String logoUrl = logoFile.toURI().toURL().toExternalForm() + "?t=" + System.currentTimeMillis();
-                        Image logoImage = new Image(logoUrl, true); // Cargar asincrónicamente
-                        loginLogoImage.setImage(logoImage);
-                        loginLogoImage.setFitWidth(50);
-                        loginLogoImage.setFitHeight(50);
-                        loginLogoImage.setPreserveRatio(true);
-                        loginLogoImage.setVisible(true);
-                        loginLogo.setVisible(false);
-                        System.out.println("✅ Logo personalizado cargado en login desde: " + logoFile.getAbsolutePath());
-                    } else {
-                        // Si no existe el archivo, mostrar logo por defecto
-                        mostrarLogoDefaultLogin();
-                        System.out.println("⚠️ Archivo de logo personalizado no encontrado en login");
-                    }
-                } catch (Exception e) {
-                    System.err.println("❌ Error cargando logo personalizado en login: " + e.getMessage());
-                    mostrarLogoDefaultLogin();
+            for (String logoPath : logoFiles) {
+                java.io.File logoFile = new java.io.File(logoPath);
+                if (logoFile.exists()) {
+                    cargarLogoPersonalizado(logoFile);
+                    return;
                 }
-            } else {
-                // Usar logo por defecto
-                mostrarLogoDefaultLogin();
             }
             
-            System.out.println("🎨 Logo del login configurado: " + (config.isLogoPersonalizado() ? "Personalizado" : "Por defecto"));
+            // Si no se encuentra ningún logo personalizado, mostrar el por defecto
+            mostrarLogoDefaultLogin();
+            
+        } catch (Exception e) {
+            System.err.println("Error en setupLoginLogo: " + e.getMessage());
+            mostrarLogoDefaultLogin();
+        }
+    }
+    
+    private void cargarLogoPersonalizado(java.io.File logoFile) {
+        try {
+            String logoUrl = logoFile.toURI().toURL().toExternalForm();
+            Image logoImage = new Image(logoUrl);
+            
+            loginLogoImage.setImage(logoImage);
+            loginLogoImage.setFitWidth(120);
+            loginLogoImage.setFitHeight(120);
+            loginLogoImage.setPreserveRatio(true);
+            loginLogoImage.setVisible(true);
+            loginLogo.setVisible(false);
+            
+            System.out.println("Logo personalizado cargado: " + logoFile.getName());
+            
+        } catch (Exception e) {
+            System.err.println("Error cargando logo personalizado: " + e.getMessage());
+            mostrarLogoDefaultLogin();
         }
     }
     
@@ -317,11 +333,27 @@ public class LoginController {
      */
     private void mostrarLogoDefaultLogin() {
         if (loginLogo != null && loginLogoImage != null) {
-            loginLogo.setIconLiteral("fas-book");
-            loginLogo.setIconColor(Color.web("#3B82F6"));
-            loginLogo.setIconSize(50);
-            loginLogo.setVisible(true);
-            loginLogoImage.setVisible(false);
+            // SOLUCION: Asegurar que la actualización se ejecute en el hilo de JavaFX
+            javafx.application.Platform.runLater(() -> {
+                loginLogo.setIconLiteral("fas-book");
+                loginLogo.setIconColor(Color.web("#3B82F6"));
+                loginLogo.setIconSize(50);
+                loginLogo.setVisible(true);
+                loginLogoImage.setVisible(false);
+                System.out.println("🔄 Logo por defecto de login actualizado en JavaFX Thread");
+            });
+        }
+    }
+    
+    /**
+     * Método que se ejecuta cuando cambia el logo
+     * @param tipoLogo Tipo de logo que cambió ("app" o "login")
+     */
+    private void onLogoChanged(String tipoLogo) {
+        // Solo actualizar si es el logo de login
+        if (tipoLogo.equals("login")) {
+            setupLoginLogo();
+            System.out.println("🔄 Logo de inicio de sesión actualizado por cambio de configuración");
         }
     }
 }

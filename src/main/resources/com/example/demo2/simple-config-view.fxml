@@ -3,114 +3,112 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo2.controller.SystemConfigController">
    <children>
       <Label text="Configuracion del Sistema" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
       
       <TabPane fx:id="configTabPane" tabClosingPolicy="UNAVAILABLE">
-         
-         <Tab text="General">
-            <VBox spacing="15.0">
-               <children>
-                  <Label text="Configuracion General" style="-fx-font-weight: bold;" />
-                  
-                                     <GridPane hgap="10.0" vgap="10.0">
-                      <children>
-                         <Label text="Nombre del Sistema:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                         <TextField fx:id="txtSystemName" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                         
-                         <Label text="Version:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                         <TextField fx:id="txtSystemVersion" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                         
-                         <Label text="Modo Mantenimiento:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                         <CheckBox fx:id="chkMaintenanceMode" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                         
-                         <Label text="Logs Detallados:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                         <CheckBox fx:id="chkDetailedLogs" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                      </children>
-                   </GridPane>
-               </children>
-               <padding>
-                  <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
-               </padding>
-            </VBox>
-         </Tab>
-         
-         <Tab text="Multas">
-            <VBox spacing="15.0">
-               <children>
-                  <Label text="Configuracion de Multas" style="-fx-font-weight: bold;" />
-                  
-                  <GridPane hgap="10.0" vgap="10.0">
-                     <children>
-                        <Label text="Dias de Gracia:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <Spinner fx:id="spnDiasGraciaMulta" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                        
-                        <Label text="Multa por Dia:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <Spinner fx:id="spnMontoMultaDiario" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        
-                        <Label text="Multa Maxima:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                        <Spinner fx:id="spnMontoMultaMaxima" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                     </children>
-                  </GridPane>
-               </children>
-               <padding>
-                  <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
-               </padding>
-            </VBox>
-                   </Tab>
           
           <Tab text="Personalizacion">
              <VBox spacing="15.0">
                 <children>
-                   <Label text="Personalizacion de Marca" style="-fx-font-weight: bold; -fx-font-size: 14px;" />
+                   <Label text="Identidad del Sistema" style="-fx-font-weight: bold; -fx-font-size: 14px;" />
                    
-                   <VBox spacing="10.0" style="-fx-background-color: #f0f8ff; -fx-padding: 15; -fx-background-radius: 5;">
+                   <Label text="Personaliza el logo que se muestra en el sistema y en la pantalla de inicio de sesión" style="-fx-font-size: 12px;" />
+                   
+                   <HBox spacing="20.0">
+                      <!-- Logo Principal (Aplicación) -->
+                      <VBox spacing="10.0" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-background-radius: 5; -fx-border-color: #e0e0e0; -fx-border-radius: 5;" HBox.hgrow="ALWAYS">
+                         <children>
+                            <Label text="Logo Principal" style="-fx-font-weight: bold;" />
+                            <Label text="Este logo se mostrará en la barra lateral del sistema" style="-fx-font-size: 12px;" />
+                            
+                            <StackPane style="-fx-background-color: #f9f9f9; -fx-padding: 15; -fx-background-radius: 5; -fx-min-height: 100; -fx-alignment: center;">
+                               <children>
+                                  <ImageView fx:id="imgLogoAppPreview" fitWidth="100" preserveRatio="true">
+                                     <Image url="@../../../images/default-logo.png" />
+                                  </ImageView>
+                                  <Label fx:id="lblLogoAppActual" text="Logo actual del sistema" style="-fx-font-size: 11px; -fx-text-fill: #666666;" StackPane.alignment="BOTTOM_CENTER">
+                                     <StackPane.margin>
+                                        <Insets bottom="5.0" />
+                                     </StackPane.margin>
+                                  </Label>
+                               </children>
+                            </StackPane>
+                            
+                            <HBox spacing="10.0">
+                               <children>
+                                  <Button fx:id="btnSeleccionarLogoApp" onAction="#handleSeleccionarLogoApp" text="📁 Subir nuevo logo" style="-fx-background-color: #f0f0f0;" />
+                                  <Button fx:id="btnRestaurarLogoApp" onAction="#handleRestaurarLogoApp" text="🔄 Eliminar" style="-fx-background-color: #ffeeee; -fx-text-fill: #cc0000;" />
+                               </children>
+                            </HBox>
+                         </children>
+                      </VBox>
+                      
+                      <!-- Logo de Inicio de Sesión -->
+                      <VBox spacing="10.0" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-background-radius: 5; -fx-border-color: #e0e0e0; -fx-border-radius: 5;" HBox.hgrow="ALWAYS">
+                         <children>
+                            <Label text="Logo de Inicio de Sesión" style="-fx-font-weight: bold;" />
+                            <Label text="Este logo se mostrará en la pantalla de login" style="-fx-font-size: 12px;" />
+                            
+                            <StackPane style="-fx-background-color: #f9f9f9; -fx-padding: 15; -fx-background-radius: 5; -fx-min-height: 100; -fx-alignment: center;">
+                               <children>
+                                  <ImageView fx:id="imgLogoLoginPreview" fitWidth="100" preserveRatio="true">
+                                     <Image url="@../../../images/default-logo.png" />
+                                  </ImageView>
+                                  <Label fx:id="lblLogoLoginActual" text="Logo actual de inicio de sesión" style="-fx-font-size: 11px; -fx-text-fill: #666666;" StackPane.alignment="BOTTOM_CENTER">
+                                     <StackPane.margin>
+                                        <Insets bottom="5.0" />
+                                     </StackPane.margin>
+                                  </Label>
+                               </children>
+                            </StackPane>
+                            
+                            <HBox spacing="10.0">
+                               <children>
+                                  <Button fx:id="btnSeleccionarLogoLogin" onAction="#handleSeleccionarLogoLogin" text="📁 Subir nuevo logo" style="-fx-background-color: #f0f0f0;" />
+                                  <Button fx:id="btnRestaurarLogoLogin" onAction="#handleRestaurarLogoLogin" text="🔄 Eliminar" style="-fx-background-color: #ffeeee; -fx-text-fill: #cc0000;" />
+                               </children>
+                            </HBox>
+                         </children>
+                      </VBox>
+                   </HBox>
+                   
+                   <!-- Información y Recomendaciones -->
+                   <HBox spacing="10.0">
                       <children>
-                         <Label text="💼 PARA EMPRESAS Y ORGANIZACIONES" style="-fx-font-weight: bold; -fx-text-fill: #2e6da4;" />
-                         <Label text="Personalice BiblioSystem con el logo de su empresa u organizacion." style="-fx-font-size: 12px;" />
-                         <Label text="Ideal para bibliotecas, escuelas, universidades y empresas privadas." style="-fx-font-size: 12px;" />
-                      </children>
-                   </VBox>
-                   
-                   <Label text="Configuracion de Logo" style="-fx-font-weight: bold;" />
-                   
-                   <GridPane hgap="15.0" vgap="12.0">
-                      <children>
-                         <Label text="Logo Actual:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                         <Label fx:id="lblLogoActual" text="Logo por defecto" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                         
-                         <Label text="Seleccionar Logo:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                         <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                         <VBox spacing="5.0" style="-fx-background-color: #f0f8ff; -fx-padding: 10; -fx-background-radius: 5;" HBox.hgrow="ALWAYS">
                             <children>
-                               <Button fx:id="btnSeleccionarLogo" onAction="#handleSeleccionarLogo" text="📁 Examinar..." />
-                               <Button fx:id="btnRestaurarLogo" onAction="#handleRestaurarLogo" text="🔄 Logo Original" />
+                               <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                  <children>
+                                     <Label text="ℹ️" />
+                                     <Label text="Recomendaciones para el logo:" style="-fx-font-weight: bold;" />
+                                  </children>
+                               </HBox>
+                               <Label text="• Tamaño recomendado: 200×200 píxeles" style="-fx-font-size: 11px;" />
+                               <Label text="• Formatos aceptados: PNG, JPG, SVG" style="-fx-font-size: 11px;" />
+                               <Label text="• Peso máximo: 1MB" style="-fx-font-size: 11px;" />
                             </children>
-                         </HBox>
+                         </VBox>
                          
-                         <Label text="Vista Previa:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                         <VBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+                         <VBox spacing="5.0" style="-fx-background-color: #fff8e0; -fx-padding: 10; -fx-background-radius: 5;" HBox.hgrow="ALWAYS">
                             <children>
-                               <Label fx:id="lblVistaPrevia" text="(Seleccione un archivo para ver preview)" />
+                               <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                  <children>
+                                     <Label text="⚠️" />
+                                     <Label text="Importante:" style="-fx-font-weight: bold;" />
+                                  </children>
+                               </HBox>
+                               <Label text="Cambiar el logo de inicio de sesión afectará a todos los usuarios" style="-fx-font-size: 11px;" />
+                               <Label text="cuando accedan al sistema. Asegúrate de que la imagen sea clara y" style="-fx-font-size: 11px;" />
+                               <Label text="represente correctamente tu organización." style="-fx-font-size: 11px;" />
                             </children>
                          </VBox>
                       </children>
-                      <columnConstraints>
-                         <ColumnConstraints minWidth="120.0" />
-                         <ColumnConstraints hgrow="ALWAYS" />
-                      </columnConstraints>
-                   </GridPane>
-                   
-                   <VBox spacing="8.0" style="-fx-background-color: #f9f9f9; -fx-padding: 10; -fx-background-radius: 3;">
-                      <children>
-                         <Label text="📋 ESPECIFICACIONES TECNICAS:" style="-fx-font-weight: bold; -fx-font-size: 11px;" />
-                         <Label text="• Formatos soportados: PNG, JPG, JPEG, GIF, BMP" style="-fx-font-size: 11px;" />
-                         <Label text="• Tamaño máximo: 5 MB" style="-fx-font-size: 11px;" />
-                         <Label text="• Resolución recomendada: 200x50 pixels o similar" style="-fx-font-size: 11px;" />
-                         <Label text="• El logo se aplicará en el header y pantalla de login" style="-fx-font-size: 11px;" />
-                      </children>
-                   </VBox>
+                   </HBox>
                 </children>
                 <padding>
                    <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" />
@@ -131,4 +129,4 @@
    <padding>
       <Insets top="20.0" right="20.0" bottom="20.0" left="20.0" />
    </padding>
-</VBox> 
+</VBox>
