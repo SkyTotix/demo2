@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+import com.example.demo2.database.PooledConnectionWrapper;
 
 /**
  * GESTOR DE BASE DE DATOS - CONEXIÓN A ORACLE CLOUD INFRASTRUCTURE
@@ -45,6 +48,13 @@ public class DatabaseManager {
     private static DatabaseManager instance;    // Única instancia del manager
     private ConfigManager config;               // Gestor de configuración (wallet, URLs, etc.)
     private boolean isInitialized = false;     // Estado de inicialización exitosa
+    
+    // Pool de conexiones simple
+    private final ConcurrentLinkedQueue<Connection> connectionPool = new ConcurrentLinkedQueue<>();
+    private final AtomicInteger activeConnections = new AtomicInteger(0);
+    private final int MAX_POOL_SIZE = 10;
+    private final int MIN_POOL_SIZE = 3;
+    private boolean poolInitialized = false;
     
     private DatabaseManager() {
         config = ConfigManager.getInstance();
@@ -96,8 +106,10 @@ public class DatabaseManager {
             System.out.println("🧪 Probando conexión inicial...");
             if (testConnection()) {
                 isInitialized = true;
+                initializeConnectionPool();
                 System.out.println("✅ Gestor de base de datos inicializado correctamente");
                 System.out.println("   - Modo: " + (config.isCloudMode() ? "☁️ Oracle Cloud" : "🏠 Local"));
+                System.out.println("   - Pool de conexiones: " + (poolInitialized ? "✅ Activo" : "❌ Inactivo"));
             } else {
                 System.err.println("❌ Error: Falló la prueba de conexión inicial");
                 isInitialized = false;
@@ -116,59 +128,151 @@ public class DatabaseManager {
     }
     
     /**
-     * Obtiene una conexión a la base de datos
+     * Inicializa el pool de conexiones
+     */
+    private void initializeConnectionPool() {
+        try {
+            System.out.println("🏊 Inicializando pool de conexiones...");
+            
+            // Crear conexiones iniciales
+            for (int i = 0; i < MIN_POOL_SIZE; i++) {
+                Connection conn = createNewConnection();
+                if (conn != null) {
+                    connectionPool.offer(conn);
+                    activeConnections.incrementAndGet();
+                }
+            }
+            
+            poolInitialized = true;
+            System.out.println("✅ Pool de conexiones inicializado con " + activeConnections.get() + " conexiones");
+            
+        } catch (Exception e) {
+            System.err.println("❌ Error inicializando pool de conexiones: " + e.getMessage());
+            poolInitialized = false;
+        }
+    }
+    
+    /**
+     * Crea una nueva conexión física a la base de datos
+     */
+    private Connection createNewConnection() throws SQLException {
+        String url = config.getDatabaseUrl();
+        String username = config.getDatabaseUsername();
+        String password = config.getDatabasePassword();
+        
+        if (url == null || username == null || password == null) {
+            throw new SQLException("Configuración de base de datos incompleta");
+        }
+        
+        // Configurar propiedades de conexión para Oracle Cloud
+        Properties props = new Properties();
+        props.setProperty("user", username);
+        props.setProperty("password", password);
+        
+        // Configuraciones específicas para Oracle Cloud
+        if (config.isCloudMode()) {
+            props.setProperty("oracle.jdbc.fanEnabled", "false");
+            props.setProperty("oracle.net.ssl_server_dn_match", "true");
+        }
+        
+        // Optimizaciones de rendimiento (solo mostrar mensaje una vez)
+        if (config.isHighPerformanceMode()) {
+            // Configuraciones para alto rendimiento
+            props.setProperty("oracle.jdbc.defaultRowPrefetch", String.valueOf(config.getFetchSize()));
+            props.setProperty("oracle.jdbc.defaultBatchValue", String.valueOf(config.getBatchSize()));
+            props.setProperty("oracle.jdbc.implicitStatementCacheSize", "50");
+            props.setProperty("oracle.jdbc.maxCachedBufferSize", "20971520"); // 20MB
+            props.setProperty("oracle.jdbc.ReadTimeout", "0"); // Sin timeout para consultas largas
+        }
+        
+        Connection connection = DriverManager.getConnection(url, props);
+        
+        // Configurar la conexión para rendimiento
+        connection.setAutoCommit(false); // Control manual de transacciones
+        
+        return connection;
+    }
+    
+    /**
+     * Obtiene una conexión del pool
      */
     public Connection getConnection() throws SQLException {
         if (!isInitialized) {
             throw new SQLException("Gestor de base de datos no inicializado");
         }
         
+        if (!poolInitialized) {
+            initializeConnectionPool();
+        }
+        
         try {
-            String url = config.getDatabaseUrl();
-            String username = config.getDatabaseUsername();
-            String password = config.getDatabasePassword();
+            // Intentar obtener una conexión del pool
+            Connection connection = connectionPool.poll();
             
-            if (url == null || username == null || password == null) {
-                throw new SQLException("Configuración de base de datos incompleta");
+            if (connection != null && !connection.isClosed()) {
+                // Conexión válida del pool
+                return new PooledConnectionWrapper(connection, this);
+            } else {
+                // Crear nueva conexión si el pool está vacío o la conexión está cerrada
+                if (activeConnections.get() < MAX_POOL_SIZE) {
+                    connection = createNewConnection();
+                    activeConnections.incrementAndGet();
+                    return new PooledConnectionWrapper(connection, this);
+                } else {
+                    throw new SQLException("Pool de conexiones agotado. Máximo: " + MAX_POOL_SIZE);
+                }
             }
-            
-            // Configurar propiedades de conexión para Oracle Cloud
-            Properties props = new Properties();
-            props.setProperty("user", username);
-            props.setProperty("password", password);
-            
-            // Configuraciones específicas para Oracle Cloud
-            if (config.isCloudMode()) {
-                props.setProperty("oracle.jdbc.fanEnabled", "false");
-                props.setProperty("oracle.net.ssl_server_dn_match", "true");
-            }
-            
-            // Optimizaciones de rendimiento
-            if (config.isHighPerformanceMode()) {
-                // Configuraciones para alto rendimiento
-                props.setProperty("oracle.jdbc.defaultRowPrefetch", String.valueOf(config.getFetchSize()));
-                props.setProperty("oracle.jdbc.defaultBatchValue", String.valueOf(config.getBatchSize()));
-                props.setProperty("oracle.jdbc.implicitStatementCacheSize", "50");
-                props.setProperty("oracle.jdbc.maxCachedBufferSize", "20971520"); // 20MB
-                props.setProperty("oracle.jdbc.ReadTimeout", "0"); // Sin timeout para consultas largas
-                
-                System.out.println("🚀 Aplicando optimizaciones de alto rendimiento");
-            }
-            
-            Connection connection = DriverManager.getConnection(url, props);
-            
-            // Configurar la conexión para rendimiento
-            connection.setAutoCommit(false); // Control manual de transacciones
-            
-            System.out.println("📡 Conexión obtenida exitosamente" + 
-                             (config.isHighPerformanceMode() ? " (ALTO RENDIMIENTO)" : ""));
-            return connection;
             
         } catch (SQLException e) {
-            System.err.println("❌ Error obteniendo conexión: " + e.getMessage());
+            System.err.println("❌ Error obteniendo conexión del pool: " + e.getMessage());
             throw e;
         }
     }
+    
+    /**
+      * Devuelve una conexión al pool
+      */
+     public void returnConnection(Connection connection) {
+         if (connection != null && poolInitialized) {
+             try {
+                 if (!connection.isClosed()) {
+                     // Resetear el estado de la conexión
+                     if (!connection.getAutoCommit()) {
+                         connection.rollback(); // Limpiar cualquier transacción pendiente
+                     }
+                     connectionPool.offer(connection);
+                 } else {
+                     // Conexión cerrada, decrementar contador
+                     activeConnections.decrementAndGet();
+                 }
+             } catch (SQLException e) {
+                 System.err.println("⚠️ Error devolviendo conexión al pool: " + e.getMessage());
+                 activeConnections.decrementAndGet();
+             }
+         }
+     }
+     
+     /**
+      * Cierra todas las conexiones del pool
+      */
+     public void closePool() {
+         System.out.println("🔒 Cerrando pool de conexiones...");
+         
+         Connection conn;
+         while ((conn = connectionPool.poll()) != null) {
+             try {
+                 if (!conn.isClosed()) {
+                     conn.close();
+                 }
+             } catch (SQLException e) {
+                 System.err.println("⚠️ Error cerrando conexión del pool: " + e.getMessage());
+             }
+         }
+         
+         activeConnections.set(0);
+         poolInitialized = false;
+         System.out.println("✅ Pool de conexiones cerrado");
+     }
     
     /**
      * Prueba la conexión a la base de datos
@@ -327,14 +431,25 @@ public class DatabaseManager {
     }
     
     /**
-     * Obtiene información detallada de configuración de rendimiento
-     */
+      * Obtiene información detallada de configuración de rendimiento
+      */
     public String getPerformanceInfo() {
         if (!isInitialized) {
             return "❌ Manager no inicializado";
         }
         
-        return config.getPerformanceInfo();
+        String poolInfo = String.format(
+            "\n🏊 POOL DE CONEXIONES:\n" +
+            "   Estado: %s\n" +
+            "   Conexiones activas: %d/%d\n" +
+            "   Conexiones disponibles: %d",
+            poolInitialized ? "✅ Activo" : "❌ Inactivo",
+            activeConnections.get(),
+            MAX_POOL_SIZE,
+            connectionPool.size()
+        );
+        
+        return config.getPerformanceInfo() + poolInfo;
     }
     
     /**
@@ -388,4 +503,4 @@ public class DatabaseManager {
         
         return "❌ No se pudo completar la prueba de alto rendimiento";
     }
-} 
+}
