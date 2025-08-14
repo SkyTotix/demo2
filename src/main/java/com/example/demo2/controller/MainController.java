@@ -74,8 +74,8 @@ import com.example.demo2.models.Prestamo;
  * 
  * BIBLIOTECARIO:
  * - Estadísticas: Libros Totales, Disponibles, Prestados, Usuarios
- * - Menú: Dashboard, Usuarios, Préstamos, Buscar Libros
- * - Acciones: Nuevo Usuario, Nuevo Préstamo, Devolución, Buscar Libro
+ * - Menú: Dashboard, Usuarios, Préstamos, Libros
+ * - Acciones: Nuevo Usuario, Nuevo Préstamo, Devolución, Gestión de Libros
  * 
  * ASPECTOS TÉCNICOS:
  * - Carga de datos asíncrona para no bloquear la UI
@@ -222,7 +222,7 @@ public class MainController {
                 addMenuSection("Operaciones Diarias");
                 addMenuItem(IconHelper.getUsersIcon(), "Usuarios/Lectores", "lectores", true);
                 addMenuItem(IconHelper.getLoanIcon(), "Préstamos", "prestamos", false);
-                addMenuItem(IconHelper.getSearchIcon(), "Buscar Libros", "buscar-libros", false);
+                addMenuItem(IconHelper.getBookIcon(), "Libros", "libros", false);
     
                 break;
         }
@@ -419,6 +419,10 @@ public class MainController {
                 break;
             case "prestamos":
                 cargarVistaPrestamos();
+                break;
+            case "buscar-libros":
+                // Redirigir a la gestión completa de libros
+                cargarVistaLibros();
                 break;
 
             default:
