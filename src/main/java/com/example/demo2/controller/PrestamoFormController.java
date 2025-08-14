@@ -131,10 +131,9 @@ public class PrestamoFormController implements Initializable {
             lectorCombo.getItems().clear();
             lectorCombo.getItems().addAll(lectores);
             
-            // Generar código de préstamo si es nuevo
+            // Mostrar texto indicativo en el campo de código
             if (prestamo == null) {
-                String codigo = prestamoService.generarCodigoPrestamo();
-                codigoField.setText(codigo);
+                codigoField.setText("[Se generará automáticamente al guardar]");
             }
             
         } catch (SQLException e) {
@@ -218,8 +217,19 @@ public class PrestamoFormController implements Initializable {
         System.out.println("✅ Validación de formulario exitosa");
         
         try {
+            // Generar código de préstamo justo antes de guardar
+            String nuevoCodigo = prestamoService.generarCodigoPrestamo();
+            System.out.println("🔑 Código de préstamo generado: " + nuevoCodigo);
+            
+            // Verificar si el código ya existe antes de continuar
+            while (prestamoService.existeCodigo(nuevoCodigo)) {
+                System.out.println("⚠️ Código " + nuevoCodigo + " ya existe, generando uno nuevo...");
+                nuevoCodigo = prestamoService.generarCodigoPrestamo();
+                System.out.println("🔄 Nuevo código generado: " + nuevoCodigo);
+            }
+            
             Prestamo nuevoPrestamo = new Prestamo();
-            nuevoPrestamo.setCodigoPrestamo(codigoField.getText());
+            nuevoPrestamo.setCodigoPrestamo(nuevoCodigo);
             nuevoPrestamo.setLibroId(libroCombo.getValue().getId());  // Libro.getId() ya retorna Long
             nuevoPrestamo.setLectorId((long) lectorCombo.getValue().getId());  // Lector.getId() retorna int, necesita cast
             
@@ -249,7 +259,42 @@ public class PrestamoFormController implements Initializable {
             
             System.out.println("💾 Intentando guardar préstamo en base de datos...");
             
-            Prestamo prestamoCreado = prestamoService.crear(nuevoPrestamo);
+            // Implementar mecanismo de reintentos en caso de colisión de códigos
+            boolean guardadoExitoso = false;
+            int intentos = 0;
+            int maxIntentos = 3;
+            Prestamo prestamoCreado = null;
+            
+            while (!guardadoExitoso && intentos < maxIntentos) {
+                try {
+                    prestamoCreado = prestamoService.crear(nuevoPrestamo);
+                    guardadoExitoso = true;
+                } catch (SQLException e) {
+                    if (e.getMessage().contains("ORA-00001") && e.getMessage().contains("unique constraint")) {
+                        // Restricción única violada, generar nuevo código
+                        intentos++;
+                        System.out.println("⚠️ Colisión de código detectada, reintento " + intentos + "/" + maxIntentos);
+                        
+                        // Generar un nuevo código y verificar que no exista
+                        do {
+                            nuevoCodigo = prestamoService.generarCodigoPrestamo();
+                            System.out.println("🔄 Nuevo código generado: " + nuevoCodigo);
+                        } while (prestamoService.existeCodigo(nuevoCodigo));
+                        
+                        nuevoPrestamo.setCodigoPrestamo(nuevoCodigo);
+                        System.out.println("✅ Usando código verificado: " + nuevoCodigo);
+                    } else {
+                        // Otro error SQL, relanzar
+                        throw e;
+                    }
+                }
+            }
+            
+            if (!guardadoExitoso) {
+                System.out.println("❌ No se pudo crear el préstamo después de " + maxIntentos + " intentos");
+                mostrarError("No se pudo crear el préstamo después de varios intentos. Por favor, inténtelo de nuevo.");
+                return;
+            }
             
             if (prestamoCreado != null && prestamoCreado.getId() != null) {
                 System.out.println("✅ Préstamo creado exitosamente con ID: " + prestamoCreado.getId());
@@ -284,13 +329,7 @@ public class PrestamoFormController implements Initializable {
     private boolean validarFormulario() {
         System.out.println("🔍 Iniciando validación del formulario...");
         
-        // Validar campos obligatorios
-        System.out.println("  📝 Código: '" + codigoField.getText() + "'");
-        if (codigoField.getText().trim().isEmpty()) {
-            System.out.println("  ❌ Código vacío");
-            mostrarError("El código del préstamo es obligatorio");
-            return false;
-        }
+        // Ya no validamos el código porque se genera automáticamente al guardar
         
         System.out.println("  📚 Libro seleccionado: " + (libroCombo.getValue() != null ? libroCombo.getValue().getTitulo() : "null"));
         if (libroCombo.getValue() == null) {
@@ -450,4 +489,4 @@ public class PrestamoFormController implements Initializable {
     public void setParentController(PrestamoManagementController parentController) {
         this.parentController = parentController;
     }
-} 
+}

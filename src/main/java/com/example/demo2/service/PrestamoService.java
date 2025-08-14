@@ -420,7 +420,18 @@ public class PrestamoService {
             
             if (rs.next()) {
                 int siguiente = rs.getInt(1);
-                return String.format("PRES-%06d", siguiente);
+                String codigo = String.format("PRES-%06d", siguiente);
+                
+                // Verificar si el código generado ya existe (por si acaso)
+                if (existeCodigo(codigo)) {
+                    // Si existe, incrementar hasta encontrar uno disponible
+                    while (existeCodigo(codigo)) {
+                        siguiente++;
+                        codigo = String.format("PRES-%06d", siguiente);
+                    }
+                }
+                
+                return codigo;
             }
         }
         return "PRES-000001";
@@ -938,4 +949,4 @@ public class PrestamoService {
         public int prestamosProximosAVencer = 0;
         public int prestamosConMulta = 0;
     }
-} 
+}
